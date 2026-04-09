@@ -1,0 +1,537 @@
+<style>
+/*
+  Posit Academy — All Courses Page
+  =================================
+  HOW TO INSTALL:
+  1. In SkillJar Admin, go to the All Courses catalog page settings
+  2. Paste the entire contents of this file into the "Header HTML" field
+
+  WHAT THIS DOES:
+  - Adds a "Browse All Courses" page header
+  - Reskins course cards with modern styling and hover effects
+  - Builds a custom filter sidebar from the FILTER_GROUPS config in the JS below
+  - Injects content-type badges based on course tags
+
+  BADGE & FILTER SETUP:
+  Tag your courses in SkillJar to match the tag values in FILTER_GROUPS below.
+  Example: tag a course "live" → it gets a "Live Training" badge and appears
+  under the Live Training filter checkbox.
+
+  FILTER LOGIC:
+  - Selections within a group = OR  (Course OR Live Training)
+  - Selections across groups  = AND (Format AND Role)
+*/
+
+/* ═══════════════════════════════════════════════
+   PAGE LAYOUT — CSS Grid replaces Flexbox
+   Header spans full width (row 1), sidebar + grid share row 2.
+   The header lives INSIDE .storefront so SkillJar's scroll-collapse
+   JS (which targets elements above .storefront) never touches it.
+   ═══════════════════════════════════════════════ */
+.storefront {
+  display: grid !important;
+  grid-template-columns: 240px 1fr !important;
+  grid-template-rows: auto auto !important;
+  align-items: start !important;
+  column-gap: 48px !important;
+  padding: 0 40px 80px !important;
+  overflow-x: hidden !important;
+}
+
+/* ── Page header — spans both columns, sits in row 1 ── */
+.pa-courses-header {
+  grid-column: 1 / -1 !important;
+  grid-row: 1 !important;
+  padding: 72px 0 28px !important;  /* ✏️ increase top value if title still clips behind the navbar */
+  display: block !important;
+}
+.pa-courses-header__title {
+  font-family: 'Open Sans', sans-serif;
+  font-size: 42px;
+  font-weight: 300;           /* Open Sans Light — Posit H1 spec */
+  color: #17212B;
+  margin: 0;
+  line-height: 1.15;
+}
+
+/* ── Filter sidebar — column 1, row 2 ── */
+.pa-filters {
+  grid-column: 1 !important;
+  grid-row: 2 !important;
+}
+.pa-filters__topbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding-bottom: 12px;
+  border-bottom: 1px solid #D0D7DE;
+  margin-bottom: 4px;
+}
+.pa-filters__collapse-btn {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+}
+.pa-filters__label {
+  font-family: 'Open Sans', sans-serif;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: #404041;
+}
+.pa-filters__toggle-chevron {
+  font-size: 10px;
+  color: #707073;
+  transition: transform 0.2s;
+}
+.pa-filters.is-collapsed .pa-filters__toggle-chevron {
+  transform: rotate(180deg);
+}
+.pa-filters__body {
+  overflow: hidden;
+}
+.pa-filters.is-collapsed .pa-filters__body {
+  display: none;
+}
+.pa-filters__clear {
+  font-family: 'Open Sans', sans-serif;
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: #447099;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+  text-decoration: underline;
+}
+.pa-filters__clear:hover { color: #305775; }
+
+/* Filter group */
+.pa-filter-group {
+  border-bottom: 1px solid #E8ECEF;
+  padding: 4px 0;
+}
+.pa-filter-group__toggle {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 14px 0;
+  text-align: left;
+}
+.pa-filter-group__name {
+  font-family: 'Open Sans', sans-serif;
+  font-size: 16px;
+  font-weight: 600;
+  color: #17212B;
+}
+.pa-filter-group__chevron {
+  font-size: 12px;
+  color: #707073;
+  transition: transform 0.2s;
+  flex-shrink: 0;
+}
+.pa-filter-group__chevron.is-closed { transform: rotate(180deg); }
+
+.pa-filter-group__items {
+  padding-bottom: 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+.pa-filter-group__items.is-hidden { display: none; }
+
+.pa-filter-group__items label {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 5px 2px;
+  cursor: pointer;
+  font-family: 'Open Sans', sans-serif;
+  font-size: 15px;
+  font-weight: 400;
+  color: #404041;
+  border-radius: 4px;
+  transition: color 0.15s;
+}
+.pa-filter-group__items label:hover { color: #17212B; }
+.pa-filter-group__items input[type="checkbox"] {
+  width: 16px;
+  height: 16px;
+  flex-shrink: 0;
+  accent-color: #447099;
+  cursor: pointer;
+}
+
+/* ── Course content area — column 2, row 2 ── */
+.skilljar-content {
+  grid-column: 2 !important;
+  grid-row: 2 !important;
+  min-width: 0 !important;
+  width: 100% !important;
+}
+
+/* ═══════════════════════════════════════════════
+   COURSE GRID
+   ═══════════════════════════════════════════════ */
+.skilljar-content,
+.top-row.sj-courseboxes-v2,
+.catalog-center-width,
+#catalog-content {
+  width: 100% !important;
+  max-width: 100% !important;
+  box-sizing: border-box !important;
+}
+
+#catalog-courses {
+  display: grid !important;
+  grid-template-columns: repeat(3, 1fr) !important;
+  gap: 20px !important;
+  align-items: start !important;
+}
+
+/* ═══════════════════════════════════════════════
+   COURSE CARDS
+   ═══════════════════════════════════════════════ */
+a.coursebox-container:not([data-tags~="separator"]) {
+  width: 100% !important;
+  min-width: 0 !important;
+  box-sizing: border-box !important;
+  min-height: unset !important;
+  border-radius: 12px !important;
+  border: 1px solid #E0E6EC !important;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.06) !important;
+  overflow: hidden !important;
+  background: #ffffff !important;
+  transition: box-shadow 0.2s ease, transform 0.2s ease !important;
+  text-decoration: none !important;
+  position: relative !important;
+  z-index: 0 !important;
+  padding: 0 !important;
+}
+a.coursebox-container:not([data-tags~="separator"]):hover {
+  box-shadow: 0 8px 28px rgba(0,0,0,0.1) !important;
+  transform: translateY(-3px) !important;
+}
+
+/* Image */
+a.coursebox-container:not([data-tags~="separator"]) .coursebox-image {
+  width: 100% !important;
+  display: block !important;
+}
+a.coursebox-container:not([data-tags~="separator"]) .coursebox-image img {
+  width: 100% !important;
+  height: auto !important;
+  display: block !important;
+}
+
+/* Badge — injected by JS, sits between image and title */
+.pa-badge-wrap {
+  padding: 16px 16px 0;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+.pa-badge {
+  display: inline-block;
+  padding: 3px 10px;
+  border-radius: 4px;
+  border: 1px solid #C8D0D8;
+  background: #ffffff;
+  font-family: 'Open Sans', sans-serif;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.09em;
+  text-transform: uppercase;
+  color: #404041;
+}
+
+/* Title */
+a.coursebox-container:not([data-tags~="separator"]) .coursebox-text {
+  font-family: 'Open Sans', sans-serif !important;
+  font-size: 17px !important;
+  font-weight: 700 !important;
+  color: #17212B !important;
+  padding: 10px 16px 6px !important;
+  line-height: 1.3 !important;
+  margin: 0 !important;
+}
+
+/* Description */
+a.coursebox-container:not([data-tags~="separator"]) .coursebox-text-description {
+  font-family: 'Open Sans', sans-serif !important;
+  font-size: 13px !important;
+  font-weight: 400 !important;
+  color: #707073 !important;
+  line-height: 1.6 !important;
+  padding: 0 16px 20px !important;
+  margin: 0 !important;
+}
+
+/* Hide price and CTA */
+a.coursebox-container:not([data-tags~="separator"]) .storefront-price,
+a.coursebox-container:not([data-tags~="separator"]) .coursebox-callout {
+  display: none !important;
+}
+
+/* Cards filtered out */
+a.coursebox-container.pa-hidden {
+  display: none !important;
+}
+
+/* Hide SkillJar footer — conflicts with custom grid layout */
+#ep-footer, footer { display: none !important; }
+
+/* Hide SkillJar's built-in left nav (replaced by our custom .pa-filters sidebar) */
+nav.catalog-left-nav { display: none !important; }
+
+/* Prevent horizontal scroll */
+body { overflow-x: hidden !important; }
+
+
+/* ═══════════════════════════════════════════════
+   MOBILE
+   ═══════════════════════════════════════════════ */
+
+@media only screen and (max-width: 1200px) {
+  #catalog-courses {
+    grid-template-columns: repeat(2, 1fr) !important;
+  }
+}
+
+@media only screen and (max-width: 900px) {
+  .storefront {
+    grid-template-columns: 1fr !important;
+    padding: 0 20px 60px !important;
+    column-gap: 0 !important;
+  }
+  /* On mobile, stack header → sidebar → grid in a single column */
+  .pa-courses-header {
+    grid-column: 1 !important;
+    padding-top: 80px !important;
+    padding-bottom: 20px !important;
+  }
+  .pa-filters {
+    grid-column: 1 !important;
+    grid-row: 2 !important;
+    margin-bottom: 24px !important;
+  }
+  .skilljar-content {
+    grid-column: 1 !important;
+    grid-row: 3 !important;
+  }
+  /* Reset any SkillJar margins/padding that push the grid off-center */
+  .skilljar-content,
+  .catalog-center-width,
+  #catalog-content {
+    margin-left: 0 !important;
+    margin-right: 0 !important;
+    padding-left: 0 !important;
+    padding-right: 0 !important;
+    width: 100% !important;
+    max-width: 100% !important;
+  }
+  #catalog-courses {
+    grid-template-columns: repeat(2, 1fr) !important;
+    gap: 16px !important;
+    width: 100% !important;
+    margin: 0 !important;
+    padding: 0 !important;
+  }
+}
+
+@media only screen and (max-width: 500px) {
+  #catalog-courses {
+    grid-template-columns: 1fr !important;
+  }
+}
+</style>
+
+<script>
+/* ═══════════════════════════════════════════════════════════
+   ✏️  FILTER GROUPS — edit to match your SkillJar tags
+   Each filter's "tag" must match the tag slug you applied
+   to courses in SkillJar Admin.
+   ═══════════════════════════════════════════════════════════ */
+var PA_FILTER_GROUPS = [
+  {
+    label: 'Format',
+    open: true,
+    filters: [
+      { tag: 'live',          label: 'Live Training' },
+      { tag: 'on-demand',     label: 'On-Demand Training' },
+      { tag: 'course',        label: 'Course' },
+      { tag: 'path',          label: 'Learning Path' },
+    ]
+  },
+  {
+    label: 'Role',
+    open: true,
+    filters: [
+      { tag: 'data-scientist',  label: 'Data Scientist' },
+      { tag: 'it-admin',        label: 'IT Admin' },
+      { tag: 'posit-consumer',  label: 'Posit Consumer' },
+    ]
+  },
+  {
+    label: 'Product',
+    open: true,
+    filters: [
+      { tag: 'posit-connect',         label: 'Posit Connect' },
+      { tag: 'posit-workbench',       label: 'Posit Workbench' },
+      { tag: 'posit-package-manager', label: 'Posit Package Manager' },
+      { tag: 'shiny',                 label: 'Shiny' },
+      { tag: 'quarto',                label: 'Quarto' },
+      { tag: 'posit-ai',              label: 'Posit AI' },
+    ]
+  },
+];
+
+/* ─── Badge label map — built from all filter groups ─── */
+var PA_TAG_LABEL_MAP = {};
+PA_FILTER_GROUPS.forEach(function (group) {
+  group.filters.forEach(function (f) {
+    PA_TAG_LABEL_MAP[f.tag] = f.label;
+  });
+});
+PA_TAG_LABEL_MAP['course']    = PA_TAG_LABEL_MAP['course']    || 'Course';
+PA_TAG_LABEL_MAP['path']      = PA_TAG_LABEL_MAP['path']      || 'Learning Path';
+PA_TAG_LABEL_MAP['live']      = PA_TAG_LABEL_MAP['live']      || 'Live Training';
+PA_TAG_LABEL_MAP['on-demand'] = PA_TAG_LABEL_MAP['on-demand'] || 'On-Demand';
+
+/* ════════════════════════════════════════════
+   DO NOT EDIT BELOW THIS LINE
+   ════════════════════════════════════════════ */
+document.addEventListener('DOMContentLoaded', function () {
+
+  var storefront = document.querySelector('.storefront');
+  if (!storefront) return;
+
+  /* ── 1. Page header ──
+     Inserted as the FIRST CHILD of .storefront so it becomes a CSS Grid
+     item in row 1 (spanning both columns via CSS). This keeps it inside
+     the content zone — SkillJar's scroll-collapse JS only targets elements
+     above .storefront, so it never touches this element. */
+  var hdr = document.createElement('div');
+  hdr.className = 'pa-courses-header';
+  hdr.innerHTML = '<h1 class="pa-courses-header__title">Browse All Courses</h1>';/* ✏️ */
+  storefront.insertBefore(hdr, storefront.firstChild);
+
+  /* ── 2. Badge injection ── */
+  var cards = document.querySelectorAll('a.coursebox-container');
+  cards.forEach(function (card) {
+    var tags = (card.getAttribute('data-tags') || '').toLowerCase();
+    if (tags.indexOf('separator') !== -1) return;
+
+    var tagList = tags.split(',').map(function(t) { return t.trim(); });
+    var wrap = document.createElement('div');
+    wrap.className = 'pa-badge-wrap';
+    tagList.forEach(function (t) {
+      if (!t || t === 'separator') return;
+      var label = PA_TAG_LABEL_MAP[t] || t;
+      wrap.innerHTML += '<span class="pa-badge">' + label + '</span>';
+    });
+    var cardImg = card.querySelector('.coursebox-image');
+    if (cardImg && cardImg.nextSibling) {
+      card.insertBefore(wrap, cardImg.nextSibling);
+    } else {
+      card.appendChild(wrap);
+    }
+  });
+
+  /* ── 3. Build filter sidebar ── */
+  if (!PA_FILTER_GROUPS.length) return;
+
+  var sidebar = document.createElement('div');
+  sidebar.className = 'pa-filters';
+
+  var topbar = document.createElement('div');
+  topbar.className = 'pa-filters__topbar';
+  topbar.innerHTML =
+    '<button class="pa-filters__collapse-btn">' +
+      '<span class="pa-filters__label">Filters</span>' +
+      '<span class="pa-filters__toggle-chevron">&#9650;</span>' +
+    '</button>' +
+    '<button class="pa-filters__clear">Clear</button>';
+  sidebar.appendChild(topbar);
+
+  var body = document.createElement('div');
+  body.className = 'pa-filters__body';
+  sidebar.appendChild(body);
+
+  /* Default collapsed on mobile */
+  if (window.innerWidth < 900) sidebar.classList.add('is-collapsed');
+  topbar.querySelector('.pa-filters__collapse-btn').addEventListener('click', function () {
+    sidebar.classList.toggle('is-collapsed');
+  });
+
+  PA_FILTER_GROUPS.forEach(function (group) {
+    var groupEl = document.createElement('div');
+    groupEl.className = 'pa-filter-group';
+
+    var toggle = document.createElement('button');
+    toggle.className = 'pa-filter-group__toggle';
+    toggle.innerHTML =
+      '<span class="pa-filter-group__name">' + group.label + '</span>' +
+      '<span class="pa-filter-group__chevron' + (group.open ? '' : ' is-closed') + '">&#9650;</span>';
+
+    var items = document.createElement('div');
+    items.className = 'pa-filter-group__items' + (group.open ? '' : ' is-hidden');
+
+    group.filters.forEach(function (f) {
+      var lbl = document.createElement('label');
+      lbl.innerHTML = '<input type="checkbox" value="' + f.tag + '"> ' + f.label;
+      items.appendChild(lbl);
+    });
+
+    toggle.addEventListener('click', function () {
+      items.classList.toggle('is-hidden');
+      toggle.querySelector('.pa-filter-group__chevron').classList.toggle('is-closed');
+    });
+
+    groupEl.appendChild(toggle);
+    groupEl.appendChild(items);
+    body.appendChild(groupEl);
+  });
+
+  /* Insert sidebar as first child — CSS grid placement handles its position */
+  storefront.insertBefore(sidebar, storefront.firstChild);
+
+  /* ── 4. Filter logic ── */
+  function applyFilters() {
+    var groups = sidebar.querySelectorAll('.pa-filter-group');
+    var activeGroups = [];
+    groups.forEach(function (g) {
+      var checked = Array.from(g.querySelectorAll('input:checked')).map(function (cb) { return cb.value; });
+      if (checked.length) activeGroups.push(checked);
+    });
+
+    cards.forEach(function (card) {
+      if ((card.getAttribute('data-tags') || '').indexOf('separator') !== -1) return;
+      var cardTags = (card.getAttribute('data-tags') || '').toLowerCase();
+      var visible = activeGroups.every(function (groupTags) {
+        return groupTags.some(function (t) { return cardTags.indexOf(t) !== -1; });
+      });
+      card.classList.toggle('pa-hidden', !visible);
+    });
+  }
+
+  sidebar.addEventListener('change', applyFilters);
+
+  sidebar.querySelector('.pa-filters__clear').addEventListener('click', function () {
+    sidebar.querySelectorAll('input[type="checkbox"]').forEach(function (cb) { cb.checked = false; });
+    applyFilters();
+  });
+
+});
+</script>

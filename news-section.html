@@ -1,0 +1,60 @@
+<!-- START Posit Academy News Section -->
+<!--
+  HOW TO INSTALL:
+  Add a new HTML/Text Block below the Hero Banner on the Catalog Page Builder.
+  Open source code, delete default HTML, paste this snippet, and hit Save.
+-->
+
+<!-- ═══════════════════════════════════════════════
+     CONTENT — Edit the items marked with ✏️
+     ═══════════════════════════════════════════════ -->
+<div class="pa-news">
+  <div class="pa-news__inner">
+    <h2 class="pa-news__heading">News</h2><!-- ✏️ -->
+    <p class="pa-news__body">
+      <!-- ✏️ Replace with real news content, upcoming events, or announcements -->
+      Stay up to date with the latest from Posit &mdash; including conference announcements,
+      upcoming webinars, and new learning resources from the Posit team.
+    </p>
+  </div>
+</div>
+
+<style>
+/* ═══════════════════════════════════════════════
+   CSS VARIABLES — Edit colors here
+   ═══════════════════════════════════════════════ */
+body {
+  --pa-news-bg:        #ffffff;
+  --pa-news-heading:   #404041;
+  --pa-news-text:      #404041;
+  --pa-news-border:    #E2E2E2;
+}
+
+/* ═══════════════════════════════════════════════
+   STYLES
+   ═══════════════════════════════════════════════ */
+.pa-news {
+  background-color: var(--pa-news-bg);
+  border-bottom: 1px solid var(--pa-news-border);
+  padding: 32px 0;
+  margin-bottom: 0;
+}
+.pa-news__inner {
+  max-width: 860px;
+}
+.pa-news__heading {
+  font-family: 'Open Sans', sans-serif !important;
+  font-size: 26px !important;
+  font-weight: 700 !important;
+  color: var(--pa-news-heading) !important;
+  margin: 0 0 12px 0 !important;
+}
+.pa-news__body {
+  font-family: 'Open Sans', sans-serif !important;
+  font-size: 15px !important;
+  line-height: 1.75 !important;
+  color: var(--pa-news-text) !important;
+  margin: 0 !important;
+}
+</style>
+<!-- END Posit Academy News Section -->

@@ -1,0 +1,627 @@
+<!-- ═══════════════════════════════════════════════════════════════
+     POSIT ACADEMY — Global Code Snippets
+     Paste the entire contents of this file into:
+     SkillJar Admin > Design > Global Code Snippet
+     ═══════════════════════════════════════════════════════════════ -->
+
+
+<!-- START Course Separators -->
+<!--
+  HOW TO USE:
+  1. Create a course in SkillJar with [separator] anywhere in the title
+     e.g. "[separator] Getting Started"
+  2. Add the tag "separator" to that course
+  3. The [separator] text will be stripped from the visible title
+  4. The tile will render as a full-width section header instead of a course card
+-->
+<script>
+var textAlignment = 'left'; /* change to 'center' for centered section headers */
+
+document.addEventListener('DOMContentLoaded', function() {
+    // Strip [separator] text and set alignment
+    var courseboxContainers = document.querySelectorAll('.coursebox-container');
+    courseboxContainers.forEach(function(container) {
+        var courseboxText = container.querySelector('.coursebox-text');
+        var lowercaseText = courseboxText.textContent.toLowerCase();
+        if (lowercaseText.indexOf('[separator]') !== -1) {
+            courseboxText.textContent = courseboxText.textContent.replace('[separator]', '');
+            courseboxText.textContent = courseboxText.textContent.replace('[Separator]', '');
+            container.style.textAlign = textAlignment;
+        }
+    });
+
+    // Align separator left edge with the first course tile
+    var firstTile = document.querySelector('#catalog-courses a.coursebox-container:not([data-tags="separator"])');
+    var separators = document.querySelectorAll('a.coursebox-container[data-tags="separator"]');
+    if (firstTile && separators.length) {
+        var tileLeft = firstTile.getBoundingClientRect().left;
+        separators.forEach(function(sep) {
+            var sepLeft = sep.getBoundingClientRect().left;
+            sep.style.paddingLeft = Math.max(0, tileLeft - sepLeft) + 'px';
+        });
+    }
+});
+</script>
+
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Open+Sans:wght@300;400;600;700&display=swap');
+
+/* Full-width, no tile styling */
+a.coursebox-container[data-tags="separator"] {
+  padding: 24px 0 8px 0 !important;
+  width: 87% !important;
+  min-height: unset !important;
+  background-color: transparent !important;
+  box-shadow: none !important;
+  pointer-events: none !important;
+  border: none !important;
+}
+
+/* Section title */
+a.coursebox-container[data-tags="separator"] .coursebox-text {
+  font-family: 'Open Sans', sans-serif !important;
+  font-size: 26px !important;
+  font-weight: 700 !important;
+  color: #213D4F !important; /* Posit Dark Blue 2 */
+  line-height: 1.2 !important;
+}
+
+/* Orange underline accent beneath the title */
+a.coursebox-container[data-tags="separator"] .coursebox-text::after {
+  content: '';
+  display: block;
+  width: 40px;
+  height: 3px;
+  background-color: #E7B10A; /* Posit Orange */
+  margin-top: 10px;
+}
+
+/* Section subtitle */
+a.coursebox-container[data-tags="separator"] .coursebox-text-description {
+  font-family: 'Open Sans', sans-serif !important;
+  font-size: 15px !important;
+  font-weight: 400 !important;
+  color: #707073 !important; /* Posit Light Gray 3 */
+  margin: 6px 0 0 !important;
+}
+
+/* Hide price, image, CTA, after-element, and from search results */
+a.coursebox-container[data-tags="separator"] .storefront-price,
+a.coursebox-container[data-tags="separator"] .coursebox-image,
+a.coursebox-container[data-tags="separator"] .coursebox-callout,
+a.coursebox-container[data-tags="separator"]:after,
+.search a.coursebox-container[data-tags="separator"] {
+  display: none !important;
+}
+</style>
+<!-- END Course Separators -->
+
+
+<!-- START Course Landing Page Styles -->
+<!--
+  WHAT THIS DOES:
+  Modernises individual course landing pages to match the Posit brand.
+  Scoped entirely to body.sj-page-detail-course (SkillJar's own body
+  class on course pages) — nothing leaks to catalog or home pages.
+
+  LAYOUT: Asana-inspired — text (title + description + CTA) on the LEFT,
+  course image on the RIGHT with a soft Posit Light Blue background.
+  SkillJar's default HTML puts the image first, so we use CSS order to swap.
+-->
+<style>
+/* ═══════════════════════════════════════════════
+   HERO WRAPPER — remove SkillJar's grey background / padding
+   ═══════════════════════════════════════════════ */
+body.sj-page-detail-course .top-row-grey,
+body.sj-page-detail-course .top-row-white-v2 {
+  background: #ffffff !important;
+  border: none !important;
+  box-shadow: none !important;
+}
+
+/* Hero flex row — override Foundation's float-based grid */
+body.sj-page-detail-course .dp-row-flex-v2 {
+  display: flex !important;
+  align-items: center !important;
+  flex-wrap: nowrap !important;
+  gap: 48px !important;
+  padding: 48px 40px !important;
+}
+
+/* ── Text column — order 1 (left), no box/border ── */
+body.sj-page-detail-course .dp-summary-wrapper {
+  order: 1 !important;
+  flex: 1 1 45% !important;
+  min-width: 0 !important;
+  width: auto !important;
+  float: none !important;
+  text-align: left !important;
+  border: none !important;
+  box-shadow: none !important;
+  background: transparent !important;
+  padding: 0 !important;
+}
+
+/* ── Image column — order 2 (right) ── */
+body.sj-page-detail-course .dp-promo-image-wrapper {
+  order: 2 !important;
+  flex: 1 1 45% !important;
+  min-width: 0 !important;
+  width: auto !important;
+  float: none !important;
+}
+
+/* Image: soft Posit blue background, rounded corners — like Asana's tinted panel */
+body.sj-page-detail-course .dp-promo-image {
+  background-color: #D1DBE5 !important;  /* Posit Light Blue 1 */
+  border-radius: 14px !important;
+  padding: 28px !important;
+  overflow: hidden !important;
+}
+body.sj-page-detail-course .dp-promo-image img {
+  display: block !important;
+  width: 100% !important;
+  height: auto !important;
+  border-radius: 6px !important;
+}
+
+/* ── Course title ── */
+body.sj-page-detail-course h1.break-word {
+  font-family: 'Open Sans', sans-serif !important;
+  font-size: 38px !important;
+  font-weight: 700 !important;
+  color: #17212B !important;
+  line-height: 1.2 !important;
+  margin: 0 0 20px 0 !important;
+}
+
+/* ── Course description (SkillJar renders this as an h2) ── */
+body.sj-page-detail-course .sj-course-info-wrapper > h2 {
+  font-family: 'Open Sans', sans-serif !important;
+  font-size: 16px !important;
+  font-weight: 400 !important;
+  color: #404041 !important;
+  line-height: 1.7 !important;
+  margin: 0 0 28px 0 !important;
+}
+
+/* ═══════════════════════════════════════════════
+   REGISTER BUTTON
+   ═══════════════════════════════════════════════ */
+body.sj-page-detail-course a#purchase-button,
+body.sj-page-detail-course a.purchase-button {
+  font-family: 'Open Sans', sans-serif !important;
+  font-size: 15px !important;
+  font-weight: 600 !important;
+  background-color: #E7B10A !important;  /* Academy gold */
+  color: #17212B !important;
+  border: none !important;
+  border-radius: 6px !important;
+  padding: 13px 32px !important;
+  text-decoration: none !important;
+  display: inline-block !important;
+  transition: background-color 0.15s ease, transform 0.15s ease !important;
+  cursor: pointer !important;
+  box-shadow: none !important;
+}
+body.sj-page-detail-course a#purchase-button:hover,
+body.sj-page-detail-course a.purchase-button:hover {
+  background-color: #C89809 !important;
+  color: #17212B !important;
+  transform: translateY(-1px) !important;
+}
+
+/* Hide Facebook / Twitter share buttons — off-brand */
+body.sj-page-detail-course .social-media-wrapper {
+  display: none !important;
+}
+
+/* ═══════════════════════════════════════════════
+   LOWER SECTION — section headings (h3)
+   ═══════════════════════════════════════════════ */
+body.sj-page-detail-course #dp-details h3 {
+  font-family: 'Open Sans', sans-serif !important;
+  font-size: 20px !important;
+  font-weight: 700 !important;
+  color: #17212B !important;
+  margin: 0 0 20px 0 !important;
+  padding-bottom: 10px !important;
+  border-bottom: 3px solid #E7B10A !important;  /* Posit Orange accent */
+  display: inline-block !important;
+}
+
+/* ═══════════════════════════════════════════════
+   COURSE OBJECTIVES  (.dp-long-description ol)
+   ═══════════════════════════════════════════════ */
+body.sj-page-detail-course .dp-long-description ol {
+  padding-left: 0 !important;
+  margin: 0 !important;
+  list-style: none !important;
+  counter-reset: objectives !important;
+}
+body.sj-page-detail-course .dp-long-description ol li {
+  counter-increment: objectives !important;
+  display: flex !important;
+  align-items: flex-start !important;
+  gap: 14px !important;
+  padding: 10px 0 !important;
+  border-bottom: 1px solid #F0F3F6 !important;
+  font-family: 'Open Sans', sans-serif !important;
+  font-size: 15px !important;
+  font-weight: 400 !important;
+  color: #404041 !important;
+  line-height: 1.6 !important;
+}
+body.sj-page-detail-course .dp-long-description ol li:last-child {
+  border-bottom: none !important;
+}
+body.sj-page-detail-course .dp-long-description ol li::before {
+  content: counter(objectives) !important;
+  flex-shrink: 0 !important;
+  width: 26px !important;
+  height: 26px !important;
+  border-radius: 50% !important;
+  background-color: #447099 !important;  /* Posit Blue */
+  color: #ffffff !important;
+  font-size: 12px !important;
+  font-weight: 700 !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  margin-top: 2px !important;
+}
+body.sj-page-detail-course .dp-long-description ol li span {
+  font-family: 'Open Sans', sans-serif !important;
+}
+
+/* ═══════════════════════════════════════════════
+   CURRICULUM  (ul.dp-curriculum)
+   ═══════════════════════════════════════════════ */
+body.sj-page-detail-course ul.dp-curriculum {
+  padding: 0 !important;
+  margin: 0 !important;
+  list-style: none !important;
+}
+body.sj-page-detail-course ul.dp-curriculum li {
+  display: flex !important;
+  align-items: center !important;
+  gap: 10px !important;
+  padding: 10px 0 !important;
+  border-bottom: 1px solid #F0F3F6 !important;
+  font-family: 'Open Sans', sans-serif !important;
+  font-size: 15px !important;
+  font-weight: 400 !important;
+  color: #404041 !important;
+  line-height: 1.5 !important;
+}
+body.sj-page-detail-course ul.dp-curriculum li:last-child {
+  border-bottom: none !important;
+}
+body.sj-page-detail-course ul.dp-curriculum .type-icon {
+  flex-shrink: 0 !important;
+  color: #447099 !important;
+  opacity: 0.75 !important;
+}
+body.sj-page-detail-course ul.dp-curriculum .type-icon i {
+  color: #447099 !important;
+}
+body.sj-page-detail-course ul.dp-curriculum .lesson-wrapper {
+  flex: 1 !important;
+  font-family: 'Open Sans', sans-serif !important;
+}
+body.sj-page-detail-course ul.dp-curriculum li.lesson-rating {
+  color: #707073 !important;
+  font-size: 14px !important;
+}
+body.sj-page-detail-course ul.dp-curriculum li.lesson-rating .type-icon i {
+  color: #707073 !important;
+}
+
+/* ═══════════════════════════════════════════════
+   MOBILE — stack text above image
+   ═══════════════════════════════════════════════ */
+@media only screen and (max-width: 640px) {
+  body.sj-page-detail-course .dp-row-flex-v2 {
+    flex-wrap: wrap !important;
+    padding: 32px 20px !important;
+    gap: 28px !important;
+  }
+  body.sj-page-detail-course .dp-summary-wrapper,
+  body.sj-page-detail-course .dp-promo-image-wrapper {
+    flex: 1 1 100% !important;
+  }
+  body.sj-page-detail-course h1.break-word {
+    font-size: 26px !important;
+  }
+}
+</style>
+<!-- END Course Landing Page Styles -->
+
+
+<!-- START Instruqt Lab Lesson Page Styles -->
+<!--
+  WHAT THIS DOES:
+  Styles the Instruqt lab pre-launch page to match the Posit brand.
+  Targets the actual SkillJar LTI widget HTML structure:
+    .lti-launch-area        — card container
+    .lti-lesson-details p   — description text
+    button.lti-launch-button — Launch button
+
+  PER-LESSON TEMPLATE:
+  In the lesson's custom HTML / description field, paste only:
+
+    <p>Your one or two sentence description here.</p>
+
+  No class names or extra markup needed — everything is handled below.
+-->
+<style>
+/* ── Strip white background from SkillJar's content wrappers ── */
+body.sj-page-lesson #lesson-main,
+body.sj-page-lesson #lesson-main-inner,
+body.sj-page-lesson #lesson-main-content,
+body.sj-page-lesson .course-text-content {
+  background: transparent !important;
+}
+
+/* ── Card container ── */
+.lti-launch-area {
+  background: #ffffff !important;
+  border: 1px solid #D1DBE5 !important;
+  border-top: 4px solid #447099 !important;   /* Posit Blue accent */
+  border-radius: 10px !important;
+  padding: 28px 32px 24px !important;
+  box-shadow: 0 2px 10px rgba(68,112,153,0.08) !important;
+  max-width: 560px !important;
+  box-sizing: border-box !important;
+  margin: 0 auto !important;
+  text-align: center !important;
+}
+
+/* ── Description text ── */
+.lti-lesson-details p {
+  font-family: 'Open Sans', sans-serif !important;
+  font-size: 15px !important;
+  font-weight: 400 !important;
+  color: #404041 !important;
+  line-height: 1.7 !important;
+  margin: 0 0 20px 0 !important;
+}
+
+/* ── Remove default form margin so button sits flush ── */
+.lti-launch-form {
+  margin: 0 !important;
+}
+
+/* ── Launch button — Academy gold ── */
+button.lti-launch-button {
+  font-family: 'Open Sans', sans-serif !important;
+  font-size: 15px !important;
+  font-weight: 600 !important;
+  background-color: #E7B10A !important;
+  color: #17212B !important;
+  border: none !important;
+  border-radius: 6px !important;
+  padding: 11px 28px !important;
+  cursor: pointer !important;
+  transition: background-color 0.15s ease !important;
+}
+button.lti-launch-button:hover {
+  background-color: #C89809 !important;
+  color: #17212B !important;
+}
+</style>
+<!-- END Instruqt Lab Lesson Page Styles -->
+
+
+<!-- START Live Training (VILT) Lesson Page Styles -->
+<!--
+  WHAT THIS DOES:
+  Modernises the live training registration/session page to match the Posit brand.
+  Scoped to body.sj-page-lesson — applies to all lesson pages, but the
+  VILT-specific selectors (.month-day-widget, .date-section, etc.) only
+  exist on live training sessions so there is no visual impact on regular lessons.
+-->
+<style>
+/* ═══════════════════════════════════════════════
+   PAGE & CONTENT AREA
+   ═══════════════════════════════════════════════ */
+body.sj-page-lesson {
+  font-family: 'Open Sans', sans-serif !important;
+}
+
+body.sj-page-lesson #lesson-main-content {
+  padding: 32px 40px !important;
+}
+
+/* Lesson title (above the session card) */
+body.sj-page-lesson .lesson-top h2 {
+  font-family: 'Open Sans', sans-serif !important;
+  font-size: 26px !important;
+  font-weight: 700 !important;
+  color: #17212B !important;
+  margin: 0 0 24px 0 !important;
+  line-height: 1.2 !important;
+}
+
+/* ═══════════════════════════════════════════════
+   "YOU ARE REGISTERED" HEADING
+   ═══════════════════════════════════════════════ */
+body.sj-page-lesson h4.sj-text-lt-you-are-registered,
+body.sj-page-lesson .sj-text-lt-you-are-registered {
+  font-family: 'Open Sans', sans-serif !important;
+  font-size: 13px !important;
+  font-weight: 700 !important;
+  letter-spacing: 0.08em !important;
+  text-transform: uppercase !important;
+  color: #447099 !important;   /* Posit Blue */
+  margin: 0 0 16px 0 !important;
+}
+
+/* Dividers */
+body.sj-page-lesson #vilt-sessions-container hr {
+  border: none !important;
+  border-top: 1px solid #E8ECEF !important;
+  margin: 20px 0 !important;
+}
+
+/* ═══════════════════════════════════════════════
+   SESSION CARD ROW  (.row containing date + info + action)
+   ═══════════════════════════════════════════════ */
+body.sj-page-lesson #vilt-sessions-container .row {
+  background: #F8FAFB !important;
+  border: 1px solid #E0E6EC !important;
+  border-radius: 10px !important;
+  padding: 24px !important;
+  margin: 0 !important;
+  display: flex !important;
+  align-items: flex-start !important;
+  gap: 24px !important;
+  flex-wrap: wrap !important;
+}
+
+/* ── Calendar widget ── */
+body.sj-page-lesson .month-day-widget {
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: center !important;
+  border: 1px solid #E0E6EC !important;
+  border-radius: 8px !important;
+  overflow: hidden !important;
+  min-width: 64px !important;
+  background: #ffffff !important;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.06) !important;
+}
+body.sj-page-lesson .month-day-widget .date {
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: center !important;
+  width: 100% !important;
+}
+body.sj-page-lesson .month-day-widget .date .month {
+  background-color: #447099 !important;  /* Posit Blue */
+  color: #ffffff !important;
+  font-family: 'Open Sans', sans-serif !important;
+  font-size: 11px !important;
+  font-weight: 700 !important;
+  letter-spacing: 0.08em !important;
+  text-transform: uppercase !important;
+  width: 100% !important;
+  text-align: center !important;
+  padding: 4px 0 !important;
+  display: block !important;
+}
+body.sj-page-lesson .month-day-widget .date .day {
+  font-family: 'Open Sans', sans-serif !important;
+  font-size: 28px !important;
+  font-weight: 700 !important;
+  color: #17212B !important;
+  line-height: 1 !important;
+  padding: 8px 0 6px !important;
+  display: block !important;
+}
+body.sj-page-lesson .month-day-widget .time {
+  font-family: 'Open Sans', sans-serif !important;
+  font-size: 11px !important;
+  font-weight: 600 !important;
+  color: #707073 !important;
+  padding: 0 6px 6px !important;
+  text-align: center !important;
+  display: block !important;
+}
+
+/* ── Event info section ── */
+body.sj-page-lesson .info-section {
+  flex: 1 !important;
+  float: none !important;
+  width: auto !important;
+}
+body.sj-page-lesson .info-section .title {
+  font-family: 'Open Sans', sans-serif !important;
+  font-size: 18px !important;
+  font-weight: 700 !important;
+  color: #17212B !important;
+  margin-bottom: 10px !important;
+}
+body.sj-page-lesson .info-section .times,
+body.sj-page-lesson .info-section .instructor,
+body.sj-page-lesson .info-section .help-text {
+  font-family: 'Open Sans', sans-serif !important;
+  font-size: 14px !important;
+  color: #404041 !important;
+  line-height: 1.7 !important;
+  margin-bottom: 2px !important;
+}
+body.sj-page-lesson .info-section .help-text {
+  color: #707073 !important;
+  font-style: italic !important;
+  margin-top: 4px !important;
+}
+
+/* ── Action section (buttons) ── */
+body.sj-page-lesson .action-section {
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: flex-end !important;
+  gap: 10px !important;
+  float: none !important;
+  width: auto !important;
+}
+
+/* Launch Zoom Event button — active state */
+body.sj-page-lesson #launch-button,
+body.sj-page-lesson a[data-launch].button {
+  font-family: 'Open Sans', sans-serif !important;
+  font-size: 14px !important;
+  font-weight: 600 !important;
+  background-color: #E7B10A !important;  /* Academy gold */
+  color: #17212B !important;
+  border: none !important;
+  border-radius: 6px !important;
+  padding: 11px 22px !important;
+  text-decoration: none !important;
+  cursor: pointer !important;
+  white-space: nowrap !important;
+}
+body.sj-page-lesson #launch-button:hover,
+body.sj-page-lesson a[data-launch].button:hover {
+  background-color: #C89809 !important;
+  color: #17212B !important;
+}
+
+/* Disabled state (event ended / not yet open) */
+body.sj-page-lesson #launch-button.disabled,
+body.sj-page-lesson a[data-launch].button.disabled {
+  background-color: #C2C2C4 !important;  /* Posit Light Gray 1 */
+  color: #ffffff !important;
+  cursor: not-allowed !important;
+  opacity: 1 !important;
+}
+
+/* Download to Calendar link */
+body.sj-page-lesson .sj-text-lt-download-to-calendar,
+body.sj-page-lesson a.sj-text-lt-download-to-calendar {
+  font-family: 'Open Sans', sans-serif !important;
+  font-size: 13px !important;
+  font-weight: 600 !important;
+  color: #447099 !important;   /* Posit Blue */
+  text-decoration: underline !important;
+}
+body.sj-page-lesson .sj-text-lt-download-to-calendar:hover {
+  color: #305775 !important;
+}
+
+/* ═══════════════════════════════════════════════
+   BOTTOM FOOTER BAR
+   ═══════════════════════════════════════════════ */
+body.sj-page-lesson #lp-footer {
+  border-top: 1px solid #E8ECEF !important;
+  background: #ffffff !important;
+}
+body.sj-page-lesson .lesson-title-footer {
+  font-family: 'Open Sans', sans-serif !important;
+  font-size: 14px !important;
+  font-weight: 600 !important;
+  color: #404041 !important;
+}
+</style>
+<!-- END Live Training (VILT) Lesson Page Styles -->
