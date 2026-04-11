@@ -1,8 +1,228 @@
+<!-- Google Tag Manager (noscript) -->
+<noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-KHBDBW7"
+height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+<!-- End Google Tag Manager (noscript) -->
+
 <!-- ═══════════════════════════════════════════════════════════════
      POSIT ACADEMY — Global Code Snippets
      Paste the entire contents of this file into:
      SkillJar Admin > Design > Global Code Snippet
      ═══════════════════════════════════════════════════════════════ -->
+
+
+<!-- START Header / Navigation Styles -->
+<!--
+  WHAT THIS DOES:
+  1. Reskins the SkillJar Sign In link as a dark navy button
+  2. Adds a dark sub-nav bar (position: fixed) below the header with:
+     - Configurable links (Courses, Live Trainings, Community) — edit hrefs below
+     - A search input that proxies to SkillJar's own catalog search
+
+  TO CONFIGURE:
+  - Edit the href values on the .pa-subnav__link anchors below
+-->
+
+<!-- ── Sub-nav: static HTML, positioned via CSS ── -->
+<div id="pa-subnav">
+  <div class="pa-subnav__links">
+    <a href="/page/all-courses"      class="pa-subnav__link">Courses</a>       <!-- ✏️ -->
+    <a href="/page/live-trainings"   class="pa-subnav__link">Live Trainings</a><!-- ✏️ -->
+    <a href="https://forum.posit.co/" class="pa-subnav__link">Community</a>    <!-- ✏️ -->
+  </div>
+  <form class="pa-subnav__search" id="pa-subnav-form">
+    <input type="text" class="pa-subnav__search-input" id="pa-subnav-input"
+           placeholder="Search" aria-label="Search">
+    <button type="submit" class="pa-subnav__search-btn" aria-label="Search">
+      <i class="fa fa-search" aria-hidden="true"></i>
+    </button>
+  </form>
+</div>
+
+<style>
+/* ── Sign In button ── */
+#header a.login-link.sj-text-sign-in {
+  background-color: #17212B !important;  /* Posit Dark Blue */
+  color: #ffffff !important;
+  padding: 10px 22px !important;
+  border-radius: 4px !important;
+  font-family: 'Open Sans', sans-serif !important;
+  font-size: 12px !important;
+  font-weight: 700 !important;
+  letter-spacing: 0.1em !important;
+  text-transform: uppercase !important;
+  text-decoration: none !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  transition: background-color 0.15s !important;
+}
+#header a.login-link.sj-text-sign-in:hover {
+  background-color: #213D4F !important;
+  color: #ffffff !important;
+}
+
+/* ── Main nav links ── */
+#header .header-link--base {
+  font-family: 'Open Sans', sans-serif !important;
+  font-size: 15px !important;
+  font-weight: 400 !important;
+  color: #17212B !important;
+}
+#header .header-link--base:hover {
+  color: #447099 !important;
+}
+
+/* ── Hide SkillJar's search from the header (we have our own in the sub-nav) ── */
+#header .search-container {
+  display: none !important;
+}
+
+/* ═══════════════════════════════════════════════
+   SUB-NAV BAR — fixed below the header, white background
+   ═══════════════════════════════════════════════ */
+#pa-subnav {
+  position: fixed !important;
+  top: 64px !important;         /* ✏️ match your header height — JS auto-corrects this */
+  left: 0 !important;
+  right: 0 !important;
+  z-index: 999 !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: space-between !important;
+  padding: 0 40px !important;
+  height: 52px !important;
+  background: #ffffff !important;
+  border-top: 1px solid #E0E6EC !important;   /* divider between header and sub-nav */
+  box-sizing: border-box !important;
+}
+
+.pa-subnav__links {
+  display: flex !important;
+  align-items: center !important;
+  gap: 36px !important;
+}
+
+.pa-subnav__link {
+  font-family: 'Open Sans', sans-serif !important;
+  font-size: 15px !important;
+  font-weight: 400 !important;
+  color: #17212B !important;
+  text-decoration: none !important;
+  white-space: nowrap !important;
+  transition: color 0.15s !important;
+}
+.pa-subnav__link:hover {
+  color: #447099 !important;  /* Posit Blue */
+}
+
+/* ── Search form ── */
+.pa-subnav__search {
+  display: flex !important;
+  align-items: center !important;
+  margin: 0 !important;
+  height: 34px !important;
+  border: 1px solid #C8D0D8 !important;
+  border-radius: 6px !important;
+  background: #ffffff !important;
+  overflow: hidden !important;
+  box-sizing: border-box !important;
+}
+.pa-subnav__search-input {
+  font-family: 'Open Sans', sans-serif !important;
+  font-size: 11px !important;
+  font-weight: 700 !important;
+  letter-spacing: 0.1em !important;
+  text-transform: uppercase !important;
+  flex: 1 1 160px !important;
+  padding: 0 12px !important;
+  margin: 0 !important;
+  background: transparent !important;
+  border: none !important;
+  color: #404041 !important;
+  outline: none !important;
+  -webkit-appearance: none !important;
+  appearance: none !important;
+}
+.pa-subnav__search-input::placeholder {
+  color: #707073 !important;
+  letter-spacing: 0.1em !important;
+}
+.pa-subnav__search-btn {
+  flex-shrink: 0 !important;
+  padding: 0 10px !important;
+  margin: 0 !important;
+  background: transparent !important;
+  border: none !important;
+  color: #3A5672 !important;  /* Posit Drk Blue 1 */
+  cursor: pointer !important;
+  display: flex !important;
+  align-items: center !important;
+  transition: color 0.15s !important;
+}
+.pa-subnav__search-btn:hover {
+  color: #447099 !important;  /* Posit Blue */
+}
+
+/* ── Push page content down to clear fixed header + sub-nav ── */
+body {
+  padding-top: 52px !important;  /* sub-nav height — JS adds this on top of SkillJar's existing header padding */
+}
+
+/* ── Mobile ── */
+@media only screen and (max-width: 768px) {
+  #pa-subnav {
+    padding: 0 20px !important;
+    height: 44px !important;
+  }
+  .pa-subnav__links { gap: 20px !important; }
+  .pa-subnav__search-input { width: 120px !important; }
+}
+</style>
+
+<script>
+(function () {
+
+  function init() {
+    /* ── Position sub-nav exactly below the actual header ── */
+    var header = document.getElementById('header');
+    var subnav = document.getElementById('pa-subnav');
+    if (header && subnav && !subnav.getAttribute('data-positioned')) {
+      var h = header.offsetHeight;
+      if (h > 0) {
+        subnav.style.top = h + 'px';
+        subnav.setAttribute('data-positioned', '1');
+        /* Add sub-nav height on top of SkillJar's existing body padding */
+        var existingPad = parseInt(window.getComputedStyle(document.body).paddingTop) || 0;
+        document.body.style.paddingTop = (existingPad + subnav.offsetHeight) + 'px';
+      }
+    }
+
+    /* ── Wire search form to SkillJar's catalog search ── */
+    var form = document.getElementById('pa-subnav-form');
+    if (form && !form.getAttribute('data-wired')) {
+      form.setAttribute('data-wired', '1');
+      form.addEventListener('submit', function (e) {
+        e.preventDefault();
+        var val = document.getElementById('pa-subnav-input').value;
+        var sjInput = document.getElementById('catalogSearchInput');
+        var sjBtn   = document.querySelector('.catalog-search-input-button');
+        if (sjInput && sjBtn) {
+          sjInput.value = val;
+          sjBtn.click();
+        }
+      });
+    }
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', init);
+  } else {
+    init();
+  }
+  window.addEventListener('load', init);
+
+}());
+</script>
+<!-- END Header / Navigation Styles -->
 
 
 <!-- START Course Separators -->
@@ -72,7 +292,7 @@ a.coursebox-container[data-tags="separator"] .coursebox-text::after {
   display: block;
   width: 40px;
   height: 3px;
-  background-color: #E7B10A; /* Posit Orange */
+  background-color: #F6B000; /* Academy Yellow */
   margin-top: 10px;
 }
 
@@ -193,7 +413,7 @@ body.sj-page-detail-course a.purchase-button {
   font-family: 'Open Sans', sans-serif !important;
   font-size: 15px !important;
   font-weight: 600 !important;
-  background-color: #E7B10A !important;  /* Academy gold */
+  background-color: #F6B000 !important;  /* Academy Yellow */
   color: #17212B !important;
   border: none !important;
   border-radius: 6px !important;
@@ -206,7 +426,7 @@ body.sj-page-detail-course a.purchase-button {
 }
 body.sj-page-detail-course a#purchase-button:hover,
 body.sj-page-detail-course a.purchase-button:hover {
-  background-color: #C89809 !important;
+  background-color: #C48F0A !important;  /* Drk Yellow */
   color: #17212B !important;
   transform: translateY(-1px) !important;
 }
@@ -226,7 +446,7 @@ body.sj-page-detail-course #dp-details h3 {
   color: #17212B !important;
   margin: 0 0 20px 0 !important;
   padding-bottom: 10px !important;
-  border-bottom: 3px solid #E7B10A !important;  /* Posit Orange accent */
+  border-bottom: 3px solid #F6B000 !important;  /* Academy Yellow accent */
   display: inline-block !important;
 }
 
@@ -392,12 +612,12 @@ body.sj-page-lesson .course-text-content {
   margin: 0 !important;
 }
 
-/* ── Launch button — Academy gold ── */
+/* ── Launch button — Academy Yellow ── */
 button.lti-launch-button {
   font-family: 'Open Sans', sans-serif !important;
   font-size: 15px !important;
   font-weight: 600 !important;
-  background-color: #E7B10A !important;
+  background-color: #F6B000 !important;  /* Academy Yellow */
   color: #17212B !important;
   border: none !important;
   border-radius: 6px !important;
@@ -406,7 +626,7 @@ button.lti-launch-button {
   transition: background-color 0.15s ease !important;
 }
 button.lti-launch-button:hover {
-  background-color: #C89809 !important;
+  background-color: #C48F0A !important;  /* Drk Yellow */
   color: #17212B !important;
 }
 </style>
@@ -573,7 +793,7 @@ body.sj-page-lesson a[data-launch].button {
   font-family: 'Open Sans', sans-serif !important;
   font-size: 14px !important;
   font-weight: 600 !important;
-  background-color: #E7B10A !important;  /* Academy gold */
+  background-color: #F6B000 !important;  /* Academy Yellow */
   color: #17212B !important;
   border: none !important;
   border-radius: 6px !important;
@@ -584,7 +804,7 @@ body.sj-page-lesson a[data-launch].button {
 }
 body.sj-page-lesson #launch-button:hover,
 body.sj-page-lesson a[data-launch].button:hover {
-  background-color: #C89809 !important;
+  background-color: #C48F0A !important;  /* Drk Yellow */
   color: #17212B !important;
 }
 
@@ -607,7 +827,7 @@ body.sj-page-lesson a.sj-text-lt-download-to-calendar {
   text-decoration: underline !important;
 }
 body.sj-page-lesson .sj-text-lt-download-to-calendar:hover {
-  color: #305775 !important;
+  color: #3A5672 !important;  /* Posit Drk Blue 1 */
 }
 
 /* ═══════════════════════════════════════════════
