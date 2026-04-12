@@ -412,16 +412,31 @@
     });
   }
 
-  /* Poll every 300 ms until course cards appear (handles SkillJar's async rendering).
-     This is more reliable than DOMContentLoaded / load / MutationObserver alone
-     because SkillJar can inject cards at any point after the page loads. */
+  /* SkillJar loads course cards in batches after the page renders.
+     Poll every 300 ms and wait for the count to stabilise across
+     3 consecutive polls (~900 ms of no change) before building,
+     so all cards are present when the carousel is constructed. */
+  var lastCount = 0;
+  var stableRuns = 0;
+
   var pollInterval = setInterval(function () {
     var container = document.getElementById('catalog-courses');
-    if (container &&
-        container.querySelectorAll('.coursebox-container').length > 0 &&
-        !container.querySelector('.pa-carousel')) {
+    if (!container || container.querySelector('.pa-carousel')) {
       clearInterval(pollInterval);
-      buildCarousels();
+      if (container && !container.querySelector('.pa-carousel')) buildCarousels();
+      return;
+    }
+
+    var count = container.querySelectorAll('.coursebox-container').length;
+    if (count > 0 && count === lastCount) {
+      stableRuns++;
+      if (stableRuns >= 3) {
+        clearInterval(pollInterval);
+        buildCarousels();
+      }
+    } else {
+      stableRuns = 0;
+      lastCount = count;
     }
   }, 300);
 
