@@ -235,4 +235,173 @@
   }
 }
 </style>
+<!-- ══════════════════════════════════════════════
+     HOME PAGE CAROUSEL
+     Converts the course card rows into a scrolling
+     carousel with prev/next arrows.
+     ══════════════════════════════════════════════ -->
+<style>
+/* Switch catalog courses to block so JS-built carousel controls layout */
+#catalog-courses {
+  display: block !important;
+}
+
+/* Carousel wrapper — positions the prev/next buttons */
+.pa-carousel {
+  position: relative;
+  width: 100%;
+  padding-bottom: 24px;
+}
+
+/* Scrollable, snapping track */
+.pa-carousel-track {
+  display: flex;
+  gap: 16px;
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
+}
+.pa-carousel-track::-webkit-scrollbar { display: none; }
+
+/* Each slide: 4-up on desktop, fills width exactly */
+.pa-carousel-slide {
+  flex: 0 0 calc((100% - 48px) / 4);   /* 4 cards, 3 gaps × 16px */
+  scroll-snap-align: start;
+  display: flex;
+}
+.pa-carousel-slide a.coursebox-container {
+  width: 100% !important;
+  flex: 1 !important;
+}
+
+/* Prev / Next buttons */
+.pa-carousel-btn {
+  position: absolute;
+  top: calc(50% - 20px);
+  transform: translateY(-50%);
+  z-index: 10;
+  width: 36px;
+  height: 36px;
+  background: #ffffff;
+  border: 1px solid #D1DBE5;
+  border-radius: 50%;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 20px;
+  color: #17212B;
+  padding: 0;
+  line-height: 1;
+  transition: opacity 0.2s, box-shadow 0.2s;
+}
+.pa-carousel-btn:hover { box-shadow: 0 4px 12px rgba(0,0,0,0.15); }
+.pa-carousel-prev { left: -18px; }
+.pa-carousel-next { right: -18px; }
+
+/* Tablet — 2-up */
+@media only screen and (max-width: 900px) {
+  .pa-carousel-slide { flex: 0 0 calc((100% - 16px) / 2); }
+}
+
+/* Mobile — 1-up, hide buttons (touch-scroll instead) */
+@media only screen and (max-width: 640px) {
+  .pa-carousel-slide { flex: 0 0 100%; }
+  .pa-carousel-btn   { display: none; }
+}
+</style>
+
+<script>
+(function () {
+  function buildCarousels() {
+    var container = document.getElementById('catalog-courses');
+    if (!container || container.querySelector('.pa-carousel')) return;
+
+    var groups = [];
+    var cur = { separator: null, cards: [] };
+    Array.from(container.children).forEach(function (el) {
+      if (el.dataset && el.dataset.tags === 'separator') {
+        if (cur.separator || cur.cards.length) groups.push(cur);
+        cur = { separator: el, cards: [] };
+      } else if (el.classList.contains('coursebox-container')) {
+        cur.cards.push(el);
+      }
+    });
+    if (cur.separator || cur.cards.length) groups.push(cur);
+
+    groups.forEach(function (group) {
+      if (!group.cards.length) return;
+
+      var outer = document.createElement('div');
+      outer.className = 'pa-carousel';
+
+      var track = document.createElement('div');
+      track.className = 'pa-carousel-track';
+
+      group.cards.forEach(function (card) {
+        var slide = document.createElement('div');
+        slide.className = 'pa-carousel-slide';
+        slide.appendChild(card);
+        track.appendChild(slide);
+      });
+
+      var prev = document.createElement('button');
+      prev.className = 'pa-carousel-btn pa-carousel-prev';
+      prev.innerHTML = '&#8249;';
+      prev.setAttribute('aria-label', 'Previous');
+
+      var next = document.createElement('button');
+      next.className = 'pa-carousel-btn pa-carousel-next';
+      next.innerHTML = '&#8250;';
+      next.setAttribute('aria-label', 'Next');
+
+      outer.appendChild(prev);
+      outer.appendChild(track);
+      outer.appendChild(next);
+
+      if (group.separator) {
+        group.separator.insertAdjacentElement('afterend', outer);
+      } else {
+        container.appendChild(outer);
+      }
+
+      function pageWidth() {
+        var slide = track.querySelector('.pa-carousel-slide');
+        return slide ? slide.offsetWidth + 16 : 0;
+      }
+      function visiblePages() {
+        var pw = pageWidth();
+        return pw ? Math.round(track.offsetWidth / pw) : 1;
+      }
+      prev.addEventListener('click', function () {
+        track.scrollBy({ left: -(visiblePages() * pageWidth()), behavior: 'smooth' });
+      });
+      next.addEventListener('click', function () {
+        track.scrollBy({ left: visiblePages() * pageWidth(), behavior: 'smooth' });
+      });
+
+      function syncBtns() {
+        var atStart = track.scrollLeft <= 4;
+        var atEnd   = track.scrollLeft >= track.scrollWidth - track.clientWidth - 4;
+        prev.style.opacity       = atStart ? '0' : '1';
+        prev.style.pointerEvents = atStart ? 'none' : '';
+        next.style.opacity       = atEnd   ? '0' : '1';
+        next.style.pointerEvents = atEnd   ? 'none' : '';
+      }
+      track.addEventListener('scroll', syncBtns, { passive: true });
+      setTimeout(syncBtns, 150);
+    });
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', buildCarousels);
+  } else {
+    buildCarousels();
+  }
+  window.addEventListener('load', buildCarousels);
+}());
+</script>
+
 <!-- END Posit Academy Home Page -->
