@@ -170,6 +170,22 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     });
 
+    // Inject "Explore" button into each separator's description column.
+    // The button links to the separator card's own href — set that URL in
+    // SkillJar (course slug) to point wherever you want (e.g. /page/all-courses).
+    document.querySelectorAll('a.coursebox-container[data-tags="separator"]').forEach(function(sep) {
+        var dest = sep.getAttribute('href') || '/page/all-courses';
+        var desc = sep.querySelector('.coursebox-text-description');
+        if (!desc) return;
+        var btn = document.createElement('span');
+        btn.className = 'pa-sep-btn';
+        btn.textContent = 'Explore all courses';
+        btn.addEventListener('click', function() {
+            window.location.href = dest;
+        });
+        desc.appendChild(btn);
+    });
+
     // Align separator left edge with the first course tile
     var firstTile = document.querySelector('#catalog-courses a.coursebox-container:not([data-tags="separator"])');
     var separators = document.querySelectorAll('a.coursebox-container[data-tags="separator"]');
@@ -183,58 +199,244 @@ document.addEventListener('DOMContentLoaded', function() {
 });
 </script>
 
+
+<!-- START Course Card Styles -->
+<style>
+/* ═══════════════════════════════════════════════
+   BASE COURSE CARD
+   ═══════════════════════════════════════════════ */
+a.coursebox-container {
+  border-radius: 12px !important;
+  border: 1px solid #D1DBE5 !important;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.06) !important;
+  overflow: hidden !important;
+  background: #D1DBE540 !important;
+  transition: box-shadow 0.2s ease, transform 0.2s ease !important;
+  text-decoration: none !important;
+  padding: 0 !important;
+}
+a.coursebox-container:hover {
+  box-shadow: 0 8px 28px rgba(0,0,0,0.1) !important;
+  transform: translateY(-3px) !important;
+}
+
+/* Image */
+a.coursebox-container .coursebox-image {
+  width: 100% !important;
+  display: block !important;
+}
+a.coursebox-container .coursebox-image img {
+  width: 100% !important;
+  height: auto !important;
+  display: block !important;
+}
+
+/* Title */
+a.coursebox-container .coursebox-text {
+  font-family: 'Open Sans', sans-serif !important;
+  font-size: 17px !important;
+  font-weight: 700 !important;
+  color: #17212B !important;
+  padding: 10px 16px 6px !important;
+  line-height: 1.3 !important;
+  margin: 0 !important;
+}
+
+/* Description */
+a.coursebox-container .coursebox-text-description {
+  font-family: 'Open Sans', sans-serif !important;
+  font-size: 13px !important;
+  font-weight: 400 !important;
+  color: #707073 !important;
+  line-height: 1.6 !important;
+  padding: 0 16px 8px !important;
+  margin: 0 !important;
+}
+
+/* Mobile — cards fill full container width */
+@media only screen and (max-width: 640px) {
+  a.coursebox-container:not([data-tags="separator"]) {
+    width: 100% !important;
+    max-width: 100% !important;
+  }
+}
+
+/* Live Training card — yellow tint background */
+a.coursebox-container[data-tags="live-training"] {
+  background: #F4C54040 !important;
+  border-color: #F4C540 !important;
+}
+
+/* Catalog container — strip SkillJar's own width/padding constraints */
+#catalog-content {
+  width: 100% !important;
+  max-width: 100% !important;
+  padding: 0 !important;
+  box-sizing: border-box !important;
+}
+
+/* Course listing — gutters matching the announcement block */
+#catalog-courses {
+  padding-left:  max(20px, 5vw) !important;
+  padding-right: max(20px, 5vw) !important;
+  padding-top: 0 !important;
+  box-sizing: border-box !important;
+}
+
+/* Hide price and CTA button */
+a.coursebox-container .storefront-price,
+a.coursebox-container .coursebox-callout {
+  display: none !important;
+}
+</style>
+<!-- END Course Card Styles -->
+
+
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Open+Sans:wght@300;400;600;700&display=swap');
 
-/* Full-width, no tile styling */
+/* ── Container: single-column stacked layout ── */
 a.coursebox-container[data-tags="separator"] {
-  padding: 24px 0 8px 0 !important;
-  width: 87% !important;
+  padding: max(20px, calc((70vw - 1280px) / 4)) 0 32px 0 !important;
+  width: 100% !important;
   min-height: unset !important;
   background-color: transparent !important;
   box-shadow: none !important;
-  pointer-events: none !important;
   border: none !important;
+  border-radius: 0 !important;
+  overflow: visible !important;
+  pointer-events: none !important;
+  display: block !important;
 }
 
-/* Section title */
+/* ── Title ── */
 a.coursebox-container[data-tags="separator"] .coursebox-text {
   font-family: 'Open Sans', sans-serif !important;
-  font-size: 26px !important;
+  font-size: clamp(26px, 3vw, 42px) !important;
   font-weight: 700 !important;
-  color: #213D4F !important; /* Posit Dark Blue 2 */
+  color: #17212B !important;
   line-height: 1.2 !important;
+  padding: 0 !important;
+  margin: 0 0 14px !important;
+  display: block !important;
 }
 
-/* Orange underline accent beneath the title */
+/* Blue underline accent */
 a.coursebox-container[data-tags="separator"] .coursebox-text::after {
   content: '';
   display: block;
-  width: 40px;
+  width: 150px;
   height: 3px;
-  background-color: #F6B000; /* Academy Yellow */
-  margin-top: 10px;
+  background-color: #447099;
+  margin-top: 14px;
 }
 
-/* Section subtitle */
+/* ── Description ── */
 a.coursebox-container[data-tags="separator"] .coursebox-text-description {
   font-family: 'Open Sans', sans-serif !important;
   font-size: 15px !important;
   font-weight: 400 !important;
-  color: #707073 !important; /* Posit Light Gray 3 */
-  margin: 6px 0 0 !important;
+  color: #404041 !important;
+  line-height: 1.7 !important;
+  padding: 0 !important;
+  margin: 0 0 24px !important;
+  display: block !important;
 }
 
-/* Hide price, image, CTA, after-element, and from search results */
+/* ── "Explore" button (injected by JS) ── */
+.pa-sep-btn {
+  display: block;
+  width: fit-content;
+  margin-top: 20px;
+  font-family: 'Open Sans', sans-serif;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: #ffffff;
+  background-color: #17212B;
+  border-radius: 4px;
+  padding: 14px 26px;
+  cursor: pointer;
+  pointer-events: auto;
+  text-decoration: none;
+  transition: background-color 0.15s;
+}
+.pa-sep-btn:hover {
+  background-color: #3A5672;
+}
+
+/* Hide price, image, CTA, tags, ribbon, after-element, and from search results */
 a.coursebox-container[data-tags="separator"] .storefront-price,
 a.coursebox-container[data-tags="separator"] .coursebox-image,
+a.coursebox-container[data-tags="separator"] .no-coursebox-image-v2,
 a.coursebox-container[data-tags="separator"] .coursebox-callout,
+a.coursebox-container[data-tags="separator"] .coursebox-tags,
+a.coursebox-container[data-tags="separator"] .sj-ribbon-wrapper,
 a.coursebox-container[data-tags="separator"]:after,
 .search a.coursebox-container[data-tags="separator"] {
   display: none !important;
 }
 </style>
 <!-- END Course Separators -->
+
+
+<!-- START Course Type Badge -->
+<style>
+/* ═══════════════════════════════════════════════
+   COURSE TYPE BADGE  (Course / Live Training)
+   Hides all other tags; shows only the two type
+   tags as coloured pill badges below the description.
+   ═══════════════════════════════════════════════ */
+
+/* Tags container — flex row, sits below description */
+a.coursebox-container:not([data-tags="separator"]) .coursebox-tags {
+  display: flex !important;
+  flex-wrap: wrap !important;
+  gap: 6px !important;
+  padding: 0 16px 16px !important;
+  margin: 0 !important;
+}
+
+/* Hide every tag by default */
+a.coursebox-container:not([data-tags="separator"]) .coursebox-tag {
+  display: none !important;
+}
+
+/* Show only course + live-training */
+a.coursebox-container:not([data-tags="separator"]) .coursebox-tag[data-tag="course"],
+a.coursebox-container:not([data-tags="separator"]) .coursebox-tag[data-tag="live-training"] {
+  display: inline-flex !important;
+  align-items: center !important;
+}
+
+/* Pill base */
+a.coursebox-container:not([data-tags="separator"]) .coursebox-tag[data-tag="course"] > span,
+a.coursebox-container:not([data-tags="separator"]) .coursebox-tag[data-tag="live-training"] > span {
+  font-family: 'Open Sans', sans-serif !important;
+  font-size: 11px !important;
+  font-weight: 700 !important;
+  letter-spacing: 0.08em !important;
+  text-transform: uppercase !important;
+  color: #ffffff !important;
+  padding: 5px 12px !important;
+  border-radius: 20px !important;
+  line-height: 1 !important;
+  display: inline-block !important;
+}
+
+/* Course — Posit Blue */
+a.coursebox-container:not([data-tags="separator"]) .coursebox-tag[data-tag="course"] > span {
+  background-color: #447099 !important;
+}
+
+/* Live Training — Academy Yellow (dark text for contrast) */
+a.coursebox-container:not([data-tags="separator"]) .coursebox-tag[data-tag="live-training"] > span {
+  background-color: #F6B000 !important;
+  color: #17212B !important;
+}
+</style>
+<!-- END Course Type Badge -->
 
 
 <!-- START Course Landing Page Styles -->
