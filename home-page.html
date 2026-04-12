@@ -318,15 +318,19 @@
   function buildCarousels() {
     var container = document.getElementById('catalog-courses');
     if (!container || container.querySelector('.pa-carousel')) return;
-    if (!container.querySelector('.coursebox-container')) return;
 
+    /* querySelectorAll finds cards at any nesting depth, not just direct children */
+    var allBoxes = Array.from(container.querySelectorAll('.coursebox-container'));
+    if (!allBoxes.length) return;
+
+    /* Group by separator in document order */
     var groups = [];
     var cur = { separator: null, cards: [] };
-    Array.from(container.children).forEach(function (el) {
+    allBoxes.forEach(function (el) {
       if (el.dataset && el.dataset.tags === 'separator') {
         if (cur.separator || cur.cards.length) groups.push(cur);
         cur = { separator: el, cards: [] };
-      } else if (el.classList.contains('coursebox-container')) {
+      } else {
         cur.cards.push(el);
       }
     });
@@ -341,11 +345,23 @@
       var track = document.createElement('div');
       track.className = 'pa-carousel-track';
 
+      /* Move each card (from wherever it lives) into a slide */
       group.cards.forEach(function (card) {
         var slide = document.createElement('div');
         slide.className = 'pa-carousel-slide';
-        slide.appendChild(card);
+        slide.appendChild(card);   /* reparents the node */
         track.appendChild(slide);
+      });
+
+      /* Remove any now-empty wrappers SkillJar may have left behind */
+      Array.from(container.querySelectorAll('*')).forEach(function (el) {
+        if (!el.classList.contains('pa-carousel') &&
+            !el.closest('.pa-carousel') &&
+            el !== group.separator &&
+            el.children.length === 0 &&
+            el.textContent.trim() === '') {
+          el.remove();
+        }
       });
 
       var prev = document.createElement('button');
@@ -396,42 +412,21 @@
     });
   }
 
-  /* SkillJar injects course cards dynamically after page load.
-     Use a MutationObserver so we build the carousel as soon as
-     cards actually appear in #catalog-courses, regardless of
-     when that happens relative to DOMContentLoaded / load. */
-  function observe() {
+  /* Poll every 300 ms until course cards appear (handles SkillJar's async rendering).
+     This is more reliable than DOMContentLoaded / load / MutationObserver alone
+     because SkillJar can inject cards at any point after the page loads. */
+  var pollInterval = setInterval(function () {
     var container = document.getElementById('catalog-courses');
-
-    if (!container) {
-      /* #catalog-courses doesn't exist yet — watch <body> for it */
-      var bodyObs = new MutationObserver(function () {
-        if (document.getElementById('catalog-courses')) {
-          bodyObs.disconnect();
-          observe();
-        }
-      });
-      bodyObs.observe(document.body || document.documentElement,
-                      { childList: true, subtree: true });
-      return;
+    if (container &&
+        container.querySelectorAll('.coursebox-container').length > 0 &&
+        !container.querySelector('.pa-carousel')) {
+      clearInterval(pollInterval);
+      buildCarousels();
     }
+  }, 300);
 
-    /* #catalog-courses exists — try immediately, then watch for cards */
-    buildCarousels();
-    var obs = new MutationObserver(function () {
-      if (container.querySelector('.coursebox-container')) {
-        obs.disconnect();
-        buildCarousels();
-      }
-    });
-    obs.observe(container, { childList: true, subtree: true });
-  }
-
-  if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', observe);
-  } else {
-    observe();
-  }
+  /* Safety: stop polling after 15 s regardless */
+  setTimeout(function () { clearInterval(pollInterval); }, 15000);
 }());
 </script>
 
