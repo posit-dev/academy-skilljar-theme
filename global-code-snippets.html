@@ -216,10 +216,16 @@ a.coursebox-container {
   padding: 0 !important;
 }
 /* Stretch cards to fill their row, but cap width so a lone card
-   on a short row doesn't expand to fill the entire container */
+   on a short row doesn't expand to fill the entire container.
+   50% cap on narrow viewports (2-per-row); 1/3 cap on wider ones (3+-per-row). */
 a.coursebox-container:not([data-tags="separator"]) {
   flex-grow: 1 !important;
   max-width: 50% !important;
+}
+@media (min-width: 900px) {
+  a.coursebox-container:not([data-tags="separator"]) {
+    max-width: calc(100% / 3) !important;
+  }
 }
 a.coursebox-container:hover {
   box-shadow: 0 8px 28px rgba(0,0,0,0.1) !important;
