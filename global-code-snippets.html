@@ -215,6 +215,10 @@ a.coursebox-container {
   text-decoration: none !important;
   padding: 0 !important;
 }
+/* Stretch cards to fill their row in SkillJar's flex container */
+a.coursebox-container:not([data-tags="separator"]) {
+  flex-grow: 1 !important;
+}
 a.coursebox-container:hover {
   box-shadow: 0 8px 28px rgba(0,0,0,0.1) !important;
   transform: translateY(-3px) !important;
