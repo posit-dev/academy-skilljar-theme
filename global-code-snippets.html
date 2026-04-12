@@ -157,7 +157,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 <script>
 var textAlignment = 'left'; /* change to 'center' for centered section headers */
 
-document.addEventListener('DOMContentLoaded', function() {
+function runSeparatorSetup() {
     // Strip [separator] text and set alignment
     var courseboxContainers = document.querySelectorAll('.coursebox-container');
     courseboxContainers.forEach(function(container) {
@@ -196,7 +196,13 @@ document.addEventListener('DOMContentLoaded', function() {
             sep.style.paddingLeft = Math.max(0, tileLeft - sepLeft) + 'px';
         });
     }
-});
+}
+
+if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', runSeparatorSetup);
+} else {
+    runSeparatorSetup();
+}
 </script>
 
 
