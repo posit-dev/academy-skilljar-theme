@@ -318,6 +318,7 @@
   function buildCarousels() {
     var container = document.getElementById('catalog-courses');
     if (!container || container.querySelector('.pa-carousel')) return;
+    if (!container.querySelector('.coursebox-container')) return;
 
     var groups = [];
     var cur = { separator: null, cards: [] };
@@ -395,12 +396,42 @@
     });
   }
 
-  if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', buildCarousels);
-  } else {
+  /* SkillJar injects course cards dynamically after page load.
+     Use a MutationObserver so we build the carousel as soon as
+     cards actually appear in #catalog-courses, regardless of
+     when that happens relative to DOMContentLoaded / load. */
+  function observe() {
+    var container = document.getElementById('catalog-courses');
+
+    if (!container) {
+      /* #catalog-courses doesn't exist yet — watch <body> for it */
+      var bodyObs = new MutationObserver(function () {
+        if (document.getElementById('catalog-courses')) {
+          bodyObs.disconnect();
+          observe();
+        }
+      });
+      bodyObs.observe(document.body || document.documentElement,
+                      { childList: true, subtree: true });
+      return;
+    }
+
+    /* #catalog-courses exists — try immediately, then watch for cards */
     buildCarousels();
+    var obs = new MutationObserver(function () {
+      if (container.querySelector('.coursebox-container')) {
+        obs.disconnect();
+        buildCarousels();
+      }
+    });
+    obs.observe(container, { childList: true, subtree: true });
   }
-  window.addEventListener('load', buildCarousels);
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', observe);
+  } else {
+    observe();
+  }
 }());
 </script>
 
