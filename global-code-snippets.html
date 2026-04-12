@@ -217,14 +217,16 @@ a.coursebox-container {
 }
 /* Stretch cards to fill their row, but cap width so a lone card
    on a short row doesn't expand to fill the entire container.
-   50% cap on narrow viewports (2-per-row); 1/3 cap on wider ones (3+-per-row). */
+   Subtract half the inter-card gap (8px = 16px / 2) so the lone
+   card matches the width of cards in a full two-card row above it. */
 a.coursebox-container:not([data-tags="separator"]) {
   flex-grow: 1 !important;
-  max-width: 50% !important;
+  max-width: calc(50% - 8px) !important;
 }
 @media (min-width: 900px) {
   a.coursebox-container:not([data-tags="separator"]) {
-    max-width: calc(100% / 3) !important;
+    /* 2 gaps of 16px shared across 3 cards → subtract 32px/3 ≈ 11px */
+    max-width: calc(100% / 3 - 11px) !important;
   }
 }
 a.coursebox-container:hover {
