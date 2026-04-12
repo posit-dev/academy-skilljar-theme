@@ -198,11 +198,15 @@ function runSeparatorSetup() {
     }
 }
 
-if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', runSeparatorSetup);
-} else {
-    runSeparatorSetup();
-}
+/* Poll until SkillJar's course cards are in the DOM, then run.
+   Handles both the direct-paste path and the async GitHub fetch path. */
+var sepPoll = setInterval(function() {
+    if (document.querySelector('a.coursebox-container[data-tags="separator"]')) {
+        clearInterval(sepPoll);
+        runSeparatorSetup();
+    }
+}, 200);
+setTimeout(function() { clearInterval(sepPoll); }, 15000);
 </script>
 
 
