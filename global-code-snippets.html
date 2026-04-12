@@ -11,40 +11,8 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 
 
 <!-- START Header / Navigation Styles -->
-<!--
-  WHAT THIS DOES:
-  1. Reskins the SkillJar Sign In link as a dark navy button
-  2. Adds a dark sub-nav bar (position: fixed) below the header with:
-     - Configurable links (Courses, Live Trainings, Community) — edit hrefs below
-     - A search input that proxies to SkillJar's own catalog search
-
-  TO CONFIGURE:
-  - Edit the href values on the .pa-subnav__link anchors below
--->
-
-<!-- ── Sub-nav: static HTML, positioned via CSS ── -->
-<div id="pa-subnav">
-  <div class="pa-nav-inner">
-    <div class="pa-subnav__links">
-      <a href="/page/all-courses"      class="pa-subnav__link">Courses</a>       <!-- ✏️ -->
-      <a href="/page/live-trainings"   class="pa-subnav__link">Live Trainings</a><!-- ✏️ -->
-      <a href="https://forum.posit.co/" class="pa-subnav__link">Community</a>    <!-- ✏️ -->
-    </div>
-    <form class="pa-subnav__search" id="pa-subnav-form">
-      <input type="text" class="pa-subnav__search-input" id="pa-subnav-input"
-             placeholder="Search" aria-label="Search">
-      <button type="submit" class="pa-subnav__search-btn" aria-label="Search">
-        <i class="fa fa-search" aria-hidden="true"></i>
-      </button>
-    </form>
-  </div>
-</div>
-
 <style>
-/* ── Centering formula: min 40px gutter, centered at max-width 1280px ── */
-/*    Applied identically to both header and sub-nav so they always align. */
-
-/* Zero out any SkillJar padding on #header so our child margins are exact */
+/* ── Centering: min 40px gutter, centered at max-width 1280px ── */
 #header {
   padding-left: 0 !important;
   padding-right: 0 !important;
@@ -55,16 +23,6 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 }
 #header-right {
   margin-right: max(40px, calc((100vw - 1280px) / 2)) !important;
-}
-
-/* Sub-nav inner: flex row + divider line within the content gutters */
-.pa-nav-inner {
-  display: flex !important;
-  align-items: center !important;
-  justify-content: space-between !important;
-  width: 100% !important;
-  height: 100% !important;
-  border-top: 1px solid #E0E6EC !important;
 }
 
 /* ── Sign In button ── */
@@ -99,173 +57,33 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
   color: #447099 !important;
 }
 
-/* ── Hide SkillJar's search from the header (we have our own in the sub-nav) ── */
-#header .search-container {
-  display: none !important;
-}
-
 /* ── Hide the mobile search icon to the left of the logo ── */
 #left-nav-button {
   display: none !important;
 }
 
-/* ── Prevent logo from shrinking inside the header inner wrapper ── */
-@media only screen and (min-width: 769px) {
-  #pa-header-inner #header-left {
-    flex-shrink: 0 !important;
-  }
-}
-
-/* ═══════════════════════════════════════════════
-   SUB-NAV BAR — fixed below the header, white background
-   ═══════════════════════════════════════════════ */
-#pa-subnav {
-  position: fixed !important;
-  top: 64px !important;         /* JS auto-corrects this to the actual header height */
-  left: 0 !important;
-  right: 0 !important;
-  z-index: 999 !important;
-  display: flex !important;
-  align-items: center !important;
-  padding-left:  max(40px, calc((100vw - 1280px) / 2)) !important;
-  padding-right: max(40px, calc((100vw - 1280px) / 2)) !important;
-  height: 52px !important;
-  background: #ffffff !important;
-  box-sizing: border-box !important;
-}
-
-.pa-subnav__links {
-  display: flex !important;
-  align-items: center !important;
-  gap: 36px !important;
-}
-
-.pa-subnav__link {
-  font-family: 'Open Sans', sans-serif !important;
-  font-size: 15px !important;
-  font-weight: 400 !important;
-  color: #17212B !important;
-  text-decoration: none !important;
-  white-space: nowrap !important;
-  transition: color 0.15s !important;
-}
-.pa-subnav__link:hover {
-  color: #447099 !important;  /* Posit Blue */
-}
-
-/* ── Search form ── */
-.pa-subnav__search {
-  display: flex !important;
-  align-items: center !important;
-  margin: 0 !important;
-  height: 34px !important;
-  border: 1px solid #C8D0D8 !important;
-  border-radius: 6px !important;
-  background: #ffffff !important;
-  overflow: hidden !important;
-  box-sizing: border-box !important;
-}
-.pa-subnav__search-input {
-  font-family: 'Open Sans', sans-serif !important;
-  font-size: 11px !important;
-  font-weight: 700 !important;
-  letter-spacing: 0.1em !important;
-  text-transform: uppercase !important;
-  flex: 1 1 160px !important;
-  padding: 0 12px !important;
-  margin: 0 !important;
-  background: transparent !important;
-  border: none !important;
-  color: #404041 !important;
-  outline: none !important;
-  -webkit-appearance: none !important;
-  appearance: none !important;
-}
-.pa-subnav__search-input::placeholder {
-  color: #707073 !important;
-  letter-spacing: 0.1em !important;
-}
-.pa-subnav__search-btn {
-  flex-shrink: 0 !important;
-  padding: 0 10px !important;
-  margin: 0 !important;
-  background: transparent !important;
-  border: none !important;
-  color: #3A5672 !important;  /* Posit Drk Blue 1 */
-  cursor: pointer !important;
-  display: flex !important;
-  align-items: center !important;
-  transition: color 0.15s !important;
-}
-.pa-subnav__search-btn:hover {
-  color: #447099 !important;  /* Posit Blue */
-}
-
-/* ── Push page content down to clear fixed header + sub-nav ── */
-body {
-  padding-top: 52px !important;  /* sub-nav height — JS adds this on top of SkillJar's existing header padding */
-}
-
 /* ── Mobile ── */
 @media only screen and (max-width: 768px) {
-  #pa-subnav {
-    height: 44px !important;
-    padding-left: 20px !important;
-    padding-right: 20px !important;
-  }
   #header-left  { margin-left:  20px !important; }
   #header-right { margin-right: 20px !important; }
-  .pa-subnav__links { gap: 20px !important; }
-  .pa-subnav__search-input { width: 120px !important; }
 }
 </style>
 
 <script>
 (function () {
-
   function init() {
     var header      = document.getElementById('header');
     var headerLeft  = document.getElementById('header-left');
     var headerRight = document.getElementById('header-right');
     var pad = 'max(40px, calc((100vw - 1280px) / 2))';
 
-    /* ── Zero out SkillJar's own header padding, then inset children ── */
-    /* CSS handles the static rules; this handles any SkillJar inline styles. */
+    /* Zero out SkillJar's own header padding, then inset children */
     if (header) {
       header.style.setProperty('padding-left',  '0px', 'important');
       header.style.setProperty('padding-right', '0px', 'important');
     }
     if (headerLeft)  { headerLeft.style.setProperty('margin-left',   pad, 'important'); }
     if (headerRight) { headerRight.style.setProperty('margin-right', pad, 'important'); }
-
-    /* ── Position sub-nav exactly below the actual header ── */
-    var subnav = document.getElementById('pa-subnav');
-    if (header && subnav && !subnav.getAttribute('data-positioned')) {
-      var h = header.offsetHeight;
-      if (h > 0) {
-        subnav.style.top = h + 'px';
-        subnav.setAttribute('data-positioned', '1');
-        /* Add sub-nav height on top of SkillJar's existing body padding */
-        var existingPad = parseInt(window.getComputedStyle(document.body).paddingTop) || 0;
-        document.body.style.paddingTop = (existingPad + subnav.offsetHeight) + 'px';
-      }
-    }
-
-    /* ── Wire search form to SkillJar's catalog search ── */
-    var form = document.getElementById('pa-subnav-form');
-    if (form && !form.getAttribute('data-wired')) {
-      form.setAttribute('data-wired', '1');
-      form.addEventListener('submit', function (e) {
-        e.preventDefault();
-        var val = document.getElementById('pa-subnav-input').value;
-        var sjInput = document.getElementById('catalogSearchInput');
-        var sjBtn   = document.querySelector('.catalog-search-input-button');
-        if (sjInput && sjBtn) {
-          sjInput.value = val;
-          sjBtn.click();
-        }
-      });
-    }
   }
 
   if (document.readyState === 'loading') {
@@ -274,10 +92,10 @@ body {
     init();
   }
   window.addEventListener('load', init);
-
 }());
 </script>
 <!-- END Header / Navigation Styles -->
+
 
 
 <!-- START Course Separators -->
