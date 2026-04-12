@@ -9,17 +9,81 @@
   <img src="https://everpath-course-content.s3-accelerate.amazonaws.com/instructor%2Feww6wlnql2k9y5hqbfc2ycpct%2Fpublic%2F1775957193%2Facad2.0-lp-hero-1-x2.1775957193113.png"
        alt="Posit Academy — people collaborating at a laptop"
        id="pa-hero-img">
+  <div id="pa-hero-overlay">
+    <h1 id="pa-hero-title">Welcome to<br>Posit Academy</h1>
+    <p id="pa-hero-desc">Your learning hub for data science with R and Python — courses, live trainings, and a thriving community.</p>
+    <a href="/page/all-courses" id="pa-hero-btn">Full Course Catalog</a>
+  </div>
 </div>
 
 <style>
 #pa-hero {
+  position: relative;
   width: 100%;
-  line-height: 0; /* removes inline-block gap below img */
+  line-height: 0;
 }
 #pa-hero-img {
   width: 100%;
   height: auto;
   display: block;
+}
+#pa-hero-overlay {
+  position: absolute;
+  top: 0; left: 0; bottom: 0;
+  width: 52%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: 0 8% 0 max(20px, calc((100vw - 1280px) / 4));
+  box-sizing: border-box;
+}
+#pa-hero-title {
+  font-family: 'Open Sans', sans-serif;
+  font-size: clamp(32px, 5vw, 72px);
+  font-weight: 700;
+  color: #ffffff;
+  line-height: 1.1;
+  margin: 0 0 20px 0;
+  white-space: nowrap;
+}
+#pa-hero-desc {
+  font-family: 'Open Sans', sans-serif;
+  font-size: clamp(13px, 1.2vw, 16px);
+  font-weight: 400;
+  color: rgba(255,255,255,0.82);
+  line-height: 1.65;
+  margin: 0 0 32px 0;
+}
+#pa-hero-btn {
+  display: inline-block;
+  font-family: 'Open Sans', sans-serif;
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: #17212B;
+  background-color: #ffffff;
+  border: none;
+  border-radius: 4px;
+  padding: 16px 28px;
+  text-decoration: none;
+  align-self: flex-start;
+  transition: background-color 0.15s;
+}
+#pa-hero-btn:hover {
+  background-color: #D1DBE5;
+  color: #17212B;
+}
+@media only screen and (max-width: 800px) {
+  #pa-hero-overlay {
+    width: 100%;
+    padding: 36px 24px 40px;
+    background: rgba(23, 33, 43, 0.78);
+  }
+  #pa-hero-title {
+    white-space: normal;
+    font-size: clamp(28px, 7vw, 42px);
+  }
 }
 </style>
 <!--
