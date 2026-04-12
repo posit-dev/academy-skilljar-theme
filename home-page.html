@@ -246,11 +246,13 @@
   display: block !important;
 }
 
-/* Carousel wrapper — positions the prev/next buttons */
+/* Carousel wrapper — horizontal padding reserves space for buttons
+   so they're always inside the element and never clipped */
 .pa-carousel {
   position: relative;
   width: 100%;
-  padding-bottom: 24px;
+  padding: 0 44px 24px;
+  box-sizing: border-box;
 }
 
 /* Scrollable, snapping track */
@@ -264,7 +266,7 @@
 }
 .pa-carousel-track::-webkit-scrollbar { display: none; }
 
-/* Each slide: 4-up on desktop, fills width exactly */
+/* Each slide: 4-up on desktop */
 .pa-carousel-slide {
   flex: 0 0 calc((100% - 48px) / 4);   /* 4 cards, 3 gaps × 16px */
   scroll-snap-align: start;
@@ -275,10 +277,10 @@
   flex: 1 !important;
 }
 
-/* Prev / Next buttons */
+/* Prev / Next buttons — sit inside the 44px side padding */
 .pa-carousel-btn {
   position: absolute;
-  top: calc(50% - 20px);
+  top: calc(50% - 32px);
   transform: translateY(-50%);
   z-index: 10;
   width: 36px;
@@ -298,18 +300,19 @@
   transition: opacity 0.2s, box-shadow 0.2s;
 }
 .pa-carousel-btn:hover { box-shadow: 0 4px 12px rgba(0,0,0,0.15); }
-.pa-carousel-prev { left: -18px; }
-.pa-carousel-next { right: -18px; }
+.pa-carousel-prev { left: 4px; }
+.pa-carousel-next { right: 4px; }
 
 /* Tablet — 2-up */
 @media only screen and (max-width: 900px) {
   .pa-carousel-slide { flex: 0 0 calc((100% - 16px) / 2); }
 }
 
-/* Mobile — 1-up, hide buttons (touch-scroll instead) */
+/* Mobile — collapse padding, 1-up, hide buttons (swipe instead) */
 @media only screen and (max-width: 640px) {
-  .pa-carousel-slide { flex: 0 0 100%; }
-  .pa-carousel-btn   { display: none; }
+  .pa-carousel        { padding: 0 0 24px; }
+  .pa-carousel-slide  { flex: 0 0 100%; }
+  .pa-carousel-btn    { display: none; }
 }
 </style>
 
@@ -412,36 +415,50 @@
     });
   }
 
-  /* SkillJar loads course cards in batches after the page renders.
-     Poll every 300 ms and wait for the count to stabilise across
-     3 consecutive polls (~900 ms of no change) before building,
-     so all cards are present when the carousel is constructed. */
-  var lastCount = 0;
-  var stableRuns = 0;
+  /* SkillJar injects course cards in batches after the page loads.
+     Use a MutationObserver with a 600 ms debounce: every time SkillJar
+     adds cards we reset the timer. The carousel builds 600 ms after the
+     *last* mutation, so all batches are present before we start. */
+  var debounceTimer = null;
+  var obs = null;
 
-  var pollInterval = setInterval(function () {
-    var container = document.getElementById('catalog-courses');
-    if (!container || container.querySelector('.pa-carousel')) {
-      clearInterval(pollInterval);
-      if (container && !container.querySelector('.pa-carousel')) buildCarousels();
-      return;
-    }
-
-    var count = container.querySelectorAll('.coursebox-container').length;
-    if (count > 0 && count === lastCount) {
-      stableRuns++;
-      if (stableRuns >= 3) {
-        clearInterval(pollInterval);
+  function scheduleBuild() {
+    clearTimeout(debounceTimer);
+    debounceTimer = setTimeout(function () {
+      var container = document.getElementById('catalog-courses');
+      if (container &&
+          !container.querySelector('.pa-carousel') &&
+          container.querySelectorAll('.coursebox-container').length > 0) {
+        if (obs) { obs.disconnect(); obs = null; }
         buildCarousels();
       }
-    } else {
-      stableRuns = 0;
-      lastCount = count;
-    }
-  }, 300);
+    }, 600);
+  }
 
-  /* Safety: stop polling after 15 s regardless */
-  setTimeout(function () { clearInterval(pollInterval); }, 15000);
+  function startWatching() {
+    var container = document.getElementById('catalog-courses');
+    if (container) {
+      obs = new MutationObserver(scheduleBuild);
+      obs.observe(container, { childList: true, subtree: true });
+      scheduleBuild(); /* also attempt immediately if cards are already present */
+    } else {
+      /* #catalog-courses doesn't exist yet — watch body until it appears */
+      var bodyObs = new MutationObserver(function () {
+        if (document.getElementById('catalog-courses')) {
+          bodyObs.disconnect();
+          startWatching();
+        }
+      });
+      bodyObs.observe(document.body || document.documentElement,
+                      { childList: true, subtree: true });
+    }
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', startWatching);
+  } else {
+    startWatching();
+  }
 }());
 </script>
 
