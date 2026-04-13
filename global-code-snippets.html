@@ -174,7 +174,7 @@ function runSeparatorSetup() {
     // To enable: add [explore-btn] anywhere in the separator's description field in SkillJar.
     // The marker is stripped before rendering. Link destination is the separator's own href.
     document.querySelectorAll('a.coursebox-container[data-tags="separator"]').forEach(function(sep) {
-        var dest = sep.getAttribute('href') || '/page/all-courses';
+        var dest = 'https://academy.posit.co/page/all-courses';
         var desc = sep.querySelector('.coursebox-text-description');
         if (!desc) return;
         if (desc.textContent.indexOf('[explore-btn]') === -1) return; // opt-in marker required
