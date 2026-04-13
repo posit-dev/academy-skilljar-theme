@@ -18,9 +18,15 @@
   padding-right: 37px !important;
 }
 
-/* Separator spans full row width */
+/* Separator spans full row width; tighten bottom spacing vs. global defaults */
 #catalog-courses a.coursebox-container[data-tags="separator"] {
   grid-column: 1 / -1 !important;
+  padding-bottom: 4px !important;
+}
+
+/* Tighten description margin-bottom (global sets 24px) */
+#catalog-courses a.coursebox-container[data-tags="separator"] .coursebox-text-description {
+  margin-bottom: 4px !important;
 }
 
 /* Hide the "Explore all courses" button injected by global JS —
