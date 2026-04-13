@@ -30,20 +30,27 @@
 }
 
 
-/* Zero out the horizontal padding on the grid container only.
-   Uses parent selectors to beat SkillJar's higher-specificity !important rules.
-   No width overrides — those break the flex layout with the sidebar. */
-.top-row #catalog-courses,
-.top-row .course-listing,
-.skilljar-content #catalog-courses,
-.skilljar-content .course-listing,
-.skilljar-content #catalog-content,
-#catalog-courses,
-#catalog-content,
-.course-listing {
-  padding-left: 0 !important;
-  padding-right: 0 !important;
-  margin-left: 0 !important;
-  margin-right: 0 !important;
-}
+/* global-code-snippets sets padding: 0 max(20px,5vw) on #catalog-courses
+   for the home page gutters. That rule loads after this block so CSS
+   !important can't override it — we use JS inline style instead (see below). */
 </style>
+
+<script>
+/* global-code-snippets adds padding: 0 max(20px,5vw) to #catalog-courses
+   for home page gutters. It loads after this block so CSS !important loses.
+   Inline style set via JS beats any stylesheet rule. */
+(function () {
+  function removeCatalogPadding() {
+    var el = document.getElementById('catalog-courses');
+    if (el) {
+      el.style.setProperty('padding-left',  '0', 'important');
+      el.style.setProperty('padding-right', '0', 'important');
+    }
+  }
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', removeCatalogPadding);
+  } else {
+    removeCatalogPadding();
+  }
+}());
+</script>
