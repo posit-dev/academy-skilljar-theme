@@ -18,22 +18,9 @@
   padding-right: 40px !important;
 }
 
-/* ── Remove vertical gap above catalog content ──
-   SkillJar adds top padding to .sj-courseboxes-v2 and its inner wrappers.
-   Zero these out so the page title aligns with the filter sidebar. */
-.sj-courseboxes-v2 {
-  padding-top: 0 !important;
-}
-#catalog-content,
-.catalog-center-width {
-  padding-top: 0 !important;
-  margin-top: 0 !important;
-}
-
-/* Separator spans full row width; tighten spacing vs. global defaults */
+/* Separator spans full row width; tighten bottom spacing vs. global defaults */
 #catalog-courses a.coursebox-container[data-tags="separator"] {
   grid-column: 1 / -1 !important;
-  padding-top: 16px !important;
   padding-bottom: 4px !important;
 }
 
