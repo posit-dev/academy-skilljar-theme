@@ -1268,6 +1268,125 @@ body.sj-page-detail-course:has(#main-container[data-tags~="live-training"]) #dp-
   flex: 1 1 100% !important;
   order: 1 !important;
 }
+
+/* ═══════════════════════════════════════════════
+   LIVE TRAINING — TWO-COLUMN LOWER SECTION
+   h3 + .dp-long-description  LEFT
+   .dp-vilt-events             RIGHT
+   Turn .columns into a CSS grid to split siblings.
+   ═══════════════════════════════════════════════ */
+body.sj-page-detail-course:has(#main-container[data-tags~="live-training"]) #dp-details .row .columns:has(.dp-long-description) {
+  display: grid !important;
+  grid-template-columns: 1fr 1.6fr !important;
+  grid-template-rows: auto 1fr !important;
+  column-gap: 56px !important;
+  row-gap: 0 !important;
+  align-items: start !important;
+}
+/* h3 — left column, row 1 */
+body.sj-page-detail-course:has(#main-container[data-tags~="live-training"]) #dp-details .columns > h3 {
+  grid-column: 1 !important;
+  grid-row: 1 !important;
+}
+/* About text — left column, row 2 */
+body.sj-page-detail-course:has(#main-container[data-tags~="live-training"]) #dp-details .dp-long-description {
+  grid-column: 1 !important;
+  grid-row: 2 !important;
+}
+/* Sessions panel — right column, spans all rows, centered vertically */
+body.sj-page-detail-course:has(#main-container[data-tags~="live-training"]) #dp-details .dp-vilt-events {
+  grid-column: 2 !important;
+  grid-row: 1 / -1 !important;
+  background: #F8FAFB !important;
+  border-radius: 12px !important;
+  padding: 28px 32px !important;
+  align-self: start !important;
+  width: 100% !important;
+  box-sizing: border-box !important;
+}
+/* Hide redundant h4 (repeats the course title) */
+body.sj-page-detail-course:has(#main-container[data-tags~="live-training"]) .dp-vilt-events h4 {
+  display: none !important;
+}
+
+/* ── Sessions table ── */
+body.sj-page-detail-course:has(#main-container[data-tags~="live-training"]) .sj-table-v2 {
+  width: 100% !important;
+  border-collapse: collapse !important;
+  margin: 0 !important;
+}
+/* Hide Event Name and Spaces Left columns */
+body.sj-page-detail-course:has(#main-container[data-tags~="live-training"]) .sj-vilt-events-table-event-name,
+body.sj-page-detail-course:has(#main-container[data-tags~="live-training"]) .sj-vilt-events-table-spaces-left {
+  display: none !important;
+}
+/* Header */
+body.sj-page-detail-course:has(#main-container[data-tags~="live-training"]) .sj-table-v2 thead th {
+  font-family: 'Open Sans', sans-serif !important;
+  font-size: 18px !important;
+  font-weight: 400 !important;
+  color: #17212B !important;
+  text-align: left !important;
+  padding: 0 0 14px 0 !important;
+  border-bottom: 2px solid #f4c53f !important;
+  background-color: #F8FAFB !important;
+}
+body.sj-page-detail-course:has(#main-container[data-tags~="live-training"]) .sj-vilt-events-table-register th {
+  text-align: center !important;
+}
+/* Body rows — yellow separator, transparent background (override SkillJar striping) */
+body.sj-page-detail-course:has(#main-container[data-tags~="live-training"]) .sj-table-v2 tbody tr,
+body.sj-page-detail-course:has(#main-container[data-tags~="live-training"]) .sj-table-v2 tbody tr:nth-child(even),
+body.sj-page-detail-course:has(#main-container[data-tags~="live-training"]) .sj-table-v2 tbody tr:nth-child(odd) {
+  background: transparent !important;
+  border-bottom: 1px solid #f4c53f !important;
+}
+body.sj-page-detail-course:has(#main-container[data-tags~="live-training"]) .sj-table-v2 tbody tr:last-child {
+  border-bottom: none !important;
+}
+/* Body cells — match container background so no white shows through */
+body.sj-page-detail-course:has(#main-container[data-tags~="live-training"]) .sj-table-v2 tbody td,
+body.sj-page-detail-course:has(#main-container[data-tags~="live-training"]) .sj-table-v2 tbody tr:nth-child(even) td,
+body.sj-page-detail-course:has(#main-container[data-tags~="live-training"]) .sj-table-v2 tbody tr:nth-child(odd) td {
+  font-family: 'Open Sans', sans-serif !important;
+  font-size: 15px !important;
+  font-weight: 400 !important;
+  color: #404041 !important;
+  padding: 16px 0 !important;
+  vertical-align: middle !important;
+  background-color: #F8FAFB !important;
+  border: none !important;
+}
+/* Register column — centered header and cell */
+body.sj-page-detail-course:has(#main-container[data-tags~="live-training"]) .sj-vilt-events-table-register,
+body.sj-page-detail-course:has(#main-container[data-tags~="live-training"]) .sj-vilt-events-table-register th,
+body.sj-page-detail-course:has(#main-container[data-tags~="live-training"]) .sj-vilt-events-table-register td {
+  text-align: center !important;
+  width: 140px !important;
+}
+/* Register button */
+body.sj-page-detail-course:has(#main-container[data-tags~="live-training"]) .sj-vilt-events-table-register .purchase-button {
+  background-color: #17212B !important;
+  color: #ffffff !important;
+  border: none !important;
+  border-radius: 4px !important;
+  font-family: 'Open Sans', sans-serif !important;
+  font-size: 11px !important;
+  font-weight: 700 !important;
+  letter-spacing: 0.08em !important;
+  text-transform: uppercase !important;
+  padding: 10px 16px !important;
+  height: auto !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  white-space: nowrap !important;
+  box-shadow: none !important;
+}
+body.sj-page-detail-course:has(#main-container[data-tags~="live-training"]) .sj-vilt-events-table-register .purchase-button:hover {
+  background-color: #213D4F !important;
+  transform: none !important;
+}
 </style>
 
 <script>
