@@ -1097,6 +1097,18 @@ body.sj-page-detail-course ul.dp-curriculum li.lesson-rating {
 }
 
 /* ═══════════════════════════════════════════════
+   HIDE DUPLICATE TAB SECTION
+   SkillJar renders "About this course" / "Curriculum" a second time
+   as a tabbed UI below the two-column layout — hide it entirely.
+   ═══════════════════════════════════════════════ */
+body.sj-page-detail-course dl.tabs,
+body.sj-page-detail-course .tabs-content,
+body.sj-page-detail-course .dp-tabs,
+body.sj-page-detail-course #dp-tabs {
+  display: none !important;
+}
+
+/* ═══════════════════════════════════════════════
    MOBILE — stack everything vertically
    ═══════════════════════════════════════════════ */
 @media only screen and (max-width: 640px) {
