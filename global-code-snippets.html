@@ -182,7 +182,8 @@ function runSeparatorSetup() {
         var btn = document.createElement('span');
         btn.className = 'pa-sep-btn';
         btn.textContent = 'Explore all courses';
-        btn.addEventListener('click', function() {
+        btn.addEventListener('click', function(e) {
+            e.stopPropagation();
             window.location.href = dest;
         });
         desc.appendChild(btn);
