@@ -1268,18 +1268,13 @@ body.sj-page-detail-course:has(#main-container[data-tags~="live-training"]) .dp-
   color: #17212B !important;
 }
 
-/* ── Lower section row: match hero's 1500px container + fluid padding-side ──
-   The hero outer wrapper (.row-v2) caps at 1500px and applies a fluid
-   padding-side = max(20px, (100vw - 1280px) / 4) — the same formula used
-   by the header. Adding that on top of the base 40px gives a left/right
-   inset that tracks the hero image edge at all viewport widths, without
-   over-indenting on narrow screens. */
+/* ── Lower section row: capped to hero's 1500px outer container.
+   Horizontal padding is set dynamically by JS to match the actual
+   rendered position of .dp-promo-image at every viewport width. */
 body.sj-page-detail-course:has(#main-container[data-tags~="live-training"]) #dp-details .row {
   max-width: 1500px !important;
   margin-left: auto !important;
   margin-right: auto !important;
-  padding-left: calc(40px + max(0px, (100vw - 1280px) / 4)) !important;
-  padding-right: calc(40px + max(0px, (100vw - 1280px) / 4)) !important;
 }
 
 /* ── Curriculum column: hidden (live trainings don't have lessons) ── */
@@ -1440,6 +1435,40 @@ body.sj-page-detail-course:has(#main-container[data-tags~="live-training"]) .sj-
     saveToggle.dataset.moved = '1';
     row.appendChild(saveToggle);
   }
+
+  /* ── Align lower section padding with the hero image edges ──
+     CSS can't reliably replicate SkillJar's internal padding-side
+     formula, so we measure the rendered image panel position directly
+     and apply matching padding to #dp-details .row. */
+  function syncLowerSectionPadding() {
+    var img     = document.querySelector('.dp-promo-image');
+    var detRow  = document.querySelector('#dp-details .row.hide-for-small');
+    var sumWrap = document.querySelector('.dp-summary-wrapper');
+    if (!img || !detRow) return;
+
+    var imgRect = img.getBoundingClientRect();
+    var rowRect = detRow.getBoundingClientRect();
+
+    /* Right: sessions panel right edge = image panel right edge */
+    var padRight = Math.max(0, Math.round(rowRect.right - imgRect.right));
+
+    /* Left: about-text left edge = hero summary-wrapper left edge */
+    var padLeft = sumWrap
+      ? Math.max(0, Math.round(sumWrap.getBoundingClientRect().left - rowRect.left))
+      : padRight;
+
+    detRow.style.setProperty('padding-left',  padLeft  + 'px', 'important');
+    detRow.style.setProperty('padding-right', padRight + 'px', 'important');
+  }
+
+  var resizeTimer;
+  window.addEventListener('resize', function () {
+    clearTimeout(resizeTimer);
+    resizeTimer = setTimeout(syncLowerSectionPadding, 60);
+  });
+  window.addEventListener('load', syncLowerSectionPadding);
+  /* Also run after a short delay so SkillJar's own JS has finished layout */
+  setTimeout(syncLowerSectionPadding, 300);
 
   var attempts = 0;
   var poll = setInterval(function () {
