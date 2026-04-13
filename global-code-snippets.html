@@ -870,6 +870,10 @@ body.sj-page-detail-course .sj-save-toggle-block__button {
 body.sj-page-detail-course .sj-save-toggle-block__icon i {
   color: #447099 !important;
 }
+/* Hide the now-empty context-provider wrapper after JS moves the toggle out */
+body.sj-page-detail-course .sj-save-toggle-row-alignment > sjwc-context-provider {
+  display: none !important;
+}
 
 /* Primary CTA (Register / Continue / etc.) — dark filled */
 body.sj-page-detail-course a#purchase-button,
@@ -1142,14 +1146,28 @@ body.sj-page-detail-course ul.dp-curriculum li.lesson-rating {
     if (!purchaseBtn) return;
 
     /* Insert catalog button as a direct sibling after the register button.
-       sj-save-toggle-row-alignment (flex, gap:12px) then gives equal
-       spacing between all three: Register | Return to Catalog | Bookmark.
        Foundation's "medium button" classes ensure identical base sizing. */
     var catalogBtn = document.createElement('a');
     catalogBtn.className = 'medium button pa-catalog-btn';
     catalogBtn.href = '/';
     catalogBtn.textContent = 'Return to Catalog';
     purchaseBtn.insertAdjacentElement('afterend', catalogBtn);
+  }
+
+  function fixSaveToggle() {
+    if (!document.body.classList.contains('sj-page-detail-course')) return;
+
+    var row = document.querySelector('.sj-save-toggle-row-alignment');
+    if (!row) return;
+
+    /* sjwc-context-provider uses a shadow root that we can't style from
+       outside — it positions the bookmark via internal shadow DOM styles.
+       Extract sjwc-save-content-toggle and place it directly in the flex
+       row so gap:12px handles its spacing like the other two buttons. */
+    var saveToggle = row.querySelector('sjwc-save-content-toggle');
+    if (!saveToggle || saveToggle.dataset.moved) return;
+    saveToggle.dataset.moved = '1';
+    row.appendChild(saveToggle);
   }
 
   /* SkillJar renders the purchase button asynchronously — poll until present */
@@ -1159,6 +1177,7 @@ body.sj-page-detail-course ul.dp-curriculum li.lesson-rating {
     if (document.querySelector('a#purchase-button, a.purchase-button')) {
       clearInterval(poll);
       injectCatalogButton();
+      fixSaveToggle();
     }
     if (attempts >= 50) clearInterval(poll); /* bail after 10s */
   }, 200);
