@@ -197,6 +197,13 @@ function runSeparatorSetup() {
             sep.style.paddingLeft = Math.max(0, tileLeft - sepLeft) + 'px';
         });
     }
+
+    // Reveal all separator cards now that processing is complete.
+    // CSS keeps them invisible until this attribute is set, preventing
+    // the [separator] text from flashing briefly on page load.
+    document.querySelectorAll('a.coursebox-container[data-tags="separator"]').forEach(function(sep) {
+        sep.setAttribute('data-pa-ready', '');
+    });
 }
 
 /* Poll until SkillJar's course cards are in the DOM, then run.
@@ -327,6 +334,12 @@ a.coursebox-container .coursebox-callout {
 
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Open+Sans:wght@300;400;600;700&display=swap');
+
+/* Hide separator cards until JS has stripped [separator] and set data-pa-ready.
+   Uses visibility:hidden so the card still occupies its space (no layout shift). */
+a.coursebox-container[data-tags="separator"]:not([data-pa-ready]) {
+  visibility: hidden !important;
+}
 
 /* ── Container: single-column stacked layout ── */
 a.coursebox-container[data-tags="separator"] {
