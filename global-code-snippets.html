@@ -1268,6 +1268,16 @@ body.sj-page-detail-course:has(#main-container[data-tags~="live-training"]) .dp-
   color: #17212B !important;
 }
 
+/* ── Lower section row: cap to same 1500px as the hero's outer container ──
+   The hero wrapper (.row-v2) has max-width 1500px; without this override the
+   #dp-details .row fills the full viewport (1825px+ on wide screens) and the
+   sessions panel extends past the hero image on the right. */
+body.sj-page-detail-course:has(#main-container[data-tags~="live-training"]) #dp-details .row {
+  max-width: 1500px !important;
+  margin-left: auto !important;
+  margin-right: auto !important;
+}
+
 /* ── Curriculum column: hidden (live trainings don't have lessons) ── */
 body.sj-page-detail-course:has(#main-container[data-tags~="live-training"]) #dp-details .row .columns:has(ul.dp-curriculum) {
   display: none !important;
