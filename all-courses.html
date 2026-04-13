@@ -5,10 +5,12 @@
   Paste this into the HTML editor on the All Courses catalog page.
 */
 
-/* ── Course grid: uniform 4-column layout ── */
+/* ── Course grid: auto-fit columns based on available width ──
+   Cards are at least 200px wide; grid adds/removes columns automatically
+   as the container narrows (accounts for the sidebar eating into space). */
 #catalog-courses {
   display: grid !important;
-  grid-template-columns: repeat(4, 1fr) !important;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)) !important;
   gap: 16px !important;
   align-items: start !important;
 }
@@ -27,14 +29,4 @@
   flex-grow: unset !important;
 }
 
-@media only screen and (max-width: 900px) {
-  #catalog-courses {
-    grid-template-columns: repeat(2, 1fr) !important;
-  }
-}
-@media only screen and (max-width: 500px) {
-  #catalog-courses {
-    grid-template-columns: 1fr !important;
-  }
-}
 </style>
