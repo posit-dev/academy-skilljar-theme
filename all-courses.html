@@ -13,6 +13,11 @@
   align-items: start !important;
 }
 
+/* Separator spans full row width */
+#catalog-courses a.coursebox-container[data-tags="separator"] {
+  grid-column: 1 / -1 !important;
+}
+
 /* Override global-code-snippets max-width (written for home page flex layout) */
 #catalog-courses a.coursebox-container:not([data-tags~="separator"]) {
   max-width: 100% !important;
