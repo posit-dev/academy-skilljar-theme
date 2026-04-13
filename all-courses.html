@@ -8,7 +8,7 @@
 
   WHAT THIS DOES:
   - Adds a "Browse All Courses" page header
-  - Reskins course cards with modern styling and hover effects
+  - Reskins course cards with color-coded styles per content type
   - Builds a custom filter sidebar from the FILTER_GROUPS config in the JS below
   - Injects content-type badges based on course tags
 
@@ -42,13 +42,13 @@
 .pa-courses-header {
   grid-column: 1 / -1 !important;
   grid-row: 1 !important;
-  padding: 72px 0 28px !important;  /* ✏️ increase top value if title still clips behind the navbar */
+  padding: 72px 0 28px !important;
   display: block !important;
 }
 .pa-courses-header__title {
   font-family: 'Open Sans', sans-serif;
   font-size: 42px;
-  font-weight: 300;           /* Open Sans Light — Posit H1 spec */
+  font-weight: 300;
   color: #17212B;
   margin: 0;
   line-height: 1.15;
@@ -111,7 +111,7 @@
   padding: 0;
   text-decoration: underline;
 }
-.pa-filters__clear:hover { color: #3A5672; } /* Posit Drk Blue 1 */
+.pa-filters__clear:hover { color: #3A5672; }
 
 /* Filter group */
 .pa-filter-group {
@@ -201,7 +201,7 @@
 }
 
 /* ═══════════════════════════════════════════════
-   COURSE CARDS
+   COURSE CARDS — base styles
    ═══════════════════════════════════════════════ */
 a.coursebox-container:not([data-tags~="separator"]) {
   width: 100% !important;
@@ -220,7 +220,7 @@ a.coursebox-container:not([data-tags~="separator"]) {
   padding: 0 !important;
 }
 a.coursebox-container:not([data-tags~="separator"]):hover {
-  box-shadow: 0 8px 28px rgba(0,0,0,0.1) !important;
+  box-shadow: 0 8px 28px rgba(0,0,0,0.12) !important;
   transform: translateY(-3px) !important;
 }
 
@@ -235,25 +235,25 @@ a.coursebox-container:not([data-tags~="separator"]) .coursebox-image img {
   display: block !important;
 }
 
-/* Badge — injected by JS, sits between image and title */
+/* Badge wrap */
 .pa-badge-wrap {
-  padding: 16px 16px 0;
+  padding: 14px 16px 0;
   display: flex;
   flex-wrap: wrap;
   gap: 6px;
 }
+
+/* Base badge */
 .pa-badge {
   display: inline-block;
   padding: 3px 10px;
   border-radius: 4px;
-  border: 1px solid #C8D0D8;
-  background: #ffffff;
+  border: 1px solid transparent;
   font-family: 'Open Sans', sans-serif;
   font-size: 11px;
   font-weight: 700;
   letter-spacing: 0.09em;
   text-transform: uppercase;
-  color: #404041;
 }
 
 /* Title */
@@ -289,15 +289,104 @@ a.coursebox-container.pa-hidden {
   display: none !important;
 }
 
-/* Hide SkillJar footer — conflicts with custom grid layout */
+/* Hide SkillJar footer */
 #ep-footer, footer { display: none !important; }
 
-/* Hide SkillJar's built-in left nav (replaced by our custom .pa-filters sidebar) */
+/* Hide SkillJar's built-in left nav */
 nav.catalog-left-nav { display: none !important; }
 
 /* Prevent horizontal scroll */
 body { overflow-x: hidden !important; }
 
+/* ═══════════════════════════════════════════════
+   CARD TYPE STYLES — color-coded per content type
+   ═══════════════════════════════════════════════ */
+
+/* ── Learning Path — dark navy ── */
+a.coursebox-container.pa-card--path {
+  background: #17212B !important;
+  border-color: #17212B !important;
+}
+a.coursebox-container.pa-card--path:hover {
+  box-shadow: 0 8px 28px rgba(0,0,0,0.3) !important;
+}
+a.coursebox-container.pa-card--path .coursebox-image {
+  background: #3A5672;
+}
+a.coursebox-container.pa-card--path .coursebox-text {
+  color: #ffffff !important;
+}
+a.coursebox-container.pa-card--path .coursebox-text-description {
+  color: rgba(255,255,255,0.72) !important;
+}
+.pa-badge--path {
+  background: #3A5672;
+  border-color: #3A5672;
+  color: #ffffff;
+}
+
+/* ── Course — light steel blue ── */
+a.coursebox-container.pa-card--course {
+  background: #D1DBE5 !important;
+  border-color: #A2B8CB !important;
+}
+a.coursebox-container.pa-card--course .coursebox-image {
+  background: #A2B8CB;
+}
+a.coursebox-container.pa-card--course .coursebox-text {
+  color: #17212B !important;
+}
+a.coursebox-container.pa-card--course .coursebox-text-description {
+  color: #404041 !important;
+}
+.pa-badge--course {
+  background: #ED632F;
+  border-color: #ED632F;
+  color: #ffffff;
+}
+
+/* ── Live Training — academy yellow ── */
+a.coursebox-container.pa-card--live {
+  background: #F6B000 !important;
+  border-color: #C48F0A !important;
+}
+a.coursebox-container.pa-card--live:hover {
+  box-shadow: 0 8px 28px rgba(196,143,10,0.3) !important;
+}
+a.coursebox-container.pa-card--live .coursebox-image {
+  background: #F4C540;
+}
+a.coursebox-container.pa-card--live .coursebox-text {
+  color: #17212B !important;
+}
+a.coursebox-container.pa-card--live .coursebox-text-description {
+  color: #404041 !important;
+}
+.pa-badge--live {
+  background: #419599;
+  border-color: #419599;
+  color: #ffffff;
+}
+
+/* ── On-Demand Training — light salmon ── */
+a.coursebox-container.pa-card--on-demand {
+  background: #EDCCBF !important;
+  border-color: #E0A690 !important;
+}
+a.coursebox-container.pa-card--on-demand .coursebox-image {
+  background: #E0A690;
+}
+a.coursebox-container.pa-card--on-demand .coursebox-text {
+  color: #17212B !important;
+}
+a.coursebox-container.pa-card--on-demand .coursebox-text-description {
+  color: #404041 !important;
+}
+.pa-badge--on-demand {
+  background: #447099;
+  border-color: #447099;
+  color: #ffffff;
+}
 
 /* ═══════════════════════════════════════════════
    MOBILE
@@ -315,7 +404,6 @@ body { overflow-x: hidden !important; }
     padding: 0 20px 60px !important;
     column-gap: 0 !important;
   }
-  /* On mobile, stack header → sidebar → grid in a single column */
   .pa-courses-header {
     grid-column: 1 !important;
     padding-top: 80px !important;
@@ -330,7 +418,6 @@ body { overflow-x: hidden !important; }
     grid-column: 1 !important;
     grid-row: 3 !important;
   }
-  /* Reset any SkillJar margins/padding that push the grid off-center */
   .skilljar-content,
   .catalog-center-width,
   #catalog-content {
@@ -365,7 +452,7 @@ body { overflow-x: hidden !important; }
    ═══════════════════════════════════════════════════════════ */
 var PA_FILTER_GROUPS = [
   {
-    label: 'Format',
+    label: 'Ways to learn',
     open: true,
     filters: [
       { tag: 'live',          label: 'Live Training' },
@@ -397,125 +484,154 @@ var PA_FILTER_GROUPS = [
   },
 ];
 
-/* ─── Badge label map — built from all filter groups ─── */
+/* ════════════════════════════════════════════
+   DO NOT EDIT BELOW THIS LINE
+   ════════════════════════════════════════════ */
+
+/* Format tag priority order for badge + card coloring */
+var PA_FORMAT_TAGS = ['path', 'live', 'on-demand', 'course'];
+
+/* Label lookup map */
 var PA_TAG_LABEL_MAP = {};
 PA_FILTER_GROUPS.forEach(function (group) {
   group.filters.forEach(function (f) {
     PA_TAG_LABEL_MAP[f.tag] = f.label;
   });
 });
-PA_TAG_LABEL_MAP['course']    = PA_TAG_LABEL_MAP['course']    || 'Course';
-PA_TAG_LABEL_MAP['path']      = PA_TAG_LABEL_MAP['path']      || 'Learning Path';
-PA_TAG_LABEL_MAP['live']      = PA_TAG_LABEL_MAP['live']      || 'Live Training';
-PA_TAG_LABEL_MAP['on-demand'] = PA_TAG_LABEL_MAP['on-demand'] || 'On-Demand';
 
-/* ════════════════════════════════════════════
-   DO NOT EDIT BELOW THIS LINE
-   ════════════════════════════════════════════ */
-document.addEventListener('DOMContentLoaded', function () {
+(function () {
 
-  var storefront = document.querySelector('.storefront');
-  if (!storefront) return;
+  var paLayoutBuilt = false;
+  var paSidebar = null;
 
-  /* ── 1. Page header ──
-     Inserted as the FIRST CHILD of .storefront so it becomes a CSS Grid
-     item in row 1 (spanning both columns via CSS). This keeps it inside
-     the content zone — SkillJar's scroll-collapse JS only targets elements
-     above .storefront, so it never touches this element. */
-  var hdr = document.createElement('div');
-  hdr.className = 'pa-courses-header';
-  hdr.innerHTML = '<h1 class="pa-courses-header__title">Browse All Courses</h1>';/* ✏️ */
-  storefront.insertBefore(hdr, storefront.firstChild);
+  /* ── 1. Build page header + filter sidebar (needs .storefront only) ── */
+  function buildLayout() {
+    var storefront = document.querySelector('.storefront');
+    if (!storefront) return false;
 
-  /* ── 2. Badge injection ── */
-  var cards = document.querySelectorAll('a.coursebox-container');
-  cards.forEach(function (card) {
-    var tags = (card.getAttribute('data-tags') || '').toLowerCase();
-    if (tags.indexOf('separator') !== -1) return;
+    /* Page header */
+    var hdr = document.createElement('div');
+    hdr.className = 'pa-courses-header';
+    hdr.innerHTML = '<h1 class="pa-courses-header__title">Browse All Courses</h1>'; /* ✏️ */
+    storefront.insertBefore(hdr, storefront.firstChild);
 
-    var tagList = tags.split(',').map(function(t) { return t.trim(); });
-    var wrap = document.createElement('div');
-    wrap.className = 'pa-badge-wrap';
-    tagList.forEach(function (t) {
-      if (!t || t === 'separator') return;
-      var label = PA_TAG_LABEL_MAP[t] || t;
-      wrap.innerHTML += '<span class="pa-badge">' + label + '</span>';
-    });
-    var cardImg = card.querySelector('.coursebox-image');
-    if (cardImg && cardImg.nextSibling) {
-      card.insertBefore(wrap, cardImg.nextSibling);
-    } else {
-      card.appendChild(wrap);
-    }
-  });
+    /* Filter sidebar */
+    if (!PA_FILTER_GROUPS.length) return true;
 
-  /* ── 3. Build filter sidebar ── */
-  if (!PA_FILTER_GROUPS.length) return;
+    var sidebar = document.createElement('div');
+    sidebar.className = 'pa-filters';
 
-  var sidebar = document.createElement('div');
-  sidebar.className = 'pa-filters';
+    var topbar = document.createElement('div');
+    topbar.className = 'pa-filters__topbar';
+    topbar.innerHTML =
+      '<button class="pa-filters__collapse-btn">' +
+        '<span class="pa-filters__label">Filters</span>' +
+        '<span class="pa-filters__toggle-chevron">&#9650;</span>' +
+      '</button>' +
+      '<button class="pa-filters__clear">Clear</button>';
+    sidebar.appendChild(topbar);
 
-  var topbar = document.createElement('div');
-  topbar.className = 'pa-filters__topbar';
-  topbar.innerHTML =
-    '<button class="pa-filters__collapse-btn">' +
-      '<span class="pa-filters__label">Filters</span>' +
-      '<span class="pa-filters__toggle-chevron">&#9650;</span>' +
-    '</button>' +
-    '<button class="pa-filters__clear">Clear</button>';
-  sidebar.appendChild(topbar);
+    var body = document.createElement('div');
+    body.className = 'pa-filters__body';
+    sidebar.appendChild(body);
 
-  var body = document.createElement('div');
-  body.className = 'pa-filters__body';
-  sidebar.appendChild(body);
-
-  /* Default collapsed on mobile */
-  if (window.innerWidth < 900) sidebar.classList.add('is-collapsed');
-  topbar.querySelector('.pa-filters__collapse-btn').addEventListener('click', function () {
-    sidebar.classList.toggle('is-collapsed');
-  });
-
-  PA_FILTER_GROUPS.forEach(function (group) {
-    var groupEl = document.createElement('div');
-    groupEl.className = 'pa-filter-group';
-
-    var toggle = document.createElement('button');
-    toggle.className = 'pa-filter-group__toggle';
-    toggle.innerHTML =
-      '<span class="pa-filter-group__name">' + group.label + '</span>' +
-      '<span class="pa-filter-group__chevron' + (group.open ? '' : ' is-closed') + '">&#9650;</span>';
-
-    var items = document.createElement('div');
-    items.className = 'pa-filter-group__items' + (group.open ? '' : ' is-hidden');
-
-    group.filters.forEach(function (f) {
-      var lbl = document.createElement('label');
-      lbl.innerHTML = '<input type="checkbox" value="' + f.tag + '"> ' + f.label;
-      items.appendChild(lbl);
+    /* Default collapsed on mobile */
+    if (window.innerWidth < 900) sidebar.classList.add('is-collapsed');
+    topbar.querySelector('.pa-filters__collapse-btn').addEventListener('click', function () {
+      sidebar.classList.toggle('is-collapsed');
     });
 
-    toggle.addEventListener('click', function () {
-      items.classList.toggle('is-hidden');
-      toggle.querySelector('.pa-filter-group__chevron').classList.toggle('is-closed');
+    PA_FILTER_GROUPS.forEach(function (group) {
+      var groupEl = document.createElement('div');
+      groupEl.className = 'pa-filter-group';
+
+      var toggle = document.createElement('button');
+      toggle.className = 'pa-filter-group__toggle';
+      toggle.innerHTML =
+        '<span class="pa-filter-group__name">' + group.label + '</span>' +
+        '<span class="pa-filter-group__chevron' + (group.open ? '' : ' is-closed') + '">&#9650;</span>';
+
+      var items = document.createElement('div');
+      items.className = 'pa-filter-group__items' + (group.open ? '' : ' is-hidden');
+
+      group.filters.forEach(function (f) {
+        var lbl = document.createElement('label');
+        lbl.innerHTML = '<input type="checkbox" value="' + f.tag + '"> ' + f.label;
+        items.appendChild(lbl);
+      });
+
+      toggle.addEventListener('click', function () {
+        items.classList.toggle('is-hidden');
+        toggle.querySelector('.pa-filter-group__chevron').classList.toggle('is-closed');
+      });
+
+      groupEl.appendChild(toggle);
+      groupEl.appendChild(items);
+      body.appendChild(groupEl);
     });
 
-    groupEl.appendChild(toggle);
-    groupEl.appendChild(items);
-    body.appendChild(groupEl);
-  });
+    /* Filter change handler */
+    sidebar.addEventListener('change', applyFilters);
+    sidebar.querySelector('.pa-filters__clear').addEventListener('click', function () {
+      sidebar.querySelectorAll('input[type="checkbox"]').forEach(function (cb) { cb.checked = false; });
+      applyFilters();
+    });
 
-  /* Insert sidebar as first child — CSS grid placement handles its position */
-  storefront.insertBefore(sidebar, storefront.firstChild);
+    storefront.insertBefore(sidebar, storefront.firstChild);
+    paSidebar = sidebar;
+    return true;
+  }
 
-  /* ── 4. Filter logic ── */
+  /* ── 2. Badge + card-type injection (runs on each new batch of cards) ── */
+  function injectBadges() {
+    /* Only process cards that haven't been typed yet */
+    var newCards = document.querySelectorAll('a.coursebox-container:not(.pa-typed)');
+    newCards.forEach(function (card) {
+      card.classList.add('pa-typed');
+
+      var tags = (card.getAttribute('data-tags') || '').toLowerCase();
+      if (tags.indexOf('separator') !== -1) return;
+
+      var tagList = tags.split(',').map(function (t) { return t.trim(); });
+
+      /* Determine primary format type */
+      var primaryType = null;
+      for (var i = 0; i < PA_FORMAT_TAGS.length; i++) {
+        if (tagList.indexOf(PA_FORMAT_TAGS[i]) !== -1) {
+          primaryType = PA_FORMAT_TAGS[i];
+          break;
+        }
+      }
+      if (!primaryType) return;
+
+      /* Add card color class */
+      card.classList.add('pa-card--' + primaryType);
+
+      /* Inject type badge */
+      var wrap = document.createElement('div');
+      wrap.className = 'pa-badge-wrap';
+      var label = PA_TAG_LABEL_MAP[primaryType] || primaryType;
+      wrap.innerHTML = '<span class="pa-badge pa-badge--' + primaryType + '">' + label + '</span>';
+      var cardImg = card.querySelector('.coursebox-image');
+      if (cardImg) {
+        card.insertBefore(wrap, cardImg.nextSibling);
+      } else {
+        card.insertBefore(wrap, card.firstChild);
+      }
+    });
+  }
+
+  /* ── 3. Filter logic (queries cards live so late-loading cards are included) ── */
   function applyFilters() {
-    var groups = sidebar.querySelectorAll('.pa-filter-group');
+    if (!paSidebar) return;
+    var groups = paSidebar.querySelectorAll('.pa-filter-group');
     var activeGroups = [];
     groups.forEach(function (g) {
       var checked = Array.from(g.querySelectorAll('input:checked')).map(function (cb) { return cb.value; });
       if (checked.length) activeGroups.push(checked);
     });
 
+    var cards = document.querySelectorAll('a.coursebox-container');
     cards.forEach(function (card) {
       if ((card.getAttribute('data-tags') || '').indexOf('separator') !== -1) return;
       var cardTags = (card.getAttribute('data-tags') || '').toLowerCase();
@@ -526,12 +642,24 @@ document.addEventListener('DOMContentLoaded', function () {
     });
   }
 
-  sidebar.addEventListener('change', applyFilters);
+  /* ── Bootstrap: build layout once, poll for cards ── */
+  function tick() {
+    if (!paLayoutBuilt) {
+      paLayoutBuilt = buildLayout();
+    }
+    injectBadges();
+  }
 
-  sidebar.querySelector('.pa-filters__clear').addEventListener('click', function () {
-    sidebar.querySelectorAll('input[type="checkbox"]').forEach(function (cb) { cb.checked = false; });
-    applyFilters();
-  });
+  /* Run immediately if DOM is ready, otherwise wait */
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', tick);
+  } else {
+    tick();
+  }
 
-});
+  /* Poll to catch cards that SkillJar injects asynchronously */
+  var paPoll = setInterval(tick, 300);
+  setTimeout(function () { clearInterval(paPoll); }, 15000);
+
+}());
 </script>
