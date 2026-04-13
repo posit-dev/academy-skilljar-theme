@@ -780,6 +780,17 @@ body.sj-page-detail-course .top-row-white-v2 {
   border: none !important;
   box-shadow: none !important;
 }
+/* Short accent line separating hero from lower section —
+   matches the 80px × 2px underlines on the section headings */
+body.sj-page-detail-course .top-row-grey::after,
+body.sj-page-detail-course .top-row-white-v2::after {
+  content: '' !important;
+  display: block !important;
+  width: 80px !important;
+  height: 2px !important;
+  background-color: #D1DBE5 !important;
+  margin: 0 0 40px 40px !important;
+}
 
 /* Hero flex row */
 body.sj-page-detail-course .dp-row-flex-v2 {
@@ -787,8 +798,8 @@ body.sj-page-detail-course .dp-row-flex-v2 {
   align-items: center !important;
   flex-wrap: nowrap !important;
   gap: 48px !important;
-  padding: 48px 40px 40px !important;
-  border-bottom: 1px solid #E8ECEF !important;
+  padding: 48px 40px 32px !important;
+  border-bottom: none !important;
 }
 
 /* ── Text column — order 1 (left) ── */
