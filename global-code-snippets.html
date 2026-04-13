@@ -243,6 +243,11 @@ a.coursebox-container:hover {
   box-shadow: 0 8px 28px rgba(0,0,0,0.1) !important;
   transform: translateY(-3px) !important;
 }
+/* Separators are section headers, not clickable cards — suppress the lift effect */
+a.coursebox-container[data-tags="separator"]:hover {
+  box-shadow: none !important;
+  transform: none !important;
+}
 
 /* Image */
 a.coursebox-container .coursebox-image {
