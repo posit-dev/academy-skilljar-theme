@@ -254,11 +254,17 @@ a.coursebox-container[data-tags="separator"]:hover {
 a.coursebox-container .coursebox-image {
   width: 100% !important;
   display: block !important;
+  padding: 0 !important;
+  margin: 0 !important;
+  line-height: 0 !important;
+  font-size: 0 !important;
 }
 a.coursebox-container .coursebox-image img {
   width: 100% !important;
+  max-width: 100% !important;
   height: auto !important;
   display: block !important;
+  vertical-align: top !important;
 }
 
 /* Title */
@@ -465,6 +471,270 @@ a.coursebox-container:not([data-tags="separator"]) .coursebox-tag[data-tag="live
 }
 </style>
 <!-- END Course Type Badge -->
+
+
+<!-- START Search Results Styles -->
+<style>
+/* ═══════════════════════════════════════════════
+   SEARCH RESULTS — INFO BAR
+   ═══════════════════════════════════════════════ */
+
+/* Hidden by default — only shown when a search is active */
+#catalog-search-info {
+  display: none !important;
+}
+.search #catalog-search-info {
+  display: flex !important;
+  flex-wrap: wrap !important;
+  align-items: center !important;
+  gap: 10px 16px !important;
+  padding: 14px max(20px, 5vw) !important;
+  background: #F8FAFB !important;
+  border-bottom: 1px solid #E8ECEF !important;
+  box-sizing: border-box !important;
+}
+.catalog-search-info-header-results {
+  display: inline-flex !important;
+  align-items: center !important;
+  gap: 6px !important;
+  font-family: 'Open Sans', sans-serif !important;
+  font-size: 13px !important;
+  font-weight: 600 !important;
+  color: #447099 !important;
+  text-decoration: none !important;
+  cursor: pointer !important;
+  white-space: nowrap !important;
+}
+.catalog-search-info-header-results:hover { color: #3A5672 !important; }
+.catalog-search-info-header-results .fa-times-circle { font-size: 14px !important; }
+
+/* Filter chips row */
+.tile-counter-container {
+  display: flex !important;
+  flex-wrap: wrap !important;
+  gap: 8px !important;
+  align-items: center !important;
+}
+.filter-option-type {
+  display: inline-flex !important;
+  align-items: center !important;
+  gap: 4px !important;
+  font-family: 'Open Sans', sans-serif !important;
+  font-size: 12px !important;
+  font-weight: 600 !important;
+  color: #707073 !important;
+  background: #ffffff !important;
+  border: 1.5px solid #D1DBE5 !important;
+  border-radius: 20px !important;
+  padding: 5px 14px !important;
+  cursor: pointer !important;
+  transition: all 0.15s !important;
+  text-decoration: none !important;
+  user-select: none !important;
+}
+.filter-option-type.checked {
+  background: #447099 !important;
+  border-color: #447099 !important;
+  color: #ffffff !important;
+}
+.filter-option-type:not(.checked):hover {
+  background: #F0F3F6 !important;
+  border-color: #A2B8CB !important;
+  color: #17212B !important;
+}
+.filter-option-type.checked:hover {
+  background: #3A5672 !important;
+  border-color: #3A5672 !important;
+}
+/* Hide fa-stack checkmarks — checked state shown via bg color instead */
+.filter-option-type .fa-stack { display: none !important; }
+.filter-option-type .filter-name {
+  display: inline-flex !important;
+  align-items: baseline !important;
+  gap: 4px !important;
+}
+.filter-option-type .filter-counter { font-weight: 400 !important; opacity: 0.85 !important; }
+
+/* Reset button */
+.show-all-courses-wrapper .catalog-search-reset {
+  font-family: 'Open Sans', sans-serif !important;
+  font-size: 11px !important;
+  font-weight: 700 !important;
+  letter-spacing: 0.08em !important;
+  text-transform: uppercase !important;
+  color: #707073 !important;
+  background: transparent !important;
+  border: 1.5px solid #D1DBE5 !important;
+  border-radius: 4px !important;
+  padding: 5px 14px !important;
+  cursor: pointer !important;
+  text-decoration: none !important;
+  transition: color 0.15s, border-color 0.15s !important;
+  display: inline-block !important;
+}
+.show-all-courses-wrapper .catalog-search-reset:hover {
+  color: #17212B !important;
+  border-color: #A2B8CB !important;
+}
+
+/* Hide hero/announcement block when search is active */
+.search .catalog-header { display: none !important; }
+
+/* ═══════════════════════════════════════════════
+   LESSON CARD — icon/image area
+   ═══════════════════════════════════════════════ */
+
+/* Replace the empty collapsed div with a styled gradient panel */
+a.coursebox-container.lesson .coursebox-image {
+  height: 110px !important;
+  background: linear-gradient(145deg, #D1DBE5 0%, #A2B8CB 100%) !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+}
+a.coursebox-container.lesson .coursebox-image-inner-wrapper {
+  width: 52px !important;
+  height: 52px !important;
+  background: rgba(255, 255, 255, 0.75) !important;
+  border-radius: 50% !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+}
+a.coursebox-container.lesson .coursebox-image-inner-wrapper i {
+  font-size: 20px !important;
+  color: #447099 !important;
+}
+
+/* White background distinguishes lesson cards from course cards (light blue tint) */
+a.coursebox-container.lesson {
+  background: #ffffff !important;
+  border-color: #D1DBE5 !important;
+}
+
+/* "Part of:" — small-caps eyebrow label in Posit Blue */
+a.coursebox-container.lesson .sj-text-part-of span {
+  font-family: 'Open Sans', sans-serif !important;
+  font-size: 10px !important;
+  font-weight: 700 !important;
+  text-transform: uppercase !important;
+  letter-spacing: 0.08em !important;
+  color: #447099 !important;
+}
+a.coursebox-container.lesson .coursebox-text-description-target {
+  font-family: 'Open Sans', sans-serif !important;
+  font-size: 12px !important;
+  color: #707073 !important;
+}
+a.coursebox-container.lesson .coursebox-text-description {
+  padding-bottom: 16px !important;
+}
+
+/* ═══════════════════════════════════════════════
+   SEARCH RESULTS — LIST VIEW LAYOUT
+   ═══════════════════════════════════════════════ */
+
+/* Course listing: vertical stack of rows */
+.search #catalog-courses {
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 6px !important;
+  padding: 20px max(20px, 5vw) !important;
+}
+
+/* Each result: block with left indent for the image column.
+   Image is pulled out of flow (position: absolute) so text
+   elements stack naturally in the right column. */
+.search a.coursebox-container:not([data-tags="separator"]) {
+  display: block !important;
+  position: relative !important;
+  padding-left: 120px !important;
+  width: 100% !important;
+  max-width: none !important;
+  flex-grow: unset !important;
+  min-height: 80px !important;
+  border-radius: 8px !important;
+  overflow: hidden !important;
+}
+/* Suppress the upward lift — wrong for horizontal list rows */
+.search a.coursebox-container:not([data-tags="separator"]):hover {
+  transform: none !important;
+}
+
+/* Image: absolutely fills the left 120px column */
+.search a.coursebox-container .coursebox-image {
+  position: absolute !important;
+  left: 0 !important;
+  top: 0 !important;
+  bottom: 0 !important;
+  width: 120px !important;
+  min-width: 120px !important;
+  height: auto !important;
+  padding: 0 !important;
+  margin: 0 !important;
+}
+
+/* Course: crop image to fill the column */
+.search a.coursebox-container.course .coursebox-image {
+  display: block !important;
+  overflow: hidden !important;
+}
+.search a.coursebox-container.course .coursebox-image img {
+  width: 100% !important;
+  height: 100% !important;
+  object-fit: cover !important;
+  display: block !important;
+}
+
+/* Lesson: gradient + centered icon spanning full column height */
+.search a.coursebox-container.lesson .coursebox-image {
+  background: linear-gradient(145deg, #D1DBE5 0%, #A2B8CB 100%) !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+}
+.search a.coursebox-container.lesson .coursebox-image-inner-wrapper {
+  width: 40px !important;
+  height: 40px !important;
+}
+.search a.coursebox-container.lesson .coursebox-image-inner-wrapper i {
+  font-size: 18px !important;
+}
+
+/* Title */
+.search a.coursebox-container .coursebox-text {
+  font-size: 15px !important;
+  padding: 12px 16px 2px !important;
+}
+
+/* Description: clamp to 2 lines */
+.search a.coursebox-container .coursebox-text-description {
+  padding: 2px 16px 8px !important;
+  display: -webkit-box !important;
+  -webkit-line-clamp: 2 !important;
+  -webkit-box-orient: vertical !important;
+  overflow: hidden !important;
+  padding-bottom: 8px !important;
+}
+
+/* Tags */
+.search a.coursebox-container .coursebox-tags {
+  padding: 0 16px 10px !important;
+}
+
+/* Mobile: narrower thumbnail */
+@media only screen and (max-width: 640px) {
+  .search a.coursebox-container:not([data-tags="separator"]) {
+    padding-left: 72px !important;
+    min-height: 64px !important;
+  }
+  .search a.coursebox-container .coursebox-image {
+    width: 72px !important;
+    min-width: 72px !important;
+  }
+}
+</style>
+<!-- END Search Results Styles -->
 
 
 <!-- START Course Landing Page Styles -->
