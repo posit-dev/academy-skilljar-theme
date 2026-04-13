@@ -983,6 +983,16 @@ body.sj-page-detail-course #dp-details .row .columns:has(.dp-long-description) {
   padding: 0 !important;
 }
 
+/* Override Foundation's large-10 centered wrapper — makes lower section
+   align with the hero's left/right edges (same 40px padding on the row) */
+body.sj-page-detail-course #dp-details .row > .large-centered {
+  width: 100% !important;
+  max-width: none !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  float: none !important;
+}
+
 /* ── Section headings (h3) — large, short accent rule ── */
 body.sj-page-detail-course #dp-details h3 {
   font-family: 'Open Sans', sans-serif !important;
