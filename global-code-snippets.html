@@ -179,13 +179,11 @@ function runSeparatorSetup() {
         if (!desc) return;
         if (desc.textContent.indexOf('[explore-btn]') === -1) return; // opt-in marker required
         desc.innerHTML = desc.innerHTML.replace(/\[explore-btn\]/gi, '');
+        // Point the separator card's own href to the destination so the <a> handles navigation
+        sep.setAttribute('href', dest);
         var btn = document.createElement('span');
         btn.className = 'pa-sep-btn';
         btn.textContent = 'Explore all courses';
-        btn.addEventListener('click', function(e) {
-            e.stopPropagation();
-            window.location.href = dest;
-        });
         desc.appendChild(btn);
     });
 
