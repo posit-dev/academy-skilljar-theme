@@ -1268,17 +1268,18 @@ body.sj-page-detail-course:has(#main-container[data-tags~="live-training"]) .dp-
   color: #17212B !important;
 }
 
-/* ── Lower section row: match hero's 1500px container + padding-side offset ──
-   The hero's outer wrapper (.row-v2) has max-width 1500px AND applies ~57px
-   padding-side on each side, so the hero image right edge sits 57+40 = 97px
-   inset from the container edge. We apply the same 97px horizontal padding
-   here so the sessions panel's right edge lines up with the hero image. */
+/* ── Lower section row: match hero's 1500px container + fluid padding-side ──
+   The hero outer wrapper (.row-v2) caps at 1500px and applies a fluid
+   padding-side = max(20px, (100vw - 1280px) / 4) — the same formula used
+   by the header. Adding that on top of the base 40px gives a left/right
+   inset that tracks the hero image edge at all viewport widths, without
+   over-indenting on narrow screens. */
 body.sj-page-detail-course:has(#main-container[data-tags~="live-training"]) #dp-details .row {
   max-width: 1500px !important;
   margin-left: auto !important;
   margin-right: auto !important;
-  padding-left: 97px !important;
-  padding-right: 97px !important;
+  padding-left: calc(40px + max(0px, (100vw - 1280px) / 4)) !important;
+  padding-right: calc(40px + max(0px, (100vw - 1280px) / 4)) !important;
 }
 
 /* ── Curriculum column: hidden (live trainings don't have lessons) ── */
