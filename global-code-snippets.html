@@ -1452,10 +1452,11 @@ body.sj-page-detail-course:has(#main-container[data-tags~="live-training"]) .sj-
     /* Right: sessions panel right edge = image panel right edge */
     var padRight = Math.max(0, Math.round(rowRect.right - imgRect.right));
 
-    /* Left: about-text left edge = hero summary-wrapper left edge */
-    var padLeft = sumWrap
-      ? Math.max(0, Math.round(sumWrap.getBoundingClientRect().left - rowRect.left))
-      : padRight;
+    /* Left: "About this course" left edge = hero title (h1) left edge */
+    var titleEl = document.querySelector('h1.break-word');
+    var padLeft = titleEl
+      ? Math.max(0, Math.round(titleEl.getBoundingClientRect().left - rowRect.left))
+      : (sumWrap ? Math.max(0, Math.round(sumWrap.getBoundingClientRect().left - rowRect.left)) : padRight);
 
     detRow.style.setProperty('padding-left',  padLeft  + 'px', 'important');
     detRow.style.setProperty('padding-right', padRight + 'px', 'important');
