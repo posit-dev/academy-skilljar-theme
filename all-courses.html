@@ -20,6 +20,13 @@
   grid-column: 1 / -1 !important;
 }
 
+/* .skilljar-content is a flex item — min-width: auto (default) prevents it
+   from shrinking below its content size and causes the grid to overflow.
+   min-width: 0 allows it to shrink to fit the available flex space. */
+.skilljar-content {
+  min-width: 0 !important;
+}
+
 /* Override global-code-snippets max-width (written for home page flex layout) */
 #catalog-courses a.coursebox-container:not([data-tags~="separator"]) {
   max-width: 100% !important;
