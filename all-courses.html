@@ -30,11 +30,15 @@
 }
 
 
-/* Reset SkillJar's default offset — target every container in the chain */
-.top-row.sj-courseboxes-v2,
-.skilljar-content,
-#catalog-content,
+/* Reset SkillJar's default padding on the grid container.
+   Uses high-specificity selectors to beat SkillJar's own !important rules. */
+.top-row #catalog-courses,
+.top-row .course-listing,
+.skilljar-content #catalog-courses,
+.skilljar-content .course-listing,
+.skilljar-content #catalog-content,
 #catalog-courses,
+#catalog-content,
 .course-listing {
   padding-left: 0 !important;
   padding-right: 0 !important;
