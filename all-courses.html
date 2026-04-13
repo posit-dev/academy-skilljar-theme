@@ -96,8 +96,11 @@
   }
   #pa-filter-overlay.pa-open { display: block; }
 
-  /* Sidebar slides in as a drawer */
-  .catalog-left-nav {
+  /* Sidebar slides in as a drawer.
+     The element has id="catalog-left-nav" (no class of that name) and uses
+     SkillJar's cbp-spmenu library. We override positioning and use
+     cbp-spmenu-open (SkillJar's own class) to trigger the slide. */
+  #catalog-left-nav {
     display: block !important;
     position: fixed !important;
     top: 0 !important;
@@ -107,13 +110,14 @@
     overflow-y: auto !important;
     background: #ffffff !important;
     z-index: 999 !important;
-    padding: 24px 20px !important;
+    padding: 20px 16px !important;
     box-shadow: 4px 0 24px rgba(0, 0, 0, 0.18) !important;
     transform: translateX(-110%) !important;
     transition: transform 0.25s ease !important;
     box-sizing: border-box !important;
   }
-  .catalog-left-nav.pa-open {
+  /* cbp-spmenu-open is SkillJar's own "panel visible" class */
+  #catalog-left-nav.cbp-spmenu-open {
     transform: translateX(0) !important;
   }
 }
@@ -140,14 +144,14 @@
     btn.dataset.wired = '1';
 
     function openFilters() {
-      var nav = document.querySelector('.catalog-left-nav');
-      if (nav) nav.classList.add('pa-open');
+      var nav = document.getElementById('catalog-left-nav');
+      if (nav) nav.classList.add('cbp-spmenu-open');
       overlay.classList.add('pa-open');
       document.body.style.overflow = 'hidden';
     }
     function closeFilters() {
-      var nav = document.querySelector('.catalog-left-nav');
-      if (nav) nav.classList.remove('pa-open');
+      var nav = document.getElementById('catalog-left-nav');
+      if (nav) nav.classList.remove('cbp-spmenu-open');
       overlay.classList.remove('pa-open');
       document.body.style.overflow = '';
     }
