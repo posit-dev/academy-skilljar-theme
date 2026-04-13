@@ -30,8 +30,9 @@
 }
 
 
-/* Reset SkillJar's default padding on the grid container.
-   Uses high-specificity selectors to beat SkillJar's own !important rules. */
+/* Zero out the horizontal padding on the grid container only.
+   Uses parent selectors to beat SkillJar's higher-specificity !important rules.
+   No width overrides — those break the flex layout with the sidebar. */
 .top-row #catalog-courses,
 .top-row .course-listing,
 .skilljar-content #catalog-courses,
@@ -44,8 +45,5 @@
   padding-right: 0 !important;
   margin-left: 0 !important;
   margin-right: 0 !important;
-  width: 100% !important;
-  max-width: 100% !important;
-  box-sizing: border-box !important;
 }
 </style>
