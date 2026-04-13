@@ -15,7 +15,7 @@
   gap: 16px !important;
   align-items: start !important;
   padding-left: 24px !important;
-  padding-right: 37px !important;
+  padding-right: 40px !important;
 }
 
 /* Separator spans full row width; tighten bottom spacing vs. global defaults */
@@ -58,48 +58,55 @@
 }
 
 
-/* ── Mobile: filter drawer ─────────────────────────────────────────────
-   Button is in the HTML (not JS-created) so it always exists in the DOM.
-   Breakpoint 900px covers phones and most tablets. */
+/* ── Mobile: filter drawer ──────────────────────────────────────────────
+   The filter button is injected by JS directly into document.body so it
+   is never inside SkillJar's content wrappers. position:fixed anchors it
+   to the left edge of the viewport regardless of page layout. */
 
-/* Hidden by default; shown only on narrow screens */
+/* Filter button — JS-created, appended to <body> */
 #pa-filter-btn {
-  display: none;
+  display: none;                  /* hidden by default; JS shows on narrow screens */
+  position: fixed;
+  left: 0;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 200;
+  align-items: center;
+  background: rgba(23, 33, 43, 0.75);
+  color: #ffffff;
+  border: none;
+  border-radius: 0 4px 4px 0;    /* tab that "sticks out" from left edge */
+  padding: 10px 10px;
+  font-family: 'Open Sans', sans-serif;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  cursor: pointer;
+  box-shadow: 2px 2px 8px rgba(0,0,0,0.2);
 }
 
-@media only screen and (max-width: 860px) {
-  #pa-filter-btn {
-    display: inline-flex !important;
-    align-items: center;
-    gap: 8px;
-    background: #17212B;
-    color: #ffffff;
-    border: none;
-    border-radius: 4px;
-    padding: 10px 20px;
-    font-family: 'Open Sans', sans-serif;
-    font-size: 12px;
-    font-weight: 700;
-    letter-spacing: 0.1em;
-    text-transform: uppercase;
-    cursor: pointer;
-    margin: 16px 0 16px 24px;
+/* Dim backdrop */
+#pa-filter-overlay {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.45);
+  z-index: 998;
+}
+#pa-filter-overlay.pa-open { display: block; }
+
+@media only screen and (max-width: 875px) {
+  /* Sidebar is gone — collapse flex row to block so content fills full width */
+  .storefront .top-row {
+    display: block !important;
+  }
+  .skilljar-content {
+    width: 100% !important;
+    max-width: 100% !important;
   }
 
-  /* Dim backdrop */
-  #pa-filter-overlay {
-    display: none;
-    position: fixed;
-    inset: 0;
-    background: rgba(0, 0, 0, 0.45);
-    z-index: 998;
-  }
-  #pa-filter-overlay.pa-open { display: block; }
-
-  /* Sidebar slides in as a drawer.
-     The element has id="catalog-left-nav" (no class of that name) and uses
-     SkillJar's cbp-spmenu library. We override positioning and use
-     cbp-spmenu-open (SkillJar's own class) to trigger the slide. */
+  /* Sidebar slides in as a drawer */
   #catalog-left-nav {
     display: block !important;
     position: fixed !important;
@@ -116,31 +123,49 @@
     transition: transform 0.25s ease !important;
     box-sizing: border-box !important;
   }
-  /* cbp-spmenu-open is SkillJar's own "panel visible" class */
   #catalog-left-nav.cbp-spmenu-open {
     transform: translateX(0) !important;
   }
 }
 </style>
 
-<!-- Mobile filter button — lives in HTML so it exists from page load -->
-<button id="pa-filter-btn">
-  <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-    <line x1="1" y1="4" x2="15" y2="4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
-    <line x1="3" y1="8" x2="13" y2="8" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
-    <line x1="6" y1="12" x2="10" y2="12" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
-  </svg>
-  Filters
-</button>
-<!-- Backdrop overlay (hidden until drawer opens) -->
+<!-- Backdrop overlay only — button is injected by JS into document.body -->
 <div id="pa-filter-overlay"></div>
 
 <script>
 (function () {
+  var mq = window.matchMedia('(max-width: 875px)');
+
+  function getOrCreateBtn() {
+    var btn = document.getElementById('pa-filter-btn');
+    if (btn) return btn;
+
+    btn = document.createElement('button');
+    btn.id = 'pa-filter-btn';
+    btn.setAttribute('aria-label', 'Open filters');
+    btn.innerHTML =
+      '<svg width="16" height="16" viewBox="0 0 16 16" fill="none" ' +
+      'xmlns="http://www.w3.org/2000/svg" aria-hidden="true">' +
+      '<line x1="1" y1="4" x2="15" y2="4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>' +
+      '<line x1="3" y1="8" x2="13" y2="8" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>' +
+      '<line x1="6" y1="12" x2="10" y2="12" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>' +
+      '</svg>';
+
+    document.body.appendChild(btn);
+    return btn;
+  }
+
+  function updateVisibility() {
+    var btn = getOrCreateBtn();
+    btn.style.display = mq.matches ? 'inline-flex' : 'none';
+  }
+
   function initMobileFilters() {
-    var btn     = document.getElementById('pa-filter-btn');
     var overlay = document.getElementById('pa-filter-overlay');
-    if (!btn || !overlay || btn.dataset.wired) return;
+    if (!overlay) return;
+
+    var btn = getOrCreateBtn();
+    if (btn.dataset.wired) return;
     btn.dataset.wired = '1';
 
     function openFilters() {
@@ -158,6 +183,9 @@
 
     btn.addEventListener('click', openFilters);
     overlay.addEventListener('click', closeFilters);
+
+    updateVisibility();
+    mq.addEventListener('change', updateVisibility);
   }
 
   if (document.readyState === 'loading') {
@@ -168,4 +196,3 @@
   window.addEventListener('load', initMobileFilters);
 }());
 </script>
-
