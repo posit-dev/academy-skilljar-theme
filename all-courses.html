@@ -3,19 +3,11 @@
   Posit Academy — All Courses Page
   =================================
   HOW TO INSTALL:
-  1. In SkillJar Admin, go to the All Courses catalog page settings
-  2. Paste the entire contents of this file into the "Header HTML" field
-
-  WHAT THIS DOES:
-  - Adds a "Browse All Courses" page header
-  - Reskins course cards with color-coded styles per content type
-  - Builds a custom filter sidebar from the FILTER_GROUPS config in the JS below
-  - Injects content-type badges based on course tags
+  Paste the entire contents of this file into a custom HTML block
+  on the All Courses catalog page in SkillJar.
 
   BADGE & FILTER SETUP:
-  Tag your courses in SkillJar to match the tag values in FILTER_GROUPS below.
-  Example: tag a course "live" → it gets a "Live Training" badge and appears
-  under the Live Training filter checkbox.
+  Tag your courses in SkillJar to match the tag values in PA_FILTER_GROUPS.
 
   FILTER LOGIC:
   - Selections within a group = OR  (Course OR Live Training)
@@ -23,25 +15,29 @@
 */
 
 /* ═══════════════════════════════════════════════
-   PAGE LAYOUT — CSS Grid replaces Flexbox
-   Header spans full width (row 1), sidebar + grid share row 2.
-   The header lives INSIDE .storefront so SkillJar's scroll-collapse
-   JS (which targets elements above .storefront) never touches it.
+   HIDE SKILLJAR BUILT-INS
+   ═══════════════════════════════════════════════ */
+/* SkillJar's catalog name / description / CTA header block */
+.catalog-center-width { display: none !important; }
+/* SkillJar's built-in left nav (search + tag filters) */
+.catalog-left-nav { display: none !important; }
+/* SkillJar footer */
+#ep-footer, footer { display: none !important; }
+/* Prevent horizontal scroll */
+body { overflow-x: hidden !important; }
+
+/* ═══════════════════════════════════════════════
+   PAGE LAYOUT
+   The page header sits inside .storefront above .top-row.
+   .top-row becomes the flex container: sidebar | course grid.
    ═══════════════════════════════════════════════ */
 .storefront {
-  display: grid !important;
-  grid-template-columns: 240px 1fr !important;
-  grid-template-rows: auto auto !important;
-  align-items: start !important;
-  column-gap: 48px !important;
   padding: 0 40px 80px !important;
   overflow-x: hidden !important;
 }
 
-/* ── Page header — spans both columns, sits in row 1 ── */
+/* Our injected page header */
 .pa-courses-header {
-  grid-column: 1 / -1 !important;
-  grid-row: 1 !important;
   padding: 72px 0 28px !important;
   display: block !important;
 }
@@ -54,10 +50,19 @@
   line-height: 1.15;
 }
 
-/* ── Filter sidebar — column 1, row 2 ── */
+/* .top-row becomes the 2-column flex layout: sidebar | grid */
+.top-row.sj-courseboxes-v2 {
+  display: flex !important;
+  align-items: flex-start !important;
+  gap: 48px !important;
+  width: 100% !important;
+  box-sizing: border-box !important;
+}
+
+/* Filter sidebar */
 .pa-filters {
-  grid-column: 1 !important;
-  grid-row: 2 !important;
+  flex: 0 0 240px !important;
+  width: 240px !important;
 }
 .pa-filters__topbar {
   display: flex;
@@ -92,12 +97,8 @@
 .pa-filters.is-collapsed .pa-filters__toggle-chevron {
   transform: rotate(180deg);
 }
-.pa-filters__body {
-  overflow: hidden;
-}
-.pa-filters.is-collapsed .pa-filters__body {
-  display: none;
-}
+.pa-filters__body { overflow: hidden; }
+.pa-filters.is-collapsed .pa-filters__body { display: none; }
 .pa-filters__clear {
   font-family: 'Open Sans', sans-serif;
   font-size: 12px;
@@ -142,7 +143,6 @@
   flex-shrink: 0;
 }
 .pa-filter-group__chevron.is-closed { transform: rotate(180deg); }
-
 .pa-filter-group__items {
   padding-bottom: 12px;
   display: flex;
@@ -150,7 +150,6 @@
   gap: 2px;
 }
 .pa-filter-group__items.is-hidden { display: none; }
-
 .pa-filter-group__items label {
   display: flex;
   align-items: center;
@@ -173,26 +172,21 @@
   cursor: pointer;
 }
 
-/* ── Course content area — column 2, row 2 ── */
+/* Course content area */
 .skilljar-content {
-  grid-column: 2 !important;
-  grid-row: 2 !important;
+  flex: 1 1 0 !important;
   min-width: 0 !important;
   width: 100% !important;
+}
+.skilljar-content,
+#catalog-content {
+  max-width: 100% !important;
+  box-sizing: border-box !important;
 }
 
 /* ═══════════════════════════════════════════════
    COURSE GRID
    ═══════════════════════════════════════════════ */
-.skilljar-content,
-.top-row.sj-courseboxes-v2,
-.catalog-center-width,
-#catalog-content {
-  width: 100% !important;
-  max-width: 100% !important;
-  box-sizing: border-box !important;
-}
-
 #catalog-courses {
   display: grid !important;
   grid-template-columns: repeat(3, 1fr) !important;
@@ -223,8 +217,6 @@ a.coursebox-container:not([data-tags~="separator"]):hover {
   box-shadow: 0 8px 28px rgba(0,0,0,0.12) !important;
   transform: translateY(-3px) !important;
 }
-
-/* Image */
 a.coursebox-container:not([data-tags~="separator"]) .coursebox-image {
   width: 100% !important;
   display: block !important;
@@ -234,16 +226,12 @@ a.coursebox-container:not([data-tags~="separator"]) .coursebox-image img {
   height: auto !important;
   display: block !important;
 }
-
-/* Badge wrap */
 .pa-badge-wrap {
   padding: 14px 16px 0;
   display: flex;
   flex-wrap: wrap;
   gap: 6px;
 }
-
-/* Base badge */
 .pa-badge {
   display: inline-block;
   padding: 3px 10px;
@@ -255,8 +243,6 @@ a.coursebox-container:not([data-tags~="separator"]) .coursebox-image img {
   letter-spacing: 0.09em;
   text-transform: uppercase;
 }
-
-/* Title */
 a.coursebox-container:not([data-tags~="separator"]) .coursebox-text {
   font-family: 'Open Sans', sans-serif !important;
   font-size: 17px !important;
@@ -266,8 +252,6 @@ a.coursebox-container:not([data-tags~="separator"]) .coursebox-text {
   line-height: 1.3 !important;
   margin: 0 !important;
 }
-
-/* Description */
 a.coursebox-container:not([data-tags~="separator"]) .coursebox-text-description {
   font-family: 'Open Sans', sans-serif !important;
   font-size: 13px !important;
@@ -277,26 +261,13 @@ a.coursebox-container:not([data-tags~="separator"]) .coursebox-text-description 
   padding: 0 16px 20px !important;
   margin: 0 !important;
 }
-
-/* Hide price and CTA */
 a.coursebox-container:not([data-tags~="separator"]) .storefront-price,
 a.coursebox-container:not([data-tags~="separator"]) .coursebox-callout {
   display: none !important;
 }
-
-/* Cards filtered out */
 a.coursebox-container.pa-hidden {
   display: none !important;
 }
-
-/* Hide SkillJar footer */
-#ep-footer, footer { display: none !important; }
-
-/* Hide SkillJar's built-in left nav */
-nav.catalog-left-nav { display: none !important; }
-
-/* Prevent horizontal scroll */
-body { overflow-x: hidden !important; }
 
 /* ═══════════════════════════════════════════════
    CARD TYPE STYLES — color-coded per content type
@@ -310,40 +281,20 @@ a.coursebox-container.pa-card--path {
 a.coursebox-container.pa-card--path:hover {
   box-shadow: 0 8px 28px rgba(0,0,0,0.3) !important;
 }
-a.coursebox-container.pa-card--path .coursebox-image {
-  background: #3A5672;
-}
-a.coursebox-container.pa-card--path .coursebox-text {
-  color: #ffffff !important;
-}
-a.coursebox-container.pa-card--path .coursebox-text-description {
-  color: rgba(255,255,255,0.72) !important;
-}
-.pa-badge--path {
-  background: #3A5672;
-  border-color: #3A5672;
-  color: #ffffff;
-}
+a.coursebox-container.pa-card--path .coursebox-image { background: #3A5672; }
+a.coursebox-container.pa-card--path .coursebox-text { color: #ffffff !important; }
+a.coursebox-container.pa-card--path .coursebox-text-description { color: rgba(255,255,255,0.72) !important; }
+.pa-badge--path { background: #3A5672; border-color: #3A5672; color: #ffffff; }
 
 /* ── Course — light steel blue ── */
 a.coursebox-container.pa-card--course {
   background: #D1DBE5 !important;
   border-color: #A2B8CB !important;
 }
-a.coursebox-container.pa-card--course .coursebox-image {
-  background: #A2B8CB;
-}
-a.coursebox-container.pa-card--course .coursebox-text {
-  color: #17212B !important;
-}
-a.coursebox-container.pa-card--course .coursebox-text-description {
-  color: #404041 !important;
-}
-.pa-badge--course {
-  background: #ED632F;
-  border-color: #ED632F;
-  color: #ffffff;
-}
+a.coursebox-container.pa-card--course .coursebox-image { background: #A2B8CB; }
+a.coursebox-container.pa-card--course .coursebox-text { color: #17212B !important; }
+a.coursebox-container.pa-card--course .coursebox-text-description { color: #404041 !important; }
+.pa-badge--course { background: #ED632F; border-color: #ED632F; color: #ffffff; }
 
 /* ── Live Training — academy yellow ── */
 a.coursebox-container.pa-card--live {
@@ -353,90 +304,51 @@ a.coursebox-container.pa-card--live {
 a.coursebox-container.pa-card--live:hover {
   box-shadow: 0 8px 28px rgba(196,143,10,0.3) !important;
 }
-a.coursebox-container.pa-card--live .coursebox-image {
-  background: #F4C540;
-}
-a.coursebox-container.pa-card--live .coursebox-text {
-  color: #17212B !important;
-}
-a.coursebox-container.pa-card--live .coursebox-text-description {
-  color: #404041 !important;
-}
-.pa-badge--live {
-  background: #419599;
-  border-color: #419599;
-  color: #ffffff;
-}
+a.coursebox-container.pa-card--live .coursebox-image { background: #F4C540; }
+a.coursebox-container.pa-card--live .coursebox-text { color: #17212B !important; }
+a.coursebox-container.pa-card--live .coursebox-text-description { color: #404041 !important; }
+.pa-badge--live { background: #419599; border-color: #419599; color: #ffffff; }
 
 /* ── On-Demand Training — light salmon ── */
 a.coursebox-container.pa-card--on-demand {
   background: #EDCCBF !important;
   border-color: #E0A690 !important;
 }
-a.coursebox-container.pa-card--on-demand .coursebox-image {
-  background: #E0A690;
-}
-a.coursebox-container.pa-card--on-demand .coursebox-text {
-  color: #17212B !important;
-}
-a.coursebox-container.pa-card--on-demand .coursebox-text-description {
-  color: #404041 !important;
-}
-.pa-badge--on-demand {
-  background: #447099;
-  border-color: #447099;
-  color: #ffffff;
-}
+a.coursebox-container.pa-card--on-demand .coursebox-image { background: #E0A690; }
+a.coursebox-container.pa-card--on-demand .coursebox-text { color: #17212B !important; }
+a.coursebox-container.pa-card--on-demand .coursebox-text-description { color: #404041 !important; }
+.pa-badge--on-demand { background: #447099; border-color: #447099; color: #ffffff; }
 
 /* ═══════════════════════════════════════════════
    MOBILE
    ═══════════════════════════════════════════════ */
-
 @media only screen and (max-width: 1200px) {
   #catalog-courses {
     grid-template-columns: repeat(2, 1fr) !important;
   }
 }
-
 @media only screen and (max-width: 900px) {
   .storefront {
-    grid-template-columns: 1fr !important;
     padding: 0 20px 60px !important;
-    column-gap: 0 !important;
   }
   .pa-courses-header {
-    grid-column: 1 !important;
     padding-top: 80px !important;
     padding-bottom: 20px !important;
   }
+  .top-row.sj-courseboxes-v2 {
+    flex-direction: column !important;
+    gap: 0 !important;
+  }
   .pa-filters {
-    grid-column: 1 !important;
-    grid-row: 2 !important;
-    margin-bottom: 24px !important;
-  }
-  .skilljar-content {
-    grid-column: 1 !important;
-    grid-row: 3 !important;
-  }
-  .skilljar-content,
-  .catalog-center-width,
-  #catalog-content {
-    margin-left: 0 !important;
-    margin-right: 0 !important;
-    padding-left: 0 !important;
-    padding-right: 0 !important;
+    flex: none !important;
     width: 100% !important;
-    max-width: 100% !important;
+    margin-bottom: 24px !important;
   }
   #catalog-courses {
     grid-template-columns: repeat(2, 1fr) !important;
     gap: 16px !important;
-    width: 100% !important;
-    margin: 0 !important;
-    padding: 0 !important;
   }
 }
-
 @media only screen and (max-width: 500px) {
   #catalog-courses {
     grid-template-columns: 1fr !important;
@@ -447,8 +359,6 @@ a.coursebox-container.pa-card--on-demand .coursebox-text-description {
 <script>
 /* ═══════════════════════════════════════════════════════════
    ✏️  FILTER GROUPS — edit to match your SkillJar tags
-   Each filter's "tag" must match the tag slug you applied
-   to courses in SkillJar Admin.
    ═══════════════════════════════════════════════════════════ */
 var PA_FILTER_GROUPS = [
   {
@@ -488,15 +398,11 @@ var PA_FILTER_GROUPS = [
    DO NOT EDIT BELOW THIS LINE
    ════════════════════════════════════════════ */
 
-/* Format tag priority order for badge + card coloring */
 var PA_FORMAT_TAGS = ['path', 'live', 'on-demand', 'course'];
 
-/* Label lookup map */
 var PA_TAG_LABEL_MAP = {};
 PA_FILTER_GROUPS.forEach(function (group) {
-  group.filters.forEach(function (f) {
-    PA_TAG_LABEL_MAP[f.tag] = f.label;
-  });
+  group.filters.forEach(function (f) { PA_TAG_LABEL_MAP[f.tag] = f.label; });
 });
 
 (function () {
@@ -504,87 +410,89 @@ PA_FILTER_GROUPS.forEach(function (group) {
   var paLayoutBuilt = false;
   var paSidebar = null;
 
-  /* ── 1. Build page header + filter sidebar (needs .storefront only) ── */
+  /* ── 1. Build page header + filter sidebar ── */
   function buildLayout() {
     var storefront = document.querySelector('.storefront');
-    if (!storefront) return false;
+    var topRow = document.querySelector('.top-row.sj-courseboxes-v2');
+    if (!storefront || !topRow) return false;
 
-    /* Page header */
-    var hdr = document.createElement('div');
-    hdr.className = 'pa-courses-header';
-    hdr.innerHTML = '<h1 class="pa-courses-header__title">Browse All Courses</h1>'; /* ✏️ */
-    storefront.insertBefore(hdr, storefront.firstChild);
+    /* Page header — inserted into .storefront, directly before .top-row */
+    if (!document.querySelector('.pa-courses-header')) {
+      var hdr = document.createElement('div');
+      hdr.className = 'pa-courses-header';
+      hdr.innerHTML = '<h1 class="pa-courses-header__title">Browse All Courses</h1>'; /* ✏️ */
+      storefront.insertBefore(hdr, topRow);
+    }
 
-    /* Filter sidebar */
-    if (!PA_FILTER_GROUPS.length) return true;
+    /* Filter sidebar — inserted as first child of .top-row */
+    if (!document.querySelector('.pa-filters') && PA_FILTER_GROUPS.length) {
+      var sidebar = document.createElement('div');
+      sidebar.className = 'pa-filters';
 
-    var sidebar = document.createElement('div');
-    sidebar.className = 'pa-filters';
+      var topbar = document.createElement('div');
+      topbar.className = 'pa-filters__topbar';
+      topbar.innerHTML =
+        '<button class="pa-filters__collapse-btn">' +
+          '<span class="pa-filters__label">Filters</span>' +
+          '<span class="pa-filters__toggle-chevron">&#9650;</span>' +
+        '</button>' +
+        '<button class="pa-filters__clear">Clear</button>';
+      sidebar.appendChild(topbar);
 
-    var topbar = document.createElement('div');
-    topbar.className = 'pa-filters__topbar';
-    topbar.innerHTML =
-      '<button class="pa-filters__collapse-btn">' +
-        '<span class="pa-filters__label">Filters</span>' +
-        '<span class="pa-filters__toggle-chevron">&#9650;</span>' +
-      '</button>' +
-      '<button class="pa-filters__clear">Clear</button>';
-    sidebar.appendChild(topbar);
+      var body = document.createElement('div');
+      body.className = 'pa-filters__body';
+      sidebar.appendChild(body);
 
-    var body = document.createElement('div');
-    body.className = 'pa-filters__body';
-    sidebar.appendChild(body);
-
-    /* Default collapsed on mobile */
-    if (window.innerWidth < 900) sidebar.classList.add('is-collapsed');
-    topbar.querySelector('.pa-filters__collapse-btn').addEventListener('click', function () {
-      sidebar.classList.toggle('is-collapsed');
-    });
-
-    PA_FILTER_GROUPS.forEach(function (group) {
-      var groupEl = document.createElement('div');
-      groupEl.className = 'pa-filter-group';
-
-      var toggle = document.createElement('button');
-      toggle.className = 'pa-filter-group__toggle';
-      toggle.innerHTML =
-        '<span class="pa-filter-group__name">' + group.label + '</span>' +
-        '<span class="pa-filter-group__chevron' + (group.open ? '' : ' is-closed') + '">&#9650;</span>';
-
-      var items = document.createElement('div');
-      items.className = 'pa-filter-group__items' + (group.open ? '' : ' is-hidden');
-
-      group.filters.forEach(function (f) {
-        var lbl = document.createElement('label');
-        lbl.innerHTML = '<input type="checkbox" value="' + f.tag + '"> ' + f.label;
-        items.appendChild(lbl);
+      if (window.innerWidth < 900) sidebar.classList.add('is-collapsed');
+      topbar.querySelector('.pa-filters__collapse-btn').addEventListener('click', function () {
+        sidebar.classList.toggle('is-collapsed');
       });
 
-      toggle.addEventListener('click', function () {
-        items.classList.toggle('is-hidden');
-        toggle.querySelector('.pa-filter-group__chevron').classList.toggle('is-closed');
+      PA_FILTER_GROUPS.forEach(function (group) {
+        var groupEl = document.createElement('div');
+        groupEl.className = 'pa-filter-group';
+
+        var toggle = document.createElement('button');
+        toggle.className = 'pa-filter-group__toggle';
+        toggle.innerHTML =
+          '<span class="pa-filter-group__name">' + group.label + '</span>' +
+          '<span class="pa-filter-group__chevron' + (group.open ? '' : ' is-closed') + '">&#9650;</span>';
+
+        var items = document.createElement('div');
+        items.className = 'pa-filter-group__items' + (group.open ? '' : ' is-hidden');
+
+        group.filters.forEach(function (f) {
+          var lbl = document.createElement('label');
+          lbl.innerHTML = '<input type="checkbox" value="' + f.tag + '"> ' + f.label;
+          items.appendChild(lbl);
+        });
+
+        toggle.addEventListener('click', function () {
+          items.classList.toggle('is-hidden');
+          toggle.querySelector('.pa-filter-group__chevron').classList.toggle('is-closed');
+        });
+
+        groupEl.appendChild(toggle);
+        groupEl.appendChild(items);
+        body.appendChild(groupEl);
       });
 
-      groupEl.appendChild(toggle);
-      groupEl.appendChild(items);
-      body.appendChild(groupEl);
-    });
+      sidebar.addEventListener('change', applyFilters);
+      sidebar.querySelector('.pa-filters__clear').addEventListener('click', function () {
+        sidebar.querySelectorAll('input[type="checkbox"]').forEach(function (cb) { cb.checked = false; });
+        applyFilters();
+      });
 
-    /* Filter change handler */
-    sidebar.addEventListener('change', applyFilters);
-    sidebar.querySelector('.pa-filters__clear').addEventListener('click', function () {
-      sidebar.querySelectorAll('input[type="checkbox"]').forEach(function (cb) { cb.checked = false; });
-      applyFilters();
-    });
+      /* Insert as first child of .top-row so it appears before .skilljar-content */
+      topRow.insertBefore(sidebar, topRow.firstChild);
+      paSidebar = sidebar;
+    }
 
-    storefront.insertBefore(sidebar, storefront.firstChild);
-    paSidebar = sidebar;
     return true;
   }
 
-  /* ── 2. Badge + card-type injection (runs on each new batch of cards) ── */
+  /* ── 2. Badge + card-type injection (handles async card batches) ── */
   function injectBadges() {
-    /* Only process cards that haven't been typed yet */
     var newCards = document.querySelectorAll('a.coursebox-container:not(.pa-typed)');
     newCards.forEach(function (card) {
       card.classList.add('pa-typed');
@@ -594,24 +502,18 @@ PA_FILTER_GROUPS.forEach(function (group) {
 
       var tagList = tags.split(',').map(function (t) { return t.trim(); });
 
-      /* Determine primary format type */
       var primaryType = null;
       for (var i = 0; i < PA_FORMAT_TAGS.length; i++) {
-        if (tagList.indexOf(PA_FORMAT_TAGS[i]) !== -1) {
-          primaryType = PA_FORMAT_TAGS[i];
-          break;
-        }
+        if (tagList.indexOf(PA_FORMAT_TAGS[i]) !== -1) { primaryType = PA_FORMAT_TAGS[i]; break; }
       }
       if (!primaryType) return;
 
-      /* Add card color class */
       card.classList.add('pa-card--' + primaryType);
 
-      /* Inject type badge */
       var wrap = document.createElement('div');
       wrap.className = 'pa-badge-wrap';
-      var label = PA_TAG_LABEL_MAP[primaryType] || primaryType;
-      wrap.innerHTML = '<span class="pa-badge pa-badge--' + primaryType + '">' + label + '</span>';
+      wrap.innerHTML = '<span class="pa-badge pa-badge--' + primaryType + '">' + (PA_TAG_LABEL_MAP[primaryType] || primaryType) + '</span>';
+
       var cardImg = card.querySelector('.coursebox-image');
       if (cardImg) {
         card.insertBefore(wrap, cardImg.nextSibling);
@@ -621,18 +523,15 @@ PA_FILTER_GROUPS.forEach(function (group) {
     });
   }
 
-  /* ── 3. Filter logic (queries cards live so late-loading cards are included) ── */
+  /* ── 3. Filter logic ── */
   function applyFilters() {
     if (!paSidebar) return;
-    var groups = paSidebar.querySelectorAll('.pa-filter-group');
     var activeGroups = [];
-    groups.forEach(function (g) {
+    paSidebar.querySelectorAll('.pa-filter-group').forEach(function (g) {
       var checked = Array.from(g.querySelectorAll('input:checked')).map(function (cb) { return cb.value; });
       if (checked.length) activeGroups.push(checked);
     });
-
-    var cards = document.querySelectorAll('a.coursebox-container');
-    cards.forEach(function (card) {
+    document.querySelectorAll('a.coursebox-container').forEach(function (card) {
       if ((card.getAttribute('data-tags') || '').indexOf('separator') !== -1) return;
       var cardTags = (card.getAttribute('data-tags') || '').toLowerCase();
       var visible = activeGroups.every(function (groupTags) {
@@ -642,7 +541,7 @@ PA_FILTER_GROUPS.forEach(function (group) {
     });
   }
 
-  /* ── Bootstrap: build layout once, poll for cards ── */
+  /* ── Bootstrap ── */
   function tick() {
     if (!paLayoutBuilt) {
       paLayoutBuilt = buildLayout();
@@ -650,14 +549,12 @@ PA_FILTER_GROUPS.forEach(function (group) {
     injectBadges();
   }
 
-  /* Run immediately if DOM is ready, otherwise wait */
   if (document.readyState === 'loading') {
     document.addEventListener('DOMContentLoaded', tick);
   } else {
     tick();
   }
 
-  /* Poll to catch cards that SkillJar injects asynchronously */
   var paPoll = setInterval(tick, 300);
   setTimeout(function () { clearInterval(paPoll); }, 15000);
 
