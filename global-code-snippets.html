@@ -858,15 +858,16 @@ body.sj-page-detail-course .sj-save-toggle-row-alignment {
   flex-wrap: wrap !important;
 }
 
-/* ═══════════════════════════════════════════════
-   BUTTON GROUP
-   JS wraps both buttons in a .pa-button-group span
-   ═══════════════════════════════════════════════ */
-body.sj-page-detail-course .pa-button-group {
-  display: inline-flex !important;
-  align-items: center !important;
-  gap: 12px !important;
-  flex-wrap: wrap !important;
+/* Override SkillJar's yellow --button-color for the save toggle */
+body.sj-page-detail-course {
+  --button-color: #447099;
+}
+body.sj-page-detail-course .sj-save-toggle-block__button {
+  color: #447099 !important;
+  border-color: #447099 !important;
+}
+body.sj-page-detail-course .sj-save-toggle-block__icon i {
+  color: #447099 !important;
 }
 
 /* Primary CTA (Register / Continue / etc.) — dark filled */
@@ -1139,22 +1140,15 @@ body.sj-page-detail-course ul.dp-curriculum li.lesson-rating {
     var purchaseBtn = document.querySelector('a#purchase-button, a.purchase-button');
     if (!purchaseBtn) return;
 
-    /* Wrap purchase button in a flex group */
-    var parent = purchaseBtn.parentNode;
-    var group = document.createElement('span');
-    group.className = 'pa-button-group';
-    parent.insertBefore(group, purchaseBtn);
-    group.appendChild(purchaseBtn);
-
-    /* Inject "Return to Catalog" link.
-       Give it Foundation's "medium button" classes so it inherits the
-       same base sizing as the register button, then our CSS overrides
-       the colour/border. */
+    /* Insert catalog button as a direct sibling after the register button.
+       sj-save-toggle-row-alignment (flex, gap:12px) then gives equal
+       spacing between all three: Register | Return to Catalog | Bookmark.
+       Foundation's "medium button" classes ensure identical base sizing. */
     var catalogBtn = document.createElement('a');
     catalogBtn.className = 'medium button pa-catalog-btn';
     catalogBtn.href = '/';
     catalogBtn.textContent = 'Return to Catalog';
-    group.appendChild(catalogBtn);
+    purchaseBtn.insertAdjacentElement('afterend', catalogBtn);
   }
 
   /* SkillJar renders the purchase button asynchronously — poll until present */
