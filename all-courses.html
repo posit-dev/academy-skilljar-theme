@@ -58,5 +58,109 @@
 }
 
 
+/* ── Mobile: filter drawer ─────────────────────────────────────────────
+   On narrow screens the sidebar hides. These rules turn it into a
+   slide-in drawer triggered by a "Filters" button above the card grid. */
+@media only screen and (max-width: 768px) {
+  /* Filters toggle button */
+  #pa-filter-btn {
+    display: inline-flex !important;
+    align-items: center;
+    gap: 8px;
+    background: #17212B;
+    color: #ffffff;
+    border: none;
+    border-radius: 4px;
+    padding: 10px 20px;
+    font-family: 'Open Sans', sans-serif;
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    cursor: pointer;
+    margin: 0 0 16px 24px;
+  }
+
+  /* Dim backdrop behind the open drawer */
+  #pa-filter-overlay {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.45);
+    z-index: 998;
+  }
+  #pa-filter-overlay.pa-open { display: block; }
+
+  /* Sidebar becomes a slide-in drawer */
+  .catalog-left-nav {
+    display: block !important;  /* override SkillJar's mobile display:none */
+    position: fixed !important;
+    top: 0 !important;
+    left: 0 !important;
+    width: min(82vw, 300px) !important;
+    height: 100vh !important;
+    overflow-y: auto !important;
+    background: #ffffff !important;
+    z-index: 999 !important;
+    padding: 24px 20px !important;
+    box-shadow: 4px 0 24px rgba(0, 0, 0, 0.18) !important;
+    transform: translateX(-110%) !important;
+    transition: transform 0.25s ease !important;
+    box-sizing: border-box !important;
+  }
+  .catalog-left-nav.pa-open {
+    transform: translateX(0) !important;
+  }
+}
+
+/* Hide button and overlay on wider screens */
+@media only screen and (min-width: 769px) {
+  #pa-filter-btn,
+  #pa-filter-overlay { display: none !important; }
+}
 </style>
+
+<script>
+(function () {
+  function initMobileFilters() {
+    var nav  = document.querySelector('.catalog-left-nav');
+    var grid = document.getElementById('catalog-courses');
+    if (!nav || !grid) return;
+    if (document.getElementById('pa-filter-btn')) return; // already run
+
+    /* ── Filters button ── */
+    var btn = document.createElement('button');
+    btn.id = 'pa-filter-btn';
+    btn.innerHTML = '<svg width="14" height="14" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg" style="flex-shrink:0"><path d="M1 2.5h12M3 7h8M5.5 11.5h3" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg> Filters';
+    grid.parentElement.insertBefore(btn, grid);
+
+    /* ── Dim overlay ── */
+    var overlay = document.createElement('div');
+    overlay.id = 'pa-filter-overlay';
+    document.body.appendChild(overlay);
+
+    function openFilters() {
+      nav.classList.add('pa-open');
+      overlay.classList.add('pa-open');
+      document.body.style.overflow = 'hidden'; /* prevent background scroll */
+    }
+    function closeFilters() {
+      nav.classList.remove('pa-open');
+      overlay.classList.remove('pa-open');
+      document.body.style.overflow = '';
+    }
+
+    btn.addEventListener('click', openFilters);
+    overlay.addEventListener('click', closeFilters);
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initMobileFilters);
+  } else {
+    initMobileFilters();
+  }
+  /* Safety net for async SkillJar rendering */
+  window.addEventListener('load', initMobileFilters);
+}());
+</script>
 
