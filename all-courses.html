@@ -23,6 +23,12 @@
   grid-column: 1 / -1 !important;
 }
 
+/* Hide the "Explore all courses" button injected by global JS —
+   redundant on the all-courses page itself */
+.pa-sep-btn {
+  display: none !important;
+}
+
 /* .skilljar-content is a flex item inside .top-row.
    - flex-shrink: 1  → SkillJar may set flex-shrink:0; override so the item CAN shrink
    - min-width: 0    → allow shrinking below content size (default is min-width:auto)
