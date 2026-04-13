@@ -120,7 +120,14 @@
 </style>
 
 <!-- Mobile filter button — lives in HTML so it exists from page load -->
-<button id="pa-filter-btn">&#9636; Filters</button>
+<button id="pa-filter-btn">
+  <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+    <line x1="1" y1="4" x2="15" y2="4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+    <line x1="3" y1="8" x2="13" y2="8" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+    <line x1="6" y1="12" x2="10" y2="12" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+  </svg>
+  Filters
+</button>
 <!-- Backdrop overlay (hidden until drawer opens) -->
 <div id="pa-filter-overlay"></div>
 
