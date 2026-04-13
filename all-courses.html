@@ -7,12 +7,15 @@
 
 /* ── Course grid: auto-fit columns based on available width ──
    Cards are at least 200px wide; grid adds/removes columns automatically
-   as the container narrows (accounts for the sidebar eating into space). */
+   as the container narrows (accounts for the sidebar eating into space).
+   Padding provides gutters on left and right of the card area. */
 #catalog-courses {
   display: grid !important;
   grid-template-columns: repeat(auto-fill, minmax(max(200px, calc(33% - 11px)), 1fr)) !important;
   gap: 16px !important;
   align-items: start !important;
+  padding-left: 24px !important;
+  padding-right: 24px !important;
 }
 
 /* Separator spans full row width */
