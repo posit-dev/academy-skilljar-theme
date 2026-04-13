@@ -10,7 +10,7 @@
    as the container narrows (accounts for the sidebar eating into space). */
 #catalog-courses {
   display: grid !important;
-  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)) !important;
+  grid-template-columns: repeat(auto-fill, minmax(max(200px, calc(33% - 11px)), 1fr)) !important;
   gap: 16px !important;
   align-items: start !important;
 }
