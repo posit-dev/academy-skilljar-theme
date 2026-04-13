@@ -757,9 +757,18 @@ a.coursebox-container.lesson .coursebox-text-description {
   Scoped entirely to body.sj-page-detail-course (SkillJar's own body
   class on course pages) — nothing leaks to catalog or home pages.
 
-  LAYOUT: Asana-inspired — text (title + description + CTA) on the LEFT,
-  course image on the RIGHT with a soft Posit Light Blue background.
-  SkillJar's default HTML puts the image first, so we use CSS order to swap.
+  LAYOUT: Text (title + description + CTAs) on the LEFT, course image on
+  the RIGHT with a soft Posit Light Blue background. SkillJar's default
+  HTML puts the image first; CSS order swaps them.
+
+  LOWER SECTION: Curriculum (fixed 260px) on the LEFT, About on the RIGHT.
+  SkillJar's default puts About first; :has() + order swaps them.
+
+  CURRICULUM: Vertical timeline — open circles connected by a vertical line.
+  Font Awesome type-icons are hidden. No inter-item dividers.
+
+  BUTTON INJECTION: "Return to Catalog" is not in SkillJar's HTML.
+  The <script> block below injects it after the purchase button.
 -->
 <style>
 /* ═══════════════════════════════════════════════
@@ -772,16 +781,17 @@ body.sj-page-detail-course .top-row-white-v2 {
   box-shadow: none !important;
 }
 
-/* Hero flex row — override Foundation's float-based grid */
+/* Hero flex row */
 body.sj-page-detail-course .dp-row-flex-v2 {
   display: flex !important;
   align-items: center !important;
   flex-wrap: nowrap !important;
   gap: 48px !important;
-  padding: 48px 40px !important;
+  padding: 48px 40px 40px !important;
+  border-bottom: 1px solid #E8ECEF !important;
 }
 
-/* ── Text column — order 1 (left), no box/border ── */
+/* ── Text column — order 1 (left) ── */
 body.sj-page-detail-course .dp-summary-wrapper {
   order: 1 !important;
   flex: 1 1 45% !important;
@@ -804,11 +814,11 @@ body.sj-page-detail-course .dp-promo-image-wrapper {
   float: none !important;
 }
 
-/* Image: soft Posit blue background, rounded corners — like Asana's tinted panel */
+/* Image: soft Posit blue background, rounded corners */
 body.sj-page-detail-course .dp-promo-image {
-  background-color: #D1DBE5 !important;  /* Posit Light Blue 1 */
+  background-color: #D1DBE5 !important;
   border-radius: 14px !important;
-  padding: 28px !important;
+  padding: 36px !important;
   overflow: hidden !important;
 }
 body.sj-page-detail-course .dp-promo-image img {
@@ -821,10 +831,10 @@ body.sj-page-detail-course .dp-promo-image img {
 /* ── Course title ── */
 body.sj-page-detail-course h1.break-word {
   font-family: 'Open Sans', sans-serif !important;
-  font-size: 38px !important;
-  font-weight: 700 !important;
+  font-size: 48px !important;
+  font-weight: 400 !important;
   color: #17212B !important;
-  line-height: 1.2 !important;
+  line-height: 1.15 !important;
   margin: 0 0 20px 0 !important;
 }
 
@@ -839,29 +849,81 @@ body.sj-page-detail-course .sj-course-info-wrapper > h2 {
 }
 
 /* ═══════════════════════════════════════════════
-   REGISTER BUTTON
+   BUTTON ROW — SkillJar's outer alignment container
    ═══════════════════════════════════════════════ */
+body.sj-page-detail-course .sj-save-toggle-row-alignment {
+  display: flex !important;
+  align-items: center !important;
+  gap: 12px !important;
+  flex-wrap: wrap !important;
+}
+
+/* ═══════════════════════════════════════════════
+   BUTTON GROUP
+   JS wraps both buttons in a .pa-button-group span
+   ═══════════════════════════════════════════════ */
+body.sj-page-detail-course .pa-button-group {
+  display: inline-flex !important;
+  align-items: center !important;
+  gap: 12px !important;
+  flex-wrap: wrap !important;
+}
+
+/* Primary CTA (Register / Continue / etc.) — dark filled */
 body.sj-page-detail-course a#purchase-button,
 body.sj-page-detail-course a.purchase-button {
   font-family: 'Open Sans', sans-serif !important;
-  font-size: 15px !important;
-  font-weight: 600 !important;
-  background-color: #F6B000 !important;  /* Academy Yellow */
-  color: #17212B !important;
-  border: none !important;
+  font-size: 13px !important;
+  font-weight: 700 !important;
+  line-height: 1 !important;
+  letter-spacing: 0.08em !important;
+  text-transform: uppercase !important;
+  background-color: #17212B !important;
+  color: #ffffff !important;
+  border: 2px solid #17212B !important;
   border-radius: 6px !important;
-  padding: 13px 32px !important;
+  padding: 0 28px !important;
+  height: 44px !important;
   text-decoration: none !important;
-  display: inline-block !important;
-  transition: background-color 0.15s ease, transform 0.15s ease !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  box-sizing: border-box !important;
+  transition: background-color 0.15s ease, border-color 0.15s ease !important;
   cursor: pointer !important;
   box-shadow: none !important;
 }
 body.sj-page-detail-course a#purchase-button:hover,
 body.sj-page-detail-course a.purchase-button:hover {
-  background-color: #C48F0A !important;  /* Drk Yellow */
+  background-color: #213D4F !important;
+  border-color: #213D4F !important;
+  color: #ffffff !important;
+  transform: none !important;
+}
+
+/* "Return to Catalog" — injected by JS, outlined */
+body.sj-page-detail-course a.pa-catalog-btn {
+  font-family: 'Open Sans', sans-serif !important;
+  font-size: 13px !important;
+  font-weight: 700 !important;
+  line-height: 1 !important;
+  letter-spacing: 0.08em !important;
+  text-transform: uppercase !important;
+  background-color: transparent !important;
   color: #17212B !important;
-  transform: translateY(-1px) !important;
+  border: 2px solid #17212B !important;
+  border-radius: 6px !important;
+  padding: 0 28px !important;
+  height: 44px !important;
+  text-decoration: none !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  box-sizing: border-box !important;
+  transition: background-color 0.15s ease, color 0.15s ease !important;
+  cursor: pointer !important;
+}
+body.sj-page-detail-course a.pa-catalog-btn:hover {
+  background-color: #17212B !important;
+  color: #ffffff !important;
 }
 
 /* Hide Facebook / Twitter share buttons — off-brand */
@@ -870,17 +932,56 @@ body.sj-page-detail-course .social-media-wrapper {
 }
 
 /* ═══════════════════════════════════════════════
-   LOWER SECTION — section headings (h3)
+   LOWER SECTION — column swap (Curriculum left, About right)
+   SkillJar default: About LEFT, Curriculum RIGHT
+   :has() + order reverses them without touching the HTML
    ═══════════════════════════════════════════════ */
+body.sj-page-detail-course #dp-details .row {
+  display: flex !important;
+  flex-wrap: nowrap !important;
+  align-items: flex-start !important;
+  gap: 56px !important;
+  padding: 48px 40px !important;
+  max-width: none !important;
+  margin: 0 !important;
+  width: auto !important;
+}
+/* Curriculum column — left, fixed 260px */
+body.sj-page-detail-course #dp-details .row .columns:has(ul.dp-curriculum) {
+  order: 1 !important;
+  flex: 0 0 260px !important;
+  width: 260px !important;
+  max-width: 260px !important;
+  float: none !important;
+  padding: 0 !important;
+}
+/* About column — right, flexible */
+body.sj-page-detail-course #dp-details .row .columns:has(.dp-long-description) {
+  order: 2 !important;
+  flex: 1 1 0 !important;
+  min-width: 0 !important;
+  float: none !important;
+  padding: 0 !important;
+}
+
+/* ── Section headings (h3) — large, short accent rule ── */
 body.sj-page-detail-course #dp-details h3 {
   font-family: 'Open Sans', sans-serif !important;
-  font-size: 20px !important;
-  font-weight: 700 !important;
+  font-size: 36px !important;
+  font-weight: 400 !important;
   color: #17212B !important;
-  margin: 0 0 20px 0 !important;
-  padding-bottom: 10px !important;
-  border-bottom: 3px solid #F6B000 !important;  /* Academy Yellow accent */
-  display: inline-block !important;
+  display: block !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  border: none !important;
+}
+body.sj-page-detail-course #dp-details h3::after {
+  content: '' !important;
+  display: block !important;
+  width: 80px !important;
+  height: 2px !important;
+  background-color: #D1DBE5 !important;
+  margin: 12px 0 28px 0 !important;
 }
 
 /* ═══════════════════════════════════════════════
@@ -914,7 +1015,7 @@ body.sj-page-detail-course .dp-long-description ol li::before {
   width: 26px !important;
   height: 26px !important;
   border-radius: 50% !important;
-  background-color: #447099 !important;  /* Posit Blue */
+  background-color: #447099 !important;
   color: #ffffff !important;
   font-size: 12px !important;
   font-weight: 700 !important;
@@ -928,55 +1029,74 @@ body.sj-page-detail-course .dp-long-description ol li span {
 }
 
 /* ═══════════════════════════════════════════════
-   CURRICULUM  (ul.dp-curriculum)
+   CURRICULUM — vertical timeline
    ═══════════════════════════════════════════════ */
 body.sj-page-detail-course ul.dp-curriculum {
+  position: relative !important;
   padding: 0 !important;
   margin: 0 !important;
   list-style: none !important;
 }
+/* Vertical connecting line */
+body.sj-page-detail-course ul.dp-curriculum::before {
+  content: '' !important;
+  position: absolute !important;
+  left: 3.5px !important;
+  top: 8px !important;
+  bottom: 8px !important;
+  width: 1px !important;
+  background-color: #D1DBE5 !important;
+}
+/* Each list item */
 body.sj-page-detail-course ul.dp-curriculum li {
+  position: relative !important;
   display: flex !important;
-  align-items: center !important;
-  gap: 10px !important;
-  padding: 10px 0 !important;
-  border-bottom: 1px solid #F0F3F6 !important;
+  align-items: flex-start !important;
+  gap: 14px !important;
+  padding: 8px 0 !important;
+  border-bottom: none !important;
   font-family: 'Open Sans', sans-serif !important;
-  font-size: 15px !important;
+  font-size: 14px !important;
   font-weight: 400 !important;
   color: #404041 !important;
   line-height: 1.5 !important;
 }
-body.sj-page-detail-course ul.dp-curriculum li:last-child {
-  border-bottom: none !important;
-}
-body.sj-page-detail-course ul.dp-curriculum .type-icon {
+/* Open circle timeline node */
+body.sj-page-detail-course ul.dp-curriculum li::before {
+  content: '' !important;
   flex-shrink: 0 !important;
-  color: #447099 !important;
-  opacity: 0.75 !important;
+  width: 8px !important;
+  height: 8px !important;
+  border-radius: 50% !important;
+  border: 1.5px solid #A2B8CB !important;
+  background: #ffffff !important;
+  box-sizing: border-box !important;
+  margin-top: 4px !important;
+  position: relative !important;
+  z-index: 1 !important;
 }
-body.sj-page-detail-course ul.dp-curriculum .type-icon i {
-  color: #447099 !important;
+/* Hide Font Awesome type-icons */
+body.sj-page-detail-course ul.dp-curriculum .type-icon {
+  display: none !important;
 }
 body.sj-page-detail-course ul.dp-curriculum .lesson-wrapper {
   flex: 1 !important;
   font-family: 'Open Sans', sans-serif !important;
+  min-width: 0 !important;
 }
+/* Rating rows */
 body.sj-page-detail-course ul.dp-curriculum li.lesson-rating {
   color: #707073 !important;
-  font-size: 14px !important;
-}
-body.sj-page-detail-course ul.dp-curriculum li.lesson-rating .type-icon i {
-  color: #707073 !important;
+  font-size: 13px !important;
 }
 
 /* ═══════════════════════════════════════════════
-   MOBILE — stack text above image
+   MOBILE — stack everything vertically
    ═══════════════════════════════════════════════ */
 @media only screen and (max-width: 640px) {
   body.sj-page-detail-course .dp-row-flex-v2 {
     flex-wrap: wrap !important;
-    padding: 32px 20px !important;
+    padding: 32px 20px 28px !important;
     gap: 28px !important;
   }
   body.sj-page-detail-course .dp-summary-wrapper,
@@ -984,10 +1104,71 @@ body.sj-page-detail-course ul.dp-curriculum li.lesson-rating .type-icon i {
     flex: 1 1 100% !important;
   }
   body.sj-page-detail-course h1.break-word {
-    font-size: 26px !important;
+    font-size: 32px !important;
+  }
+  body.sj-page-detail-course #dp-details h3 {
+    font-size: 28px !important;
+  }
+  body.sj-page-detail-course #dp-details .row {
+    flex-wrap: wrap !important;
+    padding: 32px 20px !important;
+    gap: 32px !important;
+  }
+  body.sj-page-detail-course #dp-details .row .columns:has(ul.dp-curriculum),
+  body.sj-page-detail-course #dp-details .row .columns:has(.dp-long-description) {
+    flex: 1 1 100% !important;
+    width: 100% !important;
+    max-width: 100% !important;
+  }
+  /* On mobile, show About first then Curriculum */
+  body.sj-page-detail-course #dp-details .row .columns:has(.dp-long-description) {
+    order: 1 !important;
+  }
+  body.sj-page-detail-course #dp-details .row .columns:has(ul.dp-curriculum) {
+    order: 2 !important;
   }
 }
 </style>
+
+<script>
+(function () {
+  function injectCatalogButton() {
+    if (!document.body.classList.contains('sj-page-detail-course')) return;
+    if (document.querySelector('a.pa-catalog-btn')) return;
+
+    var purchaseBtn = document.querySelector('a#purchase-button, a.purchase-button');
+    if (!purchaseBtn) return;
+
+    /* Wrap purchase button in a flex group */
+    var parent = purchaseBtn.parentNode;
+    var group = document.createElement('span');
+    group.className = 'pa-button-group';
+    parent.insertBefore(group, purchaseBtn);
+    group.appendChild(purchaseBtn);
+
+    /* Inject "Return to Catalog" link.
+       Give it Foundation's "medium button" classes so it inherits the
+       same base sizing as the register button, then our CSS overrides
+       the colour/border. */
+    var catalogBtn = document.createElement('a');
+    catalogBtn.className = 'medium button pa-catalog-btn';
+    catalogBtn.href = '/';
+    catalogBtn.textContent = 'Return to Catalog';
+    group.appendChild(catalogBtn);
+  }
+
+  /* SkillJar renders the purchase button asynchronously — poll until present */
+  var attempts = 0;
+  var poll = setInterval(function () {
+    attempts++;
+    if (document.querySelector('a#purchase-button, a.purchase-button')) {
+      clearInterval(poll);
+      injectCatalogButton();
+    }
+    if (attempts >= 50) clearInterval(poll); /* bail after 10s */
+  }, 200);
+}());
+</script>
 <!-- END Course Landing Page Styles -->
 
 
