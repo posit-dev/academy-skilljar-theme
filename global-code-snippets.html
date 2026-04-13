@@ -960,9 +960,9 @@ body.sj-page-detail-course #dp-details .row {
   flex-wrap: nowrap !important;
   align-items: flex-start !important;
   gap: 56px !important;
-  padding: 48px 40px !important;
-  max-width: none !important;
-  margin: 0 !important;
+  padding: 48px 40px !important;   /* 40px horizontal is a CSS fallback; JS overrides left/right */
+  max-width: 1500px !important;    /* match hero's outer container so edges can align */
+  margin: 0 auto !important;       /* centre within viewport at wide widths */
   width: auto !important;
 }
 /* Curriculum column — left, fixed 260px */
@@ -1201,6 +1201,48 @@ body.sj-page-detail-course .section-container.tabs {
     saveToggle.dataset.moved = '1';
     row.appendChild(saveToggle);
   }
+
+  /* ── Align lower-section padding with the hero image edges ──
+     Same approach as the live-training page: measure .dp-promo-image and
+     .dp-promo-image-wrapper to derive symmetric left inset, then match the
+     right edge to the image panel. Skipped on live-training pages — those
+     have their own (identical) sync in the live-training script block. */
+  function syncLowerSectionPadding() {
+    if (!document.body.classList.contains('sj-page-detail-course')) return;
+    if (document.querySelector('#main-container[data-tags~="live-training"]')) return;
+
+    var img    = document.querySelector('.dp-promo-image');
+    var detRow = document.querySelector('#dp-details .row.hide-for-small');
+    if (!img || !detRow) return;
+
+    var imgRect = img.getBoundingClientRect();
+    var rowRect = detRow.getBoundingClientRect();
+
+    /* Right: about-column right edge = image panel right edge */
+    var padRight = Math.max(0, Math.round(rowRect.right - imgRect.right));
+
+    /* Left: strip the SkillJar-specific image inset so only the symmetric
+       container offset remains — this is where h1 (and h3) start. */
+    var imgWrapper = document.querySelector('.dp-promo-image-wrapper');
+    var padLeft;
+    if (imgWrapper) {
+      var imageInset = Math.max(0, Math.round(imgWrapper.getBoundingClientRect().right - imgRect.right));
+      padLeft = Math.max(0, padRight - imageInset);
+    } else {
+      padLeft = padRight;
+    }
+
+    detRow.style.setProperty('padding-left',  padLeft  + 'px', 'important');
+    detRow.style.setProperty('padding-right', padRight + 'px', 'important');
+  }
+
+  var resizeTimer;
+  window.addEventListener('resize', function () {
+    clearTimeout(resizeTimer);
+    resizeTimer = setTimeout(syncLowerSectionPadding, 60);
+  });
+  window.addEventListener('load', syncLowerSectionPadding);
+  setTimeout(syncLowerSectionPadding, 300);
 
   /* SkillJar renders the purchase button asynchronously — poll until present */
   var attempts = 0;
@@ -1441,9 +1483,8 @@ body.sj-page-detail-course:has(#main-container[data-tags~="live-training"]) .sj-
      formula, so we measure the rendered image panel position directly
      and apply matching padding to #dp-details .row. */
   function syncLowerSectionPadding() {
-    var img     = document.querySelector('.dp-promo-image');
-    var detRow  = document.querySelector('#dp-details .row.hide-for-small');
-    var sumWrap = document.querySelector('.dp-summary-wrapper');
+    var img    = document.querySelector('.dp-promo-image');
+    var detRow = document.querySelector('#dp-details .row.hide-for-small');
     if (!img || !detRow) return;
 
     var imgRect = img.getBoundingClientRect();
@@ -1452,11 +1493,19 @@ body.sj-page-detail-course:has(#main-container[data-tags~="live-training"]) .sj-
     /* Right: sessions panel right edge = image panel right edge */
     var padRight = Math.max(0, Math.round(rowRect.right - imgRect.right));
 
-    /* Left: "About this course" left edge = hero title (h1) left edge */
-    var titleEl = document.querySelector('h1.break-word');
-    var padLeft = titleEl
-      ? Math.max(0, Math.round(titleEl.getBoundingClientRect().left - rowRect.left))
-      : (sumWrap ? Math.max(0, Math.round(sumWrap.getBoundingClientRect().left - rowRect.left)) : padRight);
+    /* Left: the hero flex row is symmetric (equal left/right padding on
+       .dp-row-flex-v2, outer container is centered with margin:auto).
+       padRight = symmetricInset + imageInset  (where imageInset = space
+       between .dp-promo-image panel and its wrapper — SkillJar margin/gap).
+       padLeft  = symmetricInset only  →  padLeft = padRight − imageInset. */
+    var imgWrapper = document.querySelector('.dp-promo-image-wrapper');
+    var padLeft;
+    if (imgWrapper) {
+      var imageInset = Math.max(0, Math.round(imgWrapper.getBoundingClientRect().right - imgRect.right));
+      padLeft = Math.max(0, padRight - imageInset);
+    } else {
+      padLeft = padRight;
+    }
 
     detRow.style.setProperty('padding-left',  padLeft  + 'px', 'important');
     detRow.style.setProperty('padding-right', padRight + 'px', 'important');
