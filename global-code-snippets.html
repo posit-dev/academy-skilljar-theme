@@ -824,7 +824,7 @@ body.sj-page-detail-course .dp-promo-image-wrapper {
   float: none !important;
 }
 
-/* Image: soft Posit blue background, rounded corners */
+/* Image panel — Posit Light Blue background, rounded corners */
 body.sj-page-detail-course .dp-promo-image {
   background-color: #D1DBE5 !important;
   border-radius: 14px !important;
@@ -839,7 +839,6 @@ body.sj-page-detail-course .dp-promo-image img {
   width: auto !important;
   max-width: 100% !important;
   height: auto !important;
-  border-radius: 6px !important;
 }
 
 /* ── Course title ── */
@@ -1207,6 +1206,112 @@ body.sj-page-detail-course .section-container.tabs {
 }());
 </script>
 <!-- END Course Landing Page Styles -->
+
+
+<!-- START Live Training Course Page Styles -->
+<!--
+  WHAT THIS DOES:
+  Yellow-themed overrides for live training course detail pages. These pages
+  share body.sj-page-detail-course with regular courses, so we scope via
+  :has(#main-container[data-tags~="live-training"]) — SkillJar sets
+  data-tags="live-training" on #main-container for live training courses.
+
+  Because this block comes after the regular course block, and because the
+  :has() selector carries higher specificity (it contains an ID), these
+  rules correctly override the blue defaults with yellow.
+-->
+<style>
+/* Shorthand: all live training course pages */
+/* body.sj-page-detail-course:has(#main-container[data-tags~="live-training"]) */
+
+/* ── Hero separator: yellow, slightly thicker ── */
+body.sj-page-detail-course:has(#main-container[data-tags~="live-training"]) .top-row-grey::after,
+body.sj-page-detail-course:has(#main-container[data-tags~="live-training"]) .top-row-white-v2::after {
+  background-color: #F6B000 !important;
+  height: 3px !important;
+}
+
+/* ── Image panel: Academy Yellow background ── */
+body.sj-page-detail-course:has(#main-container[data-tags~="live-training"]) .dp-promo-image {
+  background-color: #f4c53f !important;
+}
+
+/* ── Save/bookmark toggle: yellow ── */
+body.sj-page-detail-course:has(#main-container[data-tags~="live-training"]) {
+  --button-color: #F6B000 !important;
+}
+body.sj-page-detail-course:has(#main-container[data-tags~="live-training"]) .sj-save-toggle-block__button {
+  color: #F6B000 !important;
+  border-color: #F6B000 !important;
+}
+body.sj-page-detail-course:has(#main-container[data-tags~="live-training"]) .sj-save-toggle-block__icon i {
+  color: #F6B000 !important;
+}
+
+/* ── Section heading underline: yellow ── */
+body.sj-page-detail-course:has(#main-container[data-tags~="live-training"]) #dp-details h3::after {
+  background-color: #F6B000 !important;
+}
+
+/* ── Numbered objective circles: yellow fill, dark text ── */
+body.sj-page-detail-course:has(#main-container[data-tags~="live-training"]) .dp-long-description ol li::before {
+  background-color: #F6B000 !important;
+  color: #17212B !important;
+}
+
+/* ── Curriculum column: hidden (live trainings don't have lessons) ── */
+body.sj-page-detail-course:has(#main-container[data-tags~="live-training"]) #dp-details .row .columns:has(ul.dp-curriculum) {
+  display: none !important;
+}
+
+/* ── About column: expands to full width ── */
+body.sj-page-detail-course:has(#main-container[data-tags~="live-training"]) #dp-details .row .columns:has(.dp-long-description) {
+  flex: 1 1 100% !important;
+  order: 1 !important;
+}
+</style>
+
+<script>
+(function () {
+  /* Only run on live training course pages */
+  var container = document.getElementById('main-container');
+  if (!container) return;
+  var tags = (container.getAttribute('data-tags') || '').split(/\s+/);
+  if (tags.indexOf('live-training') === -1) return;
+
+  function injectCatalogButton() {
+    if (document.querySelector('a.pa-catalog-btn')) return;
+    var purchaseBtn = document.querySelector('a#purchase-button, a.purchase-button');
+    if (!purchaseBtn) return;
+    var catalogBtn = document.createElement('a');
+    catalogBtn.className = 'medium button pa-catalog-btn';
+    catalogBtn.href = '/';
+    catalogBtn.textContent = 'Return to Catalog';
+    purchaseBtn.insertAdjacentElement('afterend', catalogBtn);
+  }
+
+  function fixSaveToggle() {
+    var row = document.querySelector('.sj-save-toggle-row-alignment');
+    if (!row) return;
+    var saveToggle = row.querySelector('sjwc-save-content-toggle');
+    if (!saveToggle || saveToggle.dataset.moved) return;
+    saveToggle.dataset.moved = '1';
+    row.appendChild(saveToggle);
+  }
+
+  var attempts = 0;
+  var poll = setInterval(function () {
+    attempts++;
+    if (document.querySelector('a#purchase-button, a.purchase-button')) {
+      clearInterval(poll);
+      injectCatalogButton();
+      fixSaveToggle();
+    }
+    if (attempts >= 50) clearInterval(poll);
+  }, 200);
+}());
+</script>
+<!-- END Live Training Course Page Styles -->
 
 
 <!-- START Instruqt Lab Lesson Page Styles -->
