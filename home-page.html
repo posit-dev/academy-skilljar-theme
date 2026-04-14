@@ -21,7 +21,10 @@
 </div>
 
 <style>
-/* Flex row: left panel is dark blue, right panel is the photo */
+/* Flex row: left panel is dark blue, right panel is the photo.
+   Both panels always match height via align-items:stretch.
+   Image fills the right panel with object-fit:cover so neither
+   side ever hangs below the other. */
 #pa-hero {
   display: flex;
   width: 100%;
@@ -37,25 +40,27 @@
   padding: 48px 6% 48px max(20px, calc((100vw - 1280px) / 4));
   box-sizing: border-box;
 }
-/* Right: image at natural proportions — sets the hero height */
+/* Right: image fills panel height; object-fit:cover keeps it in-sync */
 #pa-hero-right {
   flex: 1 1 0;
   min-width: 0;
+  overflow: hidden;
   line-height: 0;
 }
 #pa-hero-img {
   width: 100%;
-  height: auto;
+  height: 100%;
   display: block;
+  object-fit: cover;
+  object-position: center;
 }
 #pa-hero-title {
   font-family: 'Open Sans', sans-serif;
-  font-size: clamp(28px, 3.5vw, 60px);
+  font-size: clamp(24px, 3.5vw, 60px);
   font-weight: 700;
   color: #ffffff;
   line-height: 1.1;
   margin: 0 0 20px 0;
-  white-space: nowrap;
 }
 #pa-hero-desc {
   font-family: 'Open Sans', sans-serif;
@@ -85,8 +90,8 @@
   background-color: #D1DBE5;
   color: #17212B;
 }
-/* Mobile: stack — image on top, text below */
-@media only screen and (max-width: 800px) {
+/* Stack at 900px — avoids the awkward mid-width squeezed state */
+@media only screen and (max-width: 900px) {
   #pa-hero {
     flex-direction: column;
   }
@@ -94,9 +99,8 @@
     flex: none;
     padding: 36px 24px 40px;
   }
-  #pa-hero-title {
-    white-space: normal;
-    font-size: clamp(28px, 7vw, 42px);
+  #pa-hero-right {
+    max-height: 260px; /* cap image height when stacked */
   }
 }
 </style>
