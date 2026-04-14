@@ -5,62 +5,46 @@
      Upload acad2.0-lp-hero-1-x2.png to SkillJar's
      file manager (or any CDN) and replace the src below.
      ══════════════════════════════════════════════ -->
-<!-- Two-column hero: dark-blue text panel left, photo right.
-     Hero height follows the image naturally — no clipping, no fixed height. -->
 <div id="pa-hero">
-  <div id="pa-hero-left">
+  <img src="https://everpath-course-content.s3-accelerate.amazonaws.com/instructor%2Feww6wlnql2k9y5hqbfc2ycpct%2Fpublic%2F1775957193%2Facad2.0-lp-hero-1-x2.1775957193113.png"
+       alt="Posit Academy — people collaborating at a laptop"
+       id="pa-hero-img">
+  <div id="pa-hero-overlay">
     <h1 id="pa-hero-title">Welcome to<br>Posit Academy</h1>
     <p id="pa-hero-desc">Your learning hub for data science with R and Python — courses, live trainings, and a thriving community.</p>
     <a href="/page/all-courses" id="pa-hero-btn">Full Course Catalog</a>
   </div>
-  <div id="pa-hero-right">
-    <img src="https://everpath-course-content.s3-accelerate.amazonaws.com/instructor%2Feww6wlnql2k9y5hqbfc2ycpct%2Fpublic%2F1775957193%2Facad2.0-lp-hero-1-x2.1775957193113.png"
-         alt="Posit Academy — people collaborating at a laptop"
-         id="pa-hero-img">
-  </div>
 </div>
 
 <style>
-/* Flex row: left panel is dark blue, right panel is the photo.
-   Both panels always match height via align-items:stretch.
-   Image fills the right panel with object-fit:cover so neither
-   side ever hangs below the other. */
 #pa-hero {
-  display: flex;
+  position: relative;
   width: 100%;
-  align-items: stretch;
-}
-/* Left: solid dark-blue background, text centred vertically */
-#pa-hero-left {
-  flex: 0 0 40%;
-  background: #17212B;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  padding: 48px 6% 48px max(20px, calc((100vw - 1280px) / 4));
-  box-sizing: border-box;
-}
-/* Right: image fills panel height; object-fit:cover keeps it in-sync */
-#pa-hero-right {
-  flex: 1 1 0;
-  min-width: 0;
-  overflow: hidden;
   line-height: 0;
 }
 #pa-hero-img {
   width: 100%;
-  height: 100%;
+  height: auto;
   display: block;
-  object-fit: cover;
-  object-position: center;
+}
+#pa-hero-overlay {
+  position: absolute;
+  top: 0; left: 0; bottom: 0;
+  width: 52%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: 0 8% 0 max(20px, calc((100vw - 1280px) / 4));
+  box-sizing: border-box;
 }
 #pa-hero-title {
   font-family: 'Open Sans', sans-serif;
-  font-size: clamp(24px, 3.5vw, 60px);
+  font-size: clamp(32px, 5vw, 72px);
   font-weight: 700;
   color: #ffffff;
   line-height: 1.1;
   margin: 0 0 20px 0;
+  white-space: nowrap;
 }
 #pa-hero-desc {
   font-family: 'Open Sans', sans-serif;
@@ -90,17 +74,15 @@
   background-color: #D1DBE5;
   color: #17212B;
 }
-/* Stack at 900px — avoids the awkward mid-width squeezed state */
-@media only screen and (max-width: 900px) {
-  #pa-hero {
-    flex-direction: column;
-  }
-  #pa-hero-left {
-    flex: none;
+@media only screen and (max-width: 800px) {
+  #pa-hero-overlay {
+    width: 100%;
     padding: 36px 24px 40px;
+    background: rgba(23, 33, 43, 0.78);
   }
-  #pa-hero-right {
-    max-height: 260px; /* cap image height when stacked */
+  #pa-hero-title {
+    white-space: normal;
+    font-size: clamp(28px, 7vw, 42px);
   }
 }
 </style>
