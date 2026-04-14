@@ -205,79 +205,12 @@ function runSeparatorSetup() {
         sep.setAttribute('data-pa-ready', '');
     });
 
-    // Process role cards: force-load lazy image, then size cards.
-    var paRoleCards = document.querySelectorAll('a.coursebox-container[data-tags~="role-card"]');
-    if (paRoleCards.length) {
-        paRoleCards.forEach(function(card) {
-            var imgEl  = card.querySelector('.coursebox-image img');
-            var imgDiv = card.querySelector('.coursebox-image');
-            if (imgEl) {
-                var url = imgEl.getAttribute('data-src');
-                if (url) imgEl.src = url;
-            }
-            if (imgDiv) imgDiv.style.backgroundImage = '';
-            card.setAttribute('data-pa-ready', '');
-        });
-
-        // Derive column width from #catalog-courses inner content width.
-        // Step 1 sets card width+height synchronously so the browser can lay
-        // out the header at the correct width. Step 2 runs in rAF (after
-        // browser reflow) to measure the actual rendered header height and
-        // set the image container to an explicit pixel height — no flex or
-        // percentage magic needed, which eliminates the whitespace problem.
-        function paApplyRoleWidths() {
-            var cat = document.getElementById('catalog-courses');
-            if (!cat) return;
-            var cs     = getComputedStyle(cat);
-            var innerW = cat.getBoundingClientRect().width
-                         - (parseFloat(cs.paddingLeft)  || 0)
-                         - (parseFloat(cs.paddingRight) || 0);
-            if (innerW <= 0) return;
-            var gap  = 16;
-            var cols = innerW >= 860 ? 3 : innerW >= 580 ? 2 : 1;
-            var w    = Math.floor((innerW - gap * (cols - 1)) / cols);
-            var h    = Math.round(w * 4 / 3);
-
-            // Step 1: fix card dimensions so the browser can compute header height
-            paRoleCards.forEach(function(card) {
-                card.style.setProperty('width',     w + 'px', 'important');
-                card.style.setProperty('height',    h + 'px', 'important');
-                card.style.setProperty('max-width', w + 'px', 'important');
-                card.style.setProperty('flex',      'none',   'important');
-            });
-
-            // Step 2: measure rendered header height, set image container explicitly
-            requestAnimationFrame(function() {
-                paRoleCards.forEach(function(card) {
-                    var header = card.querySelector('.coursebox-text');
-                    var imgDiv = card.querySelector('.coursebox-image');
-                    if (!header || !imgDiv) return;
-                    var cardRect   = card.getBoundingClientRect();
-                    var headerRect = header.getBoundingClientRect();
-                    // Remaining space below header, minus the 8px bottom margin
-                    var imgH = Math.max(0, cardRect.bottom - headerRect.bottom - 8);
-                    imgDiv.style.setProperty('height', imgH + 'px', 'important');
-                });
-            });
-        }
-
-        paApplyRoleWidths();
-
-        // Debounced resize: 150 ms quiet period prevents rapid re-entrancy.
-        var paResizeTimer;
-        window.addEventListener('resize', function() {
-            clearTimeout(paResizeTimer);
-            paResizeTimer = setTimeout(paApplyRoleWidths, 150);
-        });
-    }
 }
 
 /* Poll until SkillJar's course cards are in the DOM, then run.
    Handles both the direct-paste path and the async GitHub fetch path. */
 var sepPoll = setInterval(function() {
-    var hasSep  = document.querySelector('a.coursebox-container[data-tags="separator"]');
-    var hasRole = document.querySelector('a.coursebox-container[data-tags~="role-card"]');
-    if (hasSep || hasRole) {
+    if (document.querySelector('a.coursebox-container[data-tags="separator"]')) {
         clearInterval(sepPoll);
         runSeparatorSetup();
     }
@@ -501,22 +434,24 @@ a.coursebox-container[data-tags="separator"]:after,
    ROLE CARDS  (tag: role-card)
    Layout: solid teal header (role name + chevron)
    on top; clear photo filling the bottom.
+
+   Pure CSS — no JS required.
+   Card is a CSS grid (rows: auto | 1fr).
+   The 1fr row gives .coursebox-image a definitively-
+   sized track; an inner grid then fills it with the
+   photo. No percentage-vs-flex-grown-parent issues.
    ═══════════════════════════════════════════════ */
 
-/* Hidden until JS sets data-pa-ready */
-a.coursebox-container[data-tags~="role-card"]:not([data-pa-ready]) {
-  visibility: hidden !important;
-}
-
-/* Card: flex column, portrait 3:4, Drk Teal bg, Lt Teal 2 border.
-   Use #catalog-courses scope for specificity that beats SkillJar's own
-   flex-grow/max-width rules. Role cards always stay at 1/3 column width
-   (same as a regular course card) — no 2-up breakpoint needed since the
-   portrait cards look correct at 1/3 width regardless of screen size. */
+/* Card: CSS grid container, portrait 3:4.
+   Still a flex ITEM inside #catalog-courses (flex:none
+   opts out of flex-grow so it stays at its stated width).
+   Use #catalog-courses prefix for specificity over
+   SkillJar's own flex-grow/max-width rules. */
 #catalog-courses a.coursebox-container[data-tags~="role-card"],
 a.coursebox-container[data-tags~="role-card"] {
-  display: flex !important;
-  flex-direction: column !important;
+  display: grid !important;
+  grid-template-rows: auto 1fr !important;
+  grid-template-columns: 1fr !important;
   position: relative !important;
   overflow: hidden !important;
   border: 2px solid #419599 !important;
@@ -530,8 +465,16 @@ a.coursebox-container[data-tags~="role-card"] {
   align-self: flex-start !important;
   box-shadow: 0 2px 12px rgba(0,0,0,0.15) !important;
 }
+/* Medium screens: 2 per row */
+@media (min-width: 501px) and (max-width: 899px) {
+  #catalog-courses a.coursebox-container[data-tags~="role-card"],
+  a.coursebox-container[data-tags~="role-card"] {
+    width: calc(50% - 8px) !important;
+    max-width: calc(50% - 8px) !important;
+  }
+}
 /* Mobile: full width */
-@media (max-width: 640px) {
+@media (max-width: 500px) {
   #catalog-courses a.coursebox-container[data-tags~="role-card"],
   a.coursebox-container[data-tags~="role-card"] {
     width: 100% !important;
@@ -548,15 +491,14 @@ a.coursebox-container[data-tags~="role-card"]:hover {
   border-color: #94BDBF !important;
 }
 
-/* ── Title row — flex row with chevron on the right ── */
+/* ── Title row (grid row 1: auto) ── */
 a.coursebox-container[data-tags~="role-card"] .coursebox-text {
-  order: 1 !important;
-  flex: 0 0 auto !important;
+  order: 1 !important;               /* auto-places into row 1 */
   position: static !important;
   top: auto !important; right: auto !important;
   bottom: auto !important; left: auto !important;
   z-index: auto !important;
-  display: flex !important;
+  display: flex !important;          /* flex row for chevron alignment */
   align-items: center !important;
   justify-content: space-between !important;
   padding: 18px 20px !important;
@@ -577,31 +519,35 @@ a.coursebox-container[data-tags~="role-card"] .coursebox-text::after {
   margin-left: 12px !important;
 }
 
-/* ── Photo area — inset from card edges; JS sets explicit px height ── */
+/* ── Photo area (grid row 2: 1fr) ──
+   The 1fr track gives this element a definitively-sized
+   block. An inner display:grid makes the <img> fill it
+   completely — no explicit height, no JS needed. */
 a.coursebox-container[data-tags~="role-card"] .coursebox-image {
-  order: 2 !important;
-  flex: none !important;             /* JS sets explicit height — no flex stretch */
+  order: 2 !important;               /* auto-places into row 2 */
   min-height: 0 !important;
   position: relative !important;
   top: auto !important; right: auto !important;
   bottom: auto !important; left: auto !important;
-  margin: 0 8px 8px !important;     /* teal gap on sides + bottom */
+  margin: 0 8px 8px !important;
   width: auto !important;
   background-image: none !important;
   background-size: initial !important;
   background-position: initial !important;
   overflow: hidden !important;
-  border-radius: 10px !important;    /* rounded corners on photo */
-  display: block !important;
+  border-radius: 10px !important;
+  display: grid !important;          /* inner grid: img fills the single cell */
+  grid-template-rows: 1fr !important;
+  grid-template-columns: 1fr !important;
 }
-/* Photo: static flow, 100% of JS-set parent height — reliable, no abs tricks */
+/* Photo fills its grid cell via stretch (default align/justify) */
 a.coursebox-container[data-tags~="role-card"] .coursebox-image img {
   display: block !important;
-  position: static !important;
   width: 100% !important;
   height: 100% !important;
   object-fit: cover !important;
   object-position: center 20% !important;
+  min-height: 0 !important;
 }
 
 /* Hide non-essential elements */
