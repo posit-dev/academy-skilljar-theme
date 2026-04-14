@@ -1448,6 +1448,27 @@ body.sj-page-detail-course:has(#main-container[data-tags~="live-training"]) .sj-
   background-color: #213D4F !important;
   transform: none !important;
 }
+
+/* ═══════════════════════════════════════════════
+   MOBILE — stack About above sessions table
+   ═══════════════════════════════════════════════ */
+@media only screen and (max-width: 640px) {
+  /* Collapse two-column grid to single column */
+  body.sj-page-detail-course:has(#main-container[data-tags~="live-training"]) #dp-details .row .columns:has(.dp-long-description) {
+    grid-template-columns: 1fr !important;
+    row-gap: 32px !important;
+  }
+  /* Reset sessions panel so it flows below the About text */
+  body.sj-page-detail-course:has(#main-container[data-tags~="live-training"]) #dp-details .dp-vilt-events {
+    grid-column: 1 !important;
+    grid-row: auto !important;
+    width: 100% !important;
+  }
+  /* Tighten row padding on mobile */
+  body.sj-page-detail-course:has(#main-container[data-tags~="live-training"]) #dp-details .row {
+    padding: 32px 20px !important;
+  }
+}
 </style>
 
 <script>
