@@ -204,12 +204,24 @@ function runSeparatorSetup() {
     document.querySelectorAll('a.coursebox-container[data-tags="separator"]').forEach(function(sep) {
         sep.setAttribute('data-pa-ready', '');
     });
+
+    // Process role cards: promote thumbnail <img> to CSS background-image, then reveal.
+    document.querySelectorAll('a.coursebox-container[data-tags~="role-card"]').forEach(function(card) {
+        var imgEl  = card.querySelector('.coursebox-image img');
+        var imgDiv = card.querySelector('.coursebox-image');
+        if (imgEl && imgDiv && imgEl.src) {
+            imgDiv.style.backgroundImage = 'url(' + imgEl.src + ')';
+        }
+        card.setAttribute('data-pa-ready', '');
+    });
 }
 
 /* Poll until SkillJar's course cards are in the DOM, then run.
    Handles both the direct-paste path and the async GitHub fetch path. */
 var sepPoll = setInterval(function() {
-    if (document.querySelector('a.coursebox-container[data-tags="separator"]')) {
+    var hasSep  = document.querySelector('a.coursebox-container[data-tags="separator"]');
+    var hasRole = document.querySelector('a.coursebox-container[data-tags~="role-card"]');
+    if (hasSep || hasRole) {
         clearInterval(sepPoll);
         runSeparatorSetup();
     }
@@ -425,6 +437,112 @@ a.coursebox-container[data-tags="separator"]:after,
 }
 </style>
 <!-- END Course Separators -->
+
+
+<!-- START Role Cards -->
+<style>
+/* ═══════════════════════════════════════════════
+   ROLE CARDS  (tag: role-card)
+   Courses tagged "role-card" render as teal
+   image cards with role name + right chevron.
+   ═══════════════════════════════════════════════ */
+
+/* Hidden until JS sets data-pa-ready (prevents flash of unstyled card) */
+a.coursebox-container[data-tags~="role-card"]:not([data-pa-ready]) {
+  visibility: hidden !important;
+}
+
+/* Card shell */
+a.coursebox-container[data-tags~="role-card"] {
+  position: relative !important;
+  min-height: 200px !important;
+  overflow: hidden !important;
+  border: none !important;
+  border-radius: 12px !important;
+  box-shadow: 0 2px 12px rgba(0,0,0,0.15) !important;
+  background: #3D6F74 !important; /* Drk Teal — fallback when no image */
+}
+
+/* Course thumbnail → full-card background (JS sets background-image on this div) */
+a.coursebox-container[data-tags~="role-card"] .coursebox-image {
+  position: absolute !important;
+  inset: 0 !important;
+  width: 100% !important;
+  height: 100% !important;
+  background-size: cover !important;
+  background-position: center top !important;
+  display: block !important;
+}
+/* Hide the <img> — it's been promoted to background-image */
+a.coursebox-container[data-tags~="role-card"] .coursebox-image img,
+a.coursebox-container[data-tags~="role-card"] .no-coursebox-image-v2,
+a.coursebox-container[data-tags~="role-card"] .coursebox-image-inner-wrapper {
+  display: none !important;
+}
+
+/* Teal gradient overlay (Lt Teal 2 → Drk Teal) */
+a.coursebox-container[data-tags~="role-card"]::before {
+  content: '' !important;
+  position: absolute !important;
+  inset: 0 !important;
+  background: linear-gradient(160deg, rgba(65,149,153,0.78) 0%, rgba(61,111,116,0.92) 100%) !important;
+  z-index: 1 !important;
+  transition: background 0.2s !important;
+}
+
+/* Hover — lighten overlay, lift card */
+a.coursebox-container[data-tags~="role-card"]:hover::before {
+  background: linear-gradient(160deg, rgba(65,149,153,0.60) 0%, rgba(61,111,116,0.75) 100%) !important;
+}
+a.coursebox-container[data-tags~="role-card"]:hover {
+  box-shadow: 0 6px 24px rgba(61,111,116,0.40) !important;
+  transform: translateY(-3px) !important;
+}
+
+/* Role name — bottom-left, large white bold */
+a.coursebox-container[data-tags~="role-card"] .coursebox-text {
+  position: absolute !important;
+  bottom: 20px !important;
+  left: 20px !important;
+  right: 48px !important;
+  z-index: 2 !important;
+  font-family: 'Open Sans', sans-serif !important;
+  font-size: clamp(18px, 2vw, 22px) !important;
+  font-weight: 700 !important;
+  color: #ffffff !important;
+  line-height: 1.2 !important;
+  margin: 0 !important;
+  padding: 0 !important;
+}
+
+/* Right chevron via ::after */
+a.coursebox-container[data-tags~="role-card"]::after {
+  content: '›' !important;
+  position: absolute !important;
+  bottom: 14px !important;
+  right: 18px !important;
+  z-index: 2 !important;
+  font-family: 'Open Sans', sans-serif !important;
+  font-size: 36px !important;
+  line-height: 1 !important;
+  color: rgba(255,255,255,0.85) !important;
+}
+
+/* Hide non-title elements */
+a.coursebox-container[data-tags~="role-card"] .storefront-price,
+a.coursebox-container[data-tags~="role-card"] .coursebox-text-description,
+a.coursebox-container[data-tags~="role-card"] .coursebox-callout,
+a.coursebox-container[data-tags~="role-card"] .coursebox-tags,
+a.coursebox-container[data-tags~="role-card"] .sj-ribbon-wrapper {
+  display: none !important;
+}
+
+/* Don't show role cards in search results */
+.search a.coursebox-container[data-tags~="role-card"] {
+  display: none !important;
+}
+</style>
+<!-- END Role Cards -->
 
 
 <!-- START Course Type Badge -->
