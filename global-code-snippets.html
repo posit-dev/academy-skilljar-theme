@@ -205,12 +205,7 @@ function runSeparatorSetup() {
         sep.setAttribute('data-pa-ready', '');
     });
 
-    // Process role cards: force-load lazy thumbnail; size cards to match the
-    // catalog's actual column width measured from an adjacent regular card.
-    // CSS calc(33%...) is unreliable here because SkillJar wraps #catalog-courses
-    // content in an intermediate element, so percentage resolution uses that
-    // wrapper's width rather than the outer container — causing cards to be
-    // sized incorrectly. Reading a rendered card's pixel width bypasses this.
+    // Process role cards: force-load lazy image, then size cards.
     var paRoleCards = document.querySelectorAll('a.coursebox-container[data-tags~="role-card"]');
     if (paRoleCards.length) {
         paRoleCards.forEach(function(card) {
@@ -224,36 +219,40 @@ function runSeparatorSetup() {
             card.setAttribute('data-pa-ready', '');
         });
 
+        // Derive column width from #catalog-courses inner content width.
+        // We intentionally avoid measuring a sibling card — that creates a
+        // feedback loop on resize (role card width → layout shift → sibling
+        // width changes → role card width changes → …).
+        // Setting explicit height alongside width prevents the whitespace that
+        // appears when aspect-ratio alone doesn't propagate into flex children.
         function paApplyRoleWidths() {
-            // Prefer to measure a sibling regular course card (most accurate).
-            var sample = document.querySelector(
-                '#catalog-courses a.coursebox-container:not([data-tags~="role-card"]):not([data-tags="separator"])'
-            );
-            var w;
-            if (sample) {
-                w = Math.round(sample.getBoundingClientRect().width);
-            } else {
-                // Fallback: derive from catalog container inner width.
-                var cat = document.getElementById('catalog-courses');
-                if (!cat) return;
-                var cs  = getComputedStyle(cat);
-                var innerW = cat.getBoundingClientRect().width
-                             - (parseFloat(cs.paddingLeft)  || 0)
-                             - (parseFloat(cs.paddingRight) || 0);
-                var gap  = 16;
-                var cols = innerW >= 860 ? 3 : innerW >= 580 ? 2 : 1;
-                w = Math.floor((innerW - gap * (cols - 1)) / cols);
-            }
-            if (!w) return;
+            var cat = document.getElementById('catalog-courses');
+            if (!cat) return;
+            var cs     = getComputedStyle(cat);
+            var innerW = cat.getBoundingClientRect().width
+                         - (parseFloat(cs.paddingLeft)  || 0)
+                         - (parseFloat(cs.paddingRight) || 0);
+            if (innerW <= 0) return;
+            var gap  = 16;
+            var cols = innerW >= 860 ? 3 : innerW >= 580 ? 2 : 1;
+            var w    = Math.floor((innerW - gap * (cols - 1)) / cols);
+            var h    = Math.round(w * 4 / 3);
             paRoleCards.forEach(function(card) {
                 card.style.setProperty('width',     w + 'px', 'important');
+                card.style.setProperty('height',    h + 'px', 'important');
                 card.style.setProperty('max-width', w + 'px', 'important');
                 card.style.setProperty('flex',      'none',   'important');
             });
         }
 
         paApplyRoleWidths();
-        window.addEventListener('resize', paApplyRoleWidths);
+
+        // Debounced resize: 150 ms quiet period prevents rapid re-entrancy.
+        var paResizeTimer;
+        window.addEventListener('resize', function() {
+            clearTimeout(paResizeTimer);
+            paResizeTimer = setTimeout(paApplyRoleWidths, 150);
+        });
     }
 }
 
