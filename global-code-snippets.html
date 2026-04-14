@@ -470,6 +470,7 @@ a.coursebox-container[data-tags~="role-card"] {
 @media (max-width: 640px) {
   #catalog-courses a.coursebox-container[data-tags~="role-card"],
   a.coursebox-container[data-tags~="role-card"] {
+    flex: 0 0 100% !important;  /* flex-basis:100% forces one per row; overrides flex-grow */
     max-width: 100% !important;
   }
 }
@@ -522,6 +523,7 @@ a.coursebox-container[data-tags~="role-card"] .coursebox-image {
   top: auto !important; right: auto !important;
   bottom: auto !important; left: auto !important;
   margin: 0 8px 8px !important;
+  width: auto !important;            /* override base width:100% — margins would overflow otherwise */
   background-image: none !important;
   overflow: hidden !important;
   border-radius: 10px !important;
