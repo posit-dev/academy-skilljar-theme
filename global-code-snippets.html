@@ -458,7 +458,7 @@ a.coursebox-container[data-tags~="role-card"]:not([data-pa-ready]) {
   visibility: hidden !important;
 }
 
-/* Card: flex column, Drk Teal bg, Lt Teal 2 border */
+/* Card: flex column, portrait 3:4, Drk Teal bg, Lt Teal 2 border */
 a.coursebox-container[data-tags~="role-card"] {
   display: flex !important;
   flex-direction: column !important;
@@ -467,7 +467,8 @@ a.coursebox-container[data-tags~="role-card"] {
   border: 2px solid #419599 !important;
   border-radius: 16px !important;
   background: #3D6F74 !important;
-  min-height: 260px !important;
+  aspect-ratio: 3 / 4 !important;
+  min-height: 0 !important;
   box-shadow: 0 2px 12px rgba(0,0,0,0.15) !important;
 }
 a.coursebox-container[data-tags~="role-card"]::before { display: none !important; }
@@ -509,23 +510,25 @@ a.coursebox-container[data-tags~="role-card"] .coursebox-text::after {
   margin-left: 12px !important;
 }
 
-/* ── Photo area — fills remaining card height ── */
+/* ── Photo area — inset from card edges, fills remaining height ── */
 a.coursebox-container[data-tags~="role-card"] .coursebox-image {
   order: 2 !important;
-  flex: 1 1 auto !important;
+  flex: 1 1 0 !important;
+  min-height: 0 !important;
   position: relative !important;
   top: auto !important; right: auto !important;
   bottom: auto !important; left: auto !important;
-  width: 100% !important;
+  margin: 0 8px 8px !important;     /* teal gap on sides + bottom */
+  width: auto !important;            /* let flex cross-axis fill (avoids overflow with margins) */
   height: auto !important;
-  min-height: 160px !important;
   background-image: none !important;
   background-size: initial !important;
   background-position: initial !important;
   overflow: hidden !important;
+  border-radius: 10px !important;    /* rounded corners on photo */
   display: block !important;
 }
-/* Photo fills the image area via absolute stretch */
+/* Photo fills the image area */
 a.coursebox-container[data-tags~="role-card"] .coursebox-image img {
   display: block !important;
   position: absolute !important;
