@@ -450,14 +450,14 @@ a.coursebox-container[data-tags="separator"]:after,
 #catalog-courses a.coursebox-container[data-tags~="role-card"],
 a.coursebox-container[data-tags~="role-card"] {
   display: grid !important;
-  grid-template-rows: auto 1fr !important;
+  grid-template-rows: 52px 1fr !important;  /* fixed header = identical image area across all cards */
   grid-template-columns: 1fr !important;
   position: relative !important;
   overflow: hidden !important;
   border: 2px solid #419599 !important;
   border-radius: 16px !important;
   background: #3D6F74 !important;
-  aspect-ratio: 3 / 4 !important;
+  aspect-ratio: 4 / 3 !important;
   min-height: 0 !important;
   flex: none !important;
   width: calc(100% / 3 - 11px) !important;
@@ -491,7 +491,7 @@ a.coursebox-container[data-tags~="role-card"]:hover {
   border-color: #94BDBF !important;
 }
 
-/* ── Title row (grid row 1: auto) ── */
+/* ── Title row (grid row 1: 52px fixed) ── */
 a.coursebox-container[data-tags~="role-card"] .coursebox-text {
   order: 1 !important;               /* auto-places into row 1 */
   position: static !important;
@@ -501,14 +501,15 @@ a.coursebox-container[data-tags~="role-card"] .coursebox-text {
   display: flex !important;          /* flex row for chevron alignment */
   align-items: center !important;
   justify-content: space-between !important;
-  padding: 18px 20px !important;
+  padding: 0 16px !important;        /* vertical centering from fixed row height */
   font-family: 'Open Sans', sans-serif !important;
-  font-size: clamp(16px, 2vw, 20px) !important;
+  font-size: clamp(14px, 1.6vw, 18px) !important;
   font-weight: 700 !important;
   color: #ffffff !important;
   line-height: 1.2 !important;
   margin: 0 !important;
   width: auto !important;
+  overflow: hidden !important;       /* clip if role name is very long */
 }
 a.coursebox-container[data-tags~="role-card"] .coursebox-text::after {
   content: '›' !important;
