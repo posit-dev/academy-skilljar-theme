@@ -2172,6 +2172,22 @@ body.sj-page-lesson .lesson-title-footer {
   font-size: 12px !important;
   font-weight: 600 !important;
 }
+#calendar-view .fc-event.sj-calendar-registered-event.sj-calendar-registered-event {
+  background: #447099 !important;
+  color: #ffffff !important;
+}
+#calendar-view .fc-event.sj-calendar-unregistered-event.sj-calendar-unregistered-event {
+  background: #F6B000 !important;
+  color: #17212B !important;
+}
+#calendar-view .fc-list-item.sj-calendar-registered-event .fc-event-dot {
+  background: #447099 !important;
+  border-color: #447099 !important;
+}
+#calendar-view .fc-list-item.sj-calendar-unregistered-event .fc-event-dot {
+  background: #F6B000 !important;
+  border-color: #F6B000 !important;
+}
 
 /* ── Footer ── */
 #calendar-view .calendar-footer {
@@ -2202,19 +2218,22 @@ body.sj-page-lesson .lesson-title-footer {
   font-family: 'Open Sans', sans-serif !important;
   font-size: 12px !important;
   font-weight: 600 !important;
-  padding: 4px 14px !important;
+  padding: 5px 14px !important;
   border-radius: 20px !important;
-  display: inline-flex !important;
-  align-items: center !important;
-  justify-content: center !important;
-  line-height: 1 !important;
+  display: inline-block !important;
+  height: auto !important;
+  min-height: 0 !important;
+  line-height: 1.4 !important;
+  vertical-align: middle !important;
+  text-align: center !important;
+  box-sizing: border-box !important;
 }
-#calendar-view .key-registered {
+#calendar-view .key-registered.key-registered {
   background: #447099 !important;
   color: #ffffff !important;
 }
-#calendar-view .key-unregistered {
-  background: #94BDBF !important;
+#calendar-view .key-unregistered.key-unregistered {
+  background: #F6B000 !important;
   color: #17212B !important;
 }
 #calendar-view #timezone_picker {
