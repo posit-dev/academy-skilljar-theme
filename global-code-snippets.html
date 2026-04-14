@@ -206,11 +206,14 @@ function runSeparatorSetup() {
     });
 
     // Process role cards: promote thumbnail <img> to CSS background-image, then reveal.
+    // Prefer data-src over src — SkillJar lazy-loads images, so src may still be a
+    // transparent placeholder GIF until the <img> scrolls into view.
     document.querySelectorAll('a.coursebox-container[data-tags~="role-card"]').forEach(function(card) {
         var imgEl  = card.querySelector('.coursebox-image img');
         var imgDiv = card.querySelector('.coursebox-image');
-        if (imgEl && imgDiv && imgEl.src) {
-            imgDiv.style.backgroundImage = 'url(' + imgEl.src + ')';
+        if (imgEl && imgDiv) {
+            var url = imgEl.getAttribute('data-src') || imgEl.src;
+            if (url) imgDiv.style.backgroundImage = 'url(' + url + ')';
         }
         card.setAttribute('data-pa-ready', '');
     });
