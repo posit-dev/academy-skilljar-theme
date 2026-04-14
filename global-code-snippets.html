@@ -220,11 +220,11 @@ function runSeparatorSetup() {
         });
 
         // Derive column width from #catalog-courses inner content width.
-        // We intentionally avoid measuring a sibling card — that creates a
-        // feedback loop on resize (role card width → layout shift → sibling
-        // width changes → role card width changes → …).
-        // Setting explicit height alongside width prevents the whitespace that
-        // appears when aspect-ratio alone doesn't propagate into flex children.
+        // Step 1 sets card width+height synchronously so the browser can lay
+        // out the header at the correct width. Step 2 runs in rAF (after
+        // browser reflow) to measure the actual rendered header height and
+        // set the image container to an explicit pixel height — no flex or
+        // percentage magic needed, which eliminates the whitespace problem.
         function paApplyRoleWidths() {
             var cat = document.getElementById('catalog-courses');
             if (!cat) return;
@@ -237,11 +237,27 @@ function runSeparatorSetup() {
             var cols = innerW >= 860 ? 3 : innerW >= 580 ? 2 : 1;
             var w    = Math.floor((innerW - gap * (cols - 1)) / cols);
             var h    = Math.round(w * 4 / 3);
+
+            // Step 1: fix card dimensions so the browser can compute header height
             paRoleCards.forEach(function(card) {
                 card.style.setProperty('width',     w + 'px', 'important');
                 card.style.setProperty('height',    h + 'px', 'important');
                 card.style.setProperty('max-width', w + 'px', 'important');
                 card.style.setProperty('flex',      'none',   'important');
+            });
+
+            // Step 2: measure rendered header height, set image container explicitly
+            requestAnimationFrame(function() {
+                paRoleCards.forEach(function(card) {
+                    var header = card.querySelector('.coursebox-text');
+                    var imgDiv = card.querySelector('.coursebox-image');
+                    if (!header || !imgDiv) return;
+                    var cardRect   = card.getBoundingClientRect();
+                    var headerRect = header.getBoundingClientRect();
+                    // Remaining space below header, minus the 8px bottom margin
+                    var imgH = Math.max(0, cardRect.bottom - headerRect.bottom - 8);
+                    imgDiv.style.setProperty('height', imgH + 'px', 'important');
+                });
             });
         }
 
@@ -561,17 +577,16 @@ a.coursebox-container[data-tags~="role-card"] .coursebox-text::after {
   margin-left: 12px !important;
 }
 
-/* ── Photo area — inset from card edges, fills remaining height ── */
+/* ── Photo area — inset from card edges; JS sets explicit px height ── */
 a.coursebox-container[data-tags~="role-card"] .coursebox-image {
   order: 2 !important;
-  flex: 1 1 0 !important;
+  flex: none !important;             /* JS sets explicit height — no flex stretch */
   min-height: 0 !important;
   position: relative !important;
   top: auto !important; right: auto !important;
   bottom: auto !important; left: auto !important;
   margin: 0 8px 8px !important;     /* teal gap on sides + bottom */
-  width: auto !important;            /* let flex cross-axis fill (avoids overflow with margins) */
-  height: auto !important;
+  width: auto !important;
   background-image: none !important;
   background-size: initial !important;
   background-position: initial !important;
@@ -579,11 +594,10 @@ a.coursebox-container[data-tags~="role-card"] .coursebox-image {
   border-radius: 10px !important;    /* rounded corners on photo */
   display: block !important;
 }
-/* Photo fills the image area */
+/* Photo: static flow, 100% of JS-set parent height — reliable, no abs tricks */
 a.coursebox-container[data-tags~="role-card"] .coursebox-image img {
   display: block !important;
-  position: absolute !important;
-  top: 0 !important; left: 0 !important;
+  position: static !important;
   width: 100% !important;
   height: 100% !important;
   object-fit: cover !important;
