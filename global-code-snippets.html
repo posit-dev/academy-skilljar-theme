@@ -1977,4 +1977,255 @@ body.sj-page-lesson .lesson-title-footer {
   color: #404041 !important;
 }
 </style>
+
+
+<!-- START Calendar Page -->
+<style>
+/* ═══════════════════════════════════════════════
+   CALENDAR PAGE  (academy.posit.co/calendar)
+   Scoped to #calendar-view — does not affect any
+   other page that uses body.sj-page-other.
+   FullCalendar v4 class names confirmed from live DOM.
+   ═══════════════════════════════════════════════ */
+
+/* ── Overall container: white card ── */
+#calendar-view {
+  font-family: 'Open Sans', sans-serif !important;
+  max-width: 1200px !important;
+  margin: 28px auto 40px !important;
+  background: #ffffff !important;
+  border-radius: 12px !important;
+  box-shadow: 0 2px 20px rgba(23,33,43,0.10) !important;
+  overflow: hidden !important;
+}
+
+/* ── Custom SkillJar header ── */
+#calendar-view .calendar-header {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: space-between !important;
+  padding: 20px 28px !important;
+  background: #ffffff !important;
+  border-bottom: 1px solid #E0E6EC !important;
+}
+
+/* Month / year title */
+#calendar-view .page-title #title {
+  font-family: 'Open Sans', sans-serif !important;
+  font-size: 22px !important;
+  font-weight: 700 !important;
+  color: #17212B !important;
+  margin: 0 !important;
+}
+
+/* Nav button lists */
+#calendar-view .button-group {
+  list-style: none !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  display: flex !important;
+  align-items: center !important;
+  gap: 4px !important;
+}
+
+/* Prev / next arrows */
+#calendar-view #prev,
+#calendar-view #next {
+  width: 32px !important;
+  height: 32px !important;
+  border-radius: 50% !important;
+  background: #D1DBE5 !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  cursor: pointer !important;
+  color: #17212B !important;
+  font-size: 18px !important;
+  transition: background 0.15s, color 0.15s !important;
+}
+#calendar-view #prev:hover,
+#calendar-view #next:hover {
+  background: #447099 !important;
+  color: #ffffff !important;
+}
+
+/* Today button */
+#calendar-view #today {
+  background: #447099 !important;
+  border-radius: 6px !important;
+  padding: 6px 16px !important;
+  cursor: pointer !important;
+  transition: background 0.15s !important;
+}
+#calendar-view #today span {
+  font-family: 'Open Sans', sans-serif !important;
+  font-size: 13px !important;
+  font-weight: 700 !important;
+  color: #ffffff !important;
+}
+#calendar-view #today:hover {
+  background: #3A5672 !important;
+}
+
+/* View switcher (D / W / M / L) — pill group */
+#calendar-view .view-controls .button-group {
+  background: #D1DBE5 !important;
+  border-radius: 8px !important;
+  padding: 3px !important;
+  gap: 2px !important;
+}
+#calendar-view .view-controls li {
+  border-radius: 6px !important;
+  padding: 5px 14px !important;
+  cursor: pointer !important;
+  transition: background 0.15s !important;
+}
+#calendar-view .view-controls li span {
+  font-family: 'Open Sans', sans-serif !important;
+  font-size: 12px !important;
+  font-weight: 700 !important;
+  color: #17212B !important;
+}
+#calendar-view .view-controls li.active,
+#calendar-view .view-controls li:hover {
+  background: #F6B000 !important;
+}
+
+/* ── FullCalendar v4 — column headers (Sun Mon Tue …) ── */
+#calendar-view .fc-col-header-cell {
+  background: #17212B !important;
+  border-color: #17212B !important;
+  padding: 10px 0 !important;
+}
+#calendar-view .fc-col-header-cell-cushion {
+  font-family: 'Open Sans', sans-serif !important;
+  font-size: 11px !important;
+  font-weight: 700 !important;
+  color: #ffffff !important;
+  text-transform: uppercase !important;
+  letter-spacing: 0.08em !important;
+  text-decoration: none !important;
+  display: inline-block !important;
+  padding: 0 !important;
+}
+#calendar-view .fc-col-header-cell-cushion:hover {
+  color: #ffffff !important;
+  text-decoration: none !important;
+}
+
+/* ── Grid borders ── */
+#calendar-view .fc-scrollgrid,
+#calendar-view .fc-scrollgrid td,
+#calendar-view .fc-scrollgrid th {
+  border-color: #E0E6EC !important;
+}
+
+/* ── Day cells ── */
+#calendar-view .fc-daygrid-day {
+  background: #ffffff !important;
+}
+#calendar-view .fc-day-other {
+  background: #FAFBFC !important;
+}
+
+/* ── Day numbers ── */
+#calendar-view .fc-daygrid-day-number {
+  font-family: 'Open Sans', sans-serif !important;
+  font-size: 13px !important;
+  font-weight: 700 !important;
+  color: #17212B !important;
+  text-decoration: none !important;
+  padding: 6px 8px !important;
+  line-height: 1 !important;
+  display: inline-block !important;
+}
+#calendar-view .fc-day-other .fc-daygrid-day-number {
+  color: #A2B8CB !important;
+}
+
+/* ── Today: blue tint + circled day number ── */
+#calendar-view .fc-day-today {
+  background: #EBF2F8 !important;
+}
+#calendar-view .fc-day-today .fc-daygrid-day-number {
+  background: #447099 !important;
+  color: #ffffff !important;
+  border-radius: 50% !important;
+  width: 26px !important;
+  height: 26px !important;
+  line-height: 26px !important;
+  text-align: center !important;
+  padding: 0 !important;
+  margin: 4px !important;
+}
+
+/* ── Events ── */
+#calendar-view .fc-event {
+  border-radius: 4px !important;
+  border: none !important;
+  padding: 2px 6px !important;
+  cursor: pointer !important;
+}
+#calendar-view .fc-event-title,
+#calendar-view .fc-event-main {
+  font-family: 'Open Sans', sans-serif !important;
+  font-size: 12px !important;
+  font-weight: 600 !important;
+}
+
+/* ── Footer ── */
+#calendar-view .calendar-footer {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: space-between !important;
+  flex-wrap: wrap !important;
+  gap: 12px !important;
+  padding: 14px 28px !important;
+  border-top: 1px solid #E0E6EC !important;
+  background: #ffffff !important;
+  font-family: 'Open Sans', sans-serif !important;
+}
+#calendar-view .key-label {
+  font-family: 'Open Sans', sans-serif !important;
+  font-size: 13px !important;
+  font-weight: 600 !important;
+  color: #17212B !important;
+  margin-right: 6px !important;
+}
+#calendar-view .keys {
+  display: flex !important;
+  align-items: center !important;
+  gap: 8px !important;
+}
+#calendar-view .key-registered {
+  background: #447099 !important;
+  color: #ffffff !important;
+  font-family: 'Open Sans', sans-serif !important;
+  font-size: 12px !important;
+  font-weight: 600 !important;
+  padding: 4px 14px !important;
+  border-radius: 20px !important;
+  display: inline-block !important;
+}
+#calendar-view .key-unregistered {
+  background: #94BDBF !important;
+  color: #17212B !important;
+  font-family: 'Open Sans', sans-serif !important;
+  font-size: 12px !important;
+  font-weight: 600 !important;
+  padding: 4px 14px !important;
+  border-radius: 20px !important;
+  display: inline-block !important;
+}
+#calendar-view #timezone_picker {
+  font-family: 'Open Sans', sans-serif !important;
+  font-size: 13px !important;
+  color: #17212B !important;
+  border: 1px solid #D1DBE5 !important;
+  border-radius: 6px !important;
+  padding: 4px 8px !important;
+  background: #ffffff !important;
+}
+</style>
+<!-- END Calendar Page -->
 <!-- END Live Training (VILT) Lesson Page Styles -->
