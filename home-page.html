@@ -21,11 +21,15 @@
   position: relative;
   width: 100%;
   line-height: 0;
+  max-height: 520px;   /* reduce from natural image height — adjust to taste */
+  overflow: hidden;
 }
 #pa-hero-img {
   width: 100%;
-  height: auto;
+  height: 100%;
   display: block;
+  object-fit: cover;
+  object-position: center;
 }
 #pa-hero-overlay {
   position: absolute;
