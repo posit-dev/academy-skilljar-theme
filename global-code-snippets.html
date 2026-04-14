@@ -450,8 +450,9 @@ a.coursebox-container[data-tags="separator"]:after,
 #catalog-courses a.coursebox-container[data-tags~="role-card"],
 a.coursebox-container[data-tags~="role-card"] {
   display: grid !important;
-  grid-template-rows: 52px 1fr !important;  /* fixed header = identical image area across all cards */
+  grid-template-rows: 52px 1fr !important;
   grid-template-columns: 1fr !important;
+  grid-template-areas: "header" "photo" !important;  /* named areas — beats order/DOM order */
   position: relative !important;
   overflow: hidden !important;
   border: 2px solid #419599 !important;
@@ -491,9 +492,9 @@ a.coursebox-container[data-tags~="role-card"]:hover {
   border-color: #94BDBF !important;
 }
 
-/* ── Title row (grid row 1: 52px fixed) ── */
+/* ── Title row — explicitly placed in the "header" grid area ── */
 a.coursebox-container[data-tags~="role-card"] .coursebox-text {
-  order: 1 !important;               /* auto-places into row 1 */
+  grid-area: header !important;      /* explicit: always row 1, regardless of DOM order */
   position: static !important;
   top: auto !important; right: auto !important;
   bottom: auto !important; left: auto !important;
@@ -520,12 +521,9 @@ a.coursebox-container[data-tags~="role-card"] .coursebox-text::after {
   margin-left: 12px !important;
 }
 
-/* ── Photo area (grid row 2: 1fr) ──
-   The 1fr track gives this element a definitively-sized
-   block. An inner display:grid makes the <img> fill it
-   completely — no explicit height, no JS needed. */
+/* ── Photo area — explicitly placed in the "photo" grid area ── */
 a.coursebox-container[data-tags~="role-card"] .coursebox-image {
-  order: 2 !important;               /* auto-places into row 2 */
+  grid-area: photo !important;       /* explicit: always row 2, regardless of DOM order */
   min-height: 0 !important;
   position: relative !important;
   top: auto !important; right: auto !important;
