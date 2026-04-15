@@ -1633,9 +1633,25 @@ body.sj-page-curriculum {
 body.sj-page-curriculum .sj-save-toggle-block__button {
   color: #447099 !important;
   border-color: #447099 !important;
+  /* Constrain to 44px so it aligns with the other buttons */
+  height: 44px !important;
+  width: 44px !important;
+  min-width: 44px !important;
+  border-radius: 6px !important;
+  padding: 0 !important;
+  box-sizing: border-box !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
 }
 body.sj-page-curriculum .sj-save-toggle-block__icon i {
   color: #447099 !important;
+}
+/* Constrain the outer web component element too */
+body.sj-page-curriculum sjwc-save-content-toggle {
+  height: 44px !important;
+  width: 44px !important;
+  flex-shrink: 0 !important;
 }
 /* Hide the empty context-provider wrapper after JS moves the toggle out */
 body.sj-page-curriculum #resume-button > sjwc-context-provider {
@@ -1771,7 +1787,7 @@ body.sj-page-curriculum .section-container.tabs > section:has(h3.course-long-des
 
 
 /* ═══════════════════════════════════════════════
-   MOBILE — stack everything vertically
+   MOBILE — hero + buttons stack at 640px
    ═══════════════════════════════════════════════ */
 @media only screen and (max-width: 640px) {
   body.sj-page-curriculum .dp-row-flex-v2 {
@@ -1786,13 +1802,36 @@ body.sj-page-curriculum .section-container.tabs > section:has(h3.course-long-des
   body.sj-page-curriculum h1.break-word {
     font-size: 32px !important;
   }
+  /* Keep all three buttons on one row — reduce padding so they fit narrow screens */
+  body.sj-page-curriculum #resume-button {
+    flex-wrap: nowrap !important;
+  }
+  body.sj-page-curriculum a.start-button,
+  body.sj-page-curriculum a.pa-catalog-btn {
+    padding: 0 14px !important;
+    font-size: 11px !important;
+    height: 40px !important;
+  }
+  body.sj-page-curriculum sjwc-save-content-toggle,
+  body.sj-page-curriculum .sj-save-toggle-block__button {
+    height: 40px !important;
+    width: 40px !important;
+    min-width: 40px !important;
+  }
+}
+
+/* ═══════════════════════════════════════════════
+   TABLET — lower section stacks earlier (900px)
+   so the About column never gets squeezed narrow.
+   About appears above Curriculum when stacked.
+   ═══════════════════════════════════════════════ */
+@media only screen and (max-width: 900px) {
   body.sj-page-curriculum h3.course-long-description-header,
   body.sj-page-curriculum .section-container.tabs > section:has(#curriculum-list) .content > h2 {
     font-size: 28px !important;
   }
   body.sj-page-curriculum .section-container.tabs {
     flex-wrap: wrap !important;
-    padding: 32px 20px !important;
     gap: 32px !important;
   }
   body.sj-page-curriculum .section-container.tabs > section:has(#curriculum-list),
@@ -1800,7 +1839,7 @@ body.sj-page-curriculum .section-container.tabs > section:has(h3.course-long-des
     flex: 1 1 100% !important;
     max-width: none !important;
   }
-  /* On mobile, show About first then Curriculum */
+  /* About first, Curriculum below */
   body.sj-page-curriculum .section-container.tabs > section:has(h3.course-long-description-header) {
     order: 1 !important;
   }
@@ -1860,14 +1899,23 @@ body.sj-page-curriculum .section-container.tabs > section:has(h3.course-long-des
   }
 
   /* Align lower-section padding with the hero image edges —
-     mirrors syncLowerSectionPadding from the unregistered course page. */
+     mirrors syncLowerSectionPadding from the unregistered course page.
+     Below 900px the sections stack, so use minimal side padding instead. */
   function syncLowerSectionPadding() {
-    var img      = document.querySelector('.cp-promo-image');
-    var tabsEl   = document.querySelector('#cp-content .section-container.tabs');
+    var img    = document.querySelector('.cp-promo-image');
+    var tabsEl = document.querySelector('#cp-content .section-container.tabs');
     if (!img || !tabsEl) return;
 
-    var imgRect   = img.getBoundingClientRect();
-    var tabsRect  = tabsEl.getBoundingClientRect();
+    /* At stacking breakpoint: use small fixed padding so full-width
+       stacked sections get the maximum available space. */
+    if (window.innerWidth <= 900) {
+      tabsEl.style.setProperty('padding-left',  '20px', 'important');
+      tabsEl.style.setProperty('padding-right', '20px', 'important');
+      return;
+    }
+
+    var imgRect  = img.getBoundingClientRect();
+    var tabsRect = tabsEl.getBoundingClientRect();
 
     /* Right: tabs-container right edge → image panel right edge */
     var padRight = Math.max(0, Math.round(tabsRect.right - imgRect.right));
