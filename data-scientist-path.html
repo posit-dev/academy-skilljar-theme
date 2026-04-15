@@ -1,0 +1,257 @@
+<!-- START Posit Academy — Data Scientist Path Page --><!--
+  HOW TO INSTALL:
+  In the Data Scientist path Page Builder, add an HTML/Text Block at the
+  very top of the page, click "source code", delete all default HTML,
+  paste this entire file, and save.
+
+  ⚠️  BODY CLASS: This file hides SkillJar's native hero using
+  body.sj-page-detail-path — verify that class on a live path page
+  and update the two selectors in the <style> block if different.
+
+  BUILD REAL SKILLS CARD:
+  Add a course to the path with tag "path-desc" and title
+  "[path-desc] Build real skills for your role". Put objectives in the
+  description field. global-code-snippets.html handles all styling.
+
+  LEARNING PATH SEPARATOR:
+  Add a course with tag "separator" and title "[separator] Learning Path"
+  to the path's course list in SkillJar. The existing global separator
+  CSS/JS in global-code-snippets.html handles the rest.
+-->
+<div id="pa-path-hero"><img id="pa-path-hero-img" src="https://everpath-course-content.s3-accelerate.amazonaws.com/instructor%2Feww6wlnql2k9y5hqbfc2ycpct%2Fpublic%2F1776218490%2Facad2.0-role-datasci-hero-x2.1776218489705.png" alt="Posit Academy &mdash; Data Scientist learning path" />
+<div id="pa-path-hero-overlay">
+<p id="pa-path-eyebrow">Learning Path</p>
+<h1 id="pa-path-hero-title">Data<br />Scientist</h1>
+<p id="pa-path-hero-desc">Short description of role courses. Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
+<div id="pa-path-hero-btns"><!-- href synced to SkillJar's native CTA by the script below --> <a id="pa-path-hero-cta" href="#">Get Started</a> <a id="pa-path-catalog-btn" href="/">Return to Catalog</a></div>
+</div>
+</div>
+<div>
+<style>
+/* ══════════════════════════════════════════════
+   FULL-WIDTH CONTAINER RESET
+   Strips SkillJar's width/padding constraints so #pa-path-hero
+   spans the full viewport — same approach as home-page.html.
+   Gutter is restored for the course cards below.
+   ══════════════════════════════════════════════ */
+.catalog-center-width,
+#catalog-content {
+  width: 100% !important;
+  max-width: 100% !important;
+  padding: 0 !important;
+  margin-left: 0 !important;
+  margin-right: 0 !important;
+}
+.storefront .top-row {
+  padding: 0 !important;
+  margin-top: 0 !important;
+}
+/* Path pages add top padding to #main-container that catalog pages don't have */
+body.sj-page-detail-path #main-container,
+body.sj-page-detail-path .storefront {
+  padding-top: 0 !important;
+  margin-top: 0 !important;
+}
+.catalog-center-width .catalog-header {
+  padding: 0 !important;
+}
+.catalog-header > p {
+  margin: 0 !important;
+  padding: 0 !important;
+  line-height: 0 !important;
+  font-size: 0 !important;
+}
+/* Restore gutter for the course list below */
+#catalog-courses {
+  padding-left:  max(20px, 5vw) !important;
+  padding-right: max(20px, 5vw) !important;
+}
+
+/* ══════════════════════════════════════════════
+   HIDE SKILLJAR'S NATIVE PATH HERO
+   Our custom #pa-path-hero above replaces it.
+   ══════════════════════════════════════════════ */
+body.sj-page-detail-path .top-row-grey,
+body.sj-page-detail-path .top-row-white-v2 {
+  display: none !important;
+}
+body.sj-page-detail-path #dp-details {
+  display: none !important;
+}
+body.sj-page-detail-path .social-media-wrapper {
+  display: none !important;
+}
+
+/* ══════════════════════════════════════════════
+   HERO
+   ══════════════════════════════════════════════ */
+#pa-path-hero {
+  position: relative;
+  width: 100%;
+  line-height: 0;
+}
+#pa-path-hero-img {
+  width: 100%;
+  height: auto;
+  display: block;
+}
+#pa-path-hero-overlay {
+  position: absolute;
+  top: 0; left: 0; bottom: 0;
+  width: 52%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: 0 8% 0 max(20px, calc((100vw - 1280px) / 4));
+  box-sizing: border-box;
+}
+#pa-path-eyebrow {
+  font-family: 'Open Sans', sans-serif;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: rgba(255,255,255,0.65);
+  margin: 0 0 14px 0;
+  line-height: 1;
+}
+#pa-path-hero-title {
+  font-family: 'Open Sans', sans-serif;
+  font-size: clamp(32px, 5vw, 72px);
+  font-weight: 700;
+  color: #ffffff;
+  line-height: 1.1;
+  margin: 0 0 20px 0;
+  white-space: nowrap;
+}
+#pa-path-hero-desc {
+  font-family: 'Open Sans', sans-serif;
+  font-size: clamp(13px, 1.2vw, 16px);
+  font-weight: 400;
+  color: rgba(255,255,255,0.82);
+  line-height: 1.65;
+  margin: 0 0 32px 0;
+}
+#pa-path-hero-btns {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+#pa-path-hero-cta {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-family: 'Open Sans', sans-serif;
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: #17212B;
+  background-color: #ffffff;
+  border: 2px solid #ffffff;
+  border-radius: 6px;
+  padding: 0 28px;
+  height: 44px;
+  text-decoration: none;
+  box-sizing: border-box;
+  transition: background-color 0.15s, border-color 0.15s;
+}
+#pa-path-hero-cta:hover {
+  background-color: #D1DBE5;
+  border-color: #D1DBE5;
+  color: #17212B;
+}
+#pa-path-catalog-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-family: 'Open Sans', sans-serif;
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: #ffffff;
+  background-color: transparent;
+  border: 2px solid rgba(255,255,255,0.65);
+  border-radius: 6px;
+  padding: 0 28px;
+  height: 44px;
+  text-decoration: none;
+  box-sizing: border-box;
+  transition: background-color 0.15s, border-color 0.15s;
+}
+#pa-path-catalog-btn:hover {
+  background-color: rgba(255,255,255,0.15);
+  border-color: rgba(255,255,255,1);
+}
+
+/* ── Mobile ── */
+@media only screen and (max-width: 800px) {
+  #pa-path-hero-img {
+    min-height: 320px;
+    object-fit: cover;
+    object-position: center top;
+  }
+  #pa-path-hero-overlay {
+    width: 100%;
+    padding: 48px 24px 52px;
+    background: rgba(23, 33, 43, 0.78);
+  }
+  #pa-path-hero-title {
+    white-space: normal;
+    font-size: clamp(28px, 7vw, 42px);
+  }
+}
+</style>
+</div>
+<p>
+<script>
+/* Zero out top margin/padding on every ancestor element between #pa-path-hero
+   and SkillJar's outer containers — mirrors the fixCatalogGap pattern in
+   home-page.html so the hero image reaches the full viewport width. */
+(function () {
+  function fixPathGap() {
+    var hero = document.getElementById('pa-path-hero');
+    if (!hero) return;
+    var el = hero.parentElement;
+    /* Walk all the way up to (but not including) the body, zeroing every
+       ancestor's own margin/padding/max-width. Stopping early at .top-row or
+       .catalog-center-width left those elements' own padding uncleaned. */
+    while (el && el !== document.body && el !== document.documentElement) {
+      el.style.setProperty('margin-top',    '0', 'important');
+      el.style.setProperty('padding-top',   '0', 'important');
+      el.style.setProperty('margin-left',   '0', 'important');
+      el.style.setProperty('padding-left',  '0', 'important');
+      el.style.setProperty('margin-right',  '0', 'important');
+      el.style.setProperty('padding-right', '0', 'important');
+      el.style.setProperty('max-width', 'none', 'important');
+      el = el.parentElement;
+    }
+  }
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', fixPathGap);
+  } else {
+    fixPathGap();
+  }
+  window.addEventListener('load', fixPathGap);
+}());
+
+/* Sync "Get Started" href to SkillJar's native path CTA.
+   SkillJar renders its button asynchronously, so poll until it appears. */
+(function () {
+  var attempts = 0;
+  var poll = setInterval(function () {
+    attempts++;
+    var sjBtn = document.querySelector('a#purchase-button, a.purchase-button');
+    if (sjBtn && sjBtn.href && sjBtn.href !== window.location.href + '#') {
+      var cta = document.getElementById('pa-path-hero-cta');
+      if (cta) cta.href = sjBtn.href;
+      clearInterval(poll);
+    }
+    if (attempts >= 50) clearInterval(poll); /* bail after ~10 s */
+  }, 200);
+}());
+</script>
+</p>
+<!-- END Posit Academy — Data Scientist Path Page -->
