@@ -1433,6 +1433,498 @@ body.sj-page-detail-course .section-container.tabs {
 <!-- END Course Landing Page Styles -->
 
 
+<!-- START Enrolled Course Page Styles -->
+<!--
+  WHAT THIS DOES:
+  Makes the enrolled course page (body.sj-page-curriculum) look identical
+  to the unregistered course landing page (body.sj-page-detail-course).
+
+  KEY STRUCTURAL DIFFERENCES FROM THE UNREGISTERED PAGE:
+  • Class prefix: .cp-summary-wrapper / .cp-promo-image-wrapper / .cp-promo-image
+    (vs. .dp- counterparts on the unregistered page).
+  • Hero text: h2.cp-lessons (lesson count) + .progress-bar instead of description.
+  • CTA: a.start-button (vs. a#purchase-button on unregistered).
+  • Lower section: Foundation tabs in #cp-content .section-container.tabs
+    (vs. two-column #dp-details .row). CSS+JS convert tabs to the same
+    two-column layout: Curriculum (260px) left, About right.
+-->
+<style>
+/* ═══════════════════════════════════════════════
+   HERO WRAPPER
+   ═══════════════════════════════════════════════ */
+body.sj-page-curriculum .top-row-grey,
+body.sj-page-curriculum .top-row-white-v2 {
+  background: #ffffff !important;
+  border: none !important;
+  box-shadow: none !important;
+}
+body.sj-page-curriculum .top-row-grey::after,
+body.sj-page-curriculum .top-row-white-v2::after {
+  content: '' !important;
+  display: block !important;
+  width: 100% !important;
+  height: 3px !important;
+  background-color: #E8ECEF !important;
+  margin: 0 !important;
+}
+
+/* Hero flex row — override Foundation push/pull float layout */
+body.sj-page-curriculum .dp-row-flex-v2 {
+  display: flex !important;
+  align-items: center !important;
+  flex-wrap: nowrap !important;
+  gap: 48px !important;
+  padding: 48px 40px 32px !important;
+  border-bottom: none !important;
+}
+
+/* ── Text column — order 1 (left) ── */
+body.sj-page-curriculum .cp-summary-wrapper {
+  order: 1 !important;
+  flex: 1 1 45% !important;
+  min-width: 0 !important;
+  width: auto !important;
+  float: none !important;
+  text-align: left !important;
+  border: none !important;
+  box-shadow: none !important;
+  background: transparent !important;
+  padding: 0 !important;
+  /* Zero Foundation push-4 offset */
+  left: auto !important;
+  right: auto !important;
+  position: relative !important;
+}
+
+/* ── Image column — order 2 (right) ── */
+body.sj-page-curriculum .cp-promo-image-wrapper {
+  order: 2 !important;
+  flex: 1 1 45% !important;
+  min-width: 0 !important;
+  width: auto !important;
+  float: none !important;
+  /* Zero Foundation pull-8 offset */
+  left: auto !important;
+  right: auto !important;
+  position: relative !important;
+}
+
+/* Image panel — Posit Light Blue background, rounded corners */
+body.sj-page-curriculum .cp-promo-image {
+  background-color: #D1DBE5 !important;
+  border-radius: 14px !important;
+  padding: 36px !important;
+  overflow: hidden !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+}
+body.sj-page-curriculum .cp-promo-image img {
+  display: block !important;
+  width: auto !important;
+  max-width: 100% !important;
+  height: auto !important;
+}
+
+/* ── Course title ── */
+body.sj-page-curriculum h1.break-word {
+  font-family: 'Open Sans', sans-serif !important;
+  font-size: 48px !important;
+  font-weight: 400 !important;
+  color: #17212B !important;
+  line-height: 1.15 !important;
+  margin: 0 0 12px 0 !important;
+}
+
+/* ── Lesson count ── */
+body.sj-page-curriculum h2.cp-lessons {
+  font-family: 'Open Sans', sans-serif !important;
+  font-size: 14px !important;
+  font-weight: 400 !important;
+  color: #707073 !important;
+  line-height: 1.5 !important;
+  margin: 0 0 16px 0 !important;
+}
+
+/* ── Progress bar ── */
+body.sj-page-curriculum .progress-bar {
+  height: 6px !important;
+  background-color: #E8ECEF !important;
+  border-radius: 3px !important;
+  overflow: hidden !important;
+  margin: 0 0 28px 0 !important;
+  max-width: 320px !important;
+  border: none !important;
+  box-shadow: none !important;
+}
+body.sj-page-curriculum .progress-bar .progress-bar-inner {
+  height: 100% !important;
+  background-color: #447099 !important;
+  border-radius: 3px !important;
+}
+
+/* ── Button row ── */
+body.sj-page-curriculum #resume-button {
+  display: flex !important;
+  align-items: center !important;
+  gap: 12px !important;
+  flex-wrap: wrap !important;
+}
+
+/* ── Start / Resume button — dark filled ── */
+body.sj-page-curriculum a.start-button {
+  font-family: 'Open Sans', sans-serif !important;
+  font-size: 13px !important;
+  font-weight: 700 !important;
+  line-height: 1 !important;
+  letter-spacing: 0.08em !important;
+  text-transform: uppercase !important;
+  background-color: #17212B !important;
+  color: #ffffff !important;
+  border: 2px solid #17212B !important;
+  border-radius: 6px !important;
+  padding: 0 28px !important;
+  height: 44px !important;
+  text-decoration: none !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  box-sizing: border-box !important;
+  transition: background-color 0.15s ease, border-color 0.15s ease !important;
+  cursor: pointer !important;
+  box-shadow: none !important;
+}
+body.sj-page-curriculum a.start-button:hover {
+  background-color: #213D4F !important;
+  border-color: #213D4F !important;
+  color: #ffffff !important;
+}
+
+/* ── "Return to Catalog" — injected by JS, outlined ── */
+body.sj-page-curriculum a.pa-catalog-btn {
+  font-family: 'Open Sans', sans-serif !important;
+  font-size: 13px !important;
+  font-weight: 700 !important;
+  line-height: 1 !important;
+  letter-spacing: 0.08em !important;
+  text-transform: uppercase !important;
+  background-color: transparent !important;
+  color: #17212B !important;
+  border: 2px solid #17212B !important;
+  border-radius: 6px !important;
+  padding: 0 28px !important;
+  height: 44px !important;
+  text-decoration: none !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  box-sizing: border-box !important;
+  transition: background-color 0.15s ease, color 0.15s ease !important;
+  cursor: pointer !important;
+}
+body.sj-page-curriculum a.pa-catalog-btn:hover {
+  background-color: #17212B !important;
+  color: #ffffff !important;
+}
+
+/* Override SkillJar's yellow --button-color for the save toggle */
+body.sj-page-curriculum {
+  --button-color: #447099;
+}
+body.sj-page-curriculum .sj-save-toggle-block__button {
+  color: #447099 !important;
+  border-color: #447099 !important;
+}
+body.sj-page-curriculum .sj-save-toggle-block__icon i {
+  color: #447099 !important;
+}
+/* Hide the empty context-provider wrapper after JS moves the toggle out */
+body.sj-page-curriculum #resume-button > sjwc-context-provider {
+  display: none !important;
+}
+
+/* Hide social share buttons */
+body.sj-page-curriculum .social-media-wrapper {
+  display: none !important;
+}
+
+/* ═══════════════════════════════════════════════
+   LOWER SECTION — Foundation tabs → two-column layout
+   Strip Foundation's large-10 centered wrapper, then flex
+   the .section-container.tabs directly.
+   ═══════════════════════════════════════════════ */
+body.sj-page-curriculum #cp-content.row {
+  max-width: 100% !important;
+  width: 100% !important;
+  padding: 0 !important;
+  margin: 0 !important;
+}
+body.sj-page-curriculum .tabs-wrapper-v2 {
+  width: 100% !important;
+  max-width: none !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  float: none !important;
+}
+
+/* Two-column flex container */
+body.sj-page-curriculum .section-container.tabs {
+  display: flex !important;
+  align-items: flex-start !important;
+  flex-wrap: nowrap !important;
+  gap: 56px !important;
+  padding: 48px 40px !important;  /* 40px is a CSS fallback; JS overrides left/right */
+  max-width: 1500px !important;
+  margin: 0 auto !important;
+  width: auto !important;
+  background: transparent !important;
+  border: none !important;
+  box-shadow: none !important;
+}
+/* Remove Foundation's per-section and per-content borders that create the line */
+body.sj-page-curriculum .section-container.tabs > section,
+body.sj-page-curriculum .section-container.tabs > section > .content {
+  border: none !important;
+  box-shadow: none !important;
+  background: transparent !important;
+}
+
+/* Hide Foundation tab title elements (.title, [data-section-title], or <p> wrappers) */
+body.sj-page-curriculum .section-container.tabs > section > .title,
+body.sj-page-curriculum .section-container.tabs > section > [data-section-title],
+body.sj-page-curriculum .section-container.tabs > section > p {
+  display: none !important;
+}
+
+/* Force all tab content panels visible (JS also does this for inline-style overrides) */
+body.sj-page-curriculum .section-container.tabs > section > .content {
+  display: block !important;
+}
+
+/* Curriculum column — wide enough for longest titles to sit on one line */
+body.sj-page-curriculum .section-container.tabs > section:has(#curriculum-list) {
+  flex: 0 0 400px !important;
+  min-width: 0 !important;
+}
+
+/* About column — flexible */
+body.sj-page-curriculum .section-container.tabs > section:has(h3.course-long-description-header) {
+  flex: 1 1 0 !important;
+  min-width: 0 !important;
+}
+
+/* ── Curriculum heading (h2 in the active section) ── */
+body.sj-page-curriculum .section-container.tabs > section:has(#curriculum-list) .content > h2 {
+  font-family: 'Open Sans', sans-serif !important;
+  font-size: 36px !important;
+  font-weight: 400 !important;
+  color: #17212B !important;
+  display: block !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  border: none !important;
+  line-height: 1.2 !important;
+}
+body.sj-page-curriculum .section-container.tabs > section:has(#curriculum-list) .content > h2::after {
+  content: '' !important;
+  display: block !important;
+  width: 80px !important;
+  height: 2px !important;
+  background-color: #D1DBE5 !important;
+  margin: 12px 0 28px 0 !important;
+}
+
+/* Hide the <hr> SkillJar puts between the heading and curriculum list */
+body.sj-page-curriculum .section-container.tabs > section:has(#curriculum-list) .content > hr {
+  display: none !important;
+}
+
+/* ── About / long-description heading ── */
+body.sj-page-curriculum h3.course-long-description-header {
+  font-family: 'Open Sans', sans-serif !important;
+  font-size: 36px !important;
+  font-weight: 400 !important;
+  color: #17212B !important;
+  display: block !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  border: none !important;
+  line-height: 1.2 !important;
+}
+body.sj-page-curriculum h3.course-long-description-header::after {
+  content: '' !important;
+  display: block !important;
+  width: 80px !important;
+  height: 2px !important;
+  background-color: #D1DBE5 !important;
+  margin: 12px 0 28px 0 !important;
+}
+
+/* About section body text */
+body.sj-page-curriculum .section-container.tabs > section:has(h3.course-long-description-header) .content p {
+  font-family: 'Open Sans', sans-serif !important;
+  font-size: 15px !important;
+  font-weight: 400 !important;
+  color: #404041 !important;
+  line-height: 1.7 !important;
+  margin: 0 0 16px 0 !important;
+}
+
+
+/* ═══════════════════════════════════════════════
+   MOBILE — stack everything vertically
+   ═══════════════════════════════════════════════ */
+@media only screen and (max-width: 640px) {
+  body.sj-page-curriculum .dp-row-flex-v2 {
+    flex-wrap: wrap !important;
+    padding: 32px 20px 28px !important;
+    gap: 28px !important;
+  }
+  body.sj-page-curriculum .cp-summary-wrapper,
+  body.sj-page-curriculum .cp-promo-image-wrapper {
+    flex: 1 1 100% !important;
+  }
+  body.sj-page-curriculum h1.break-word {
+    font-size: 32px !important;
+  }
+  body.sj-page-curriculum h3.course-long-description-header,
+  body.sj-page-curriculum .section-container.tabs > section:has(#curriculum-list) .content > h2 {
+    font-size: 28px !important;
+  }
+  body.sj-page-curriculum .section-container.tabs {
+    flex-wrap: wrap !important;
+    padding: 32px 20px !important;
+    gap: 32px !important;
+  }
+  body.sj-page-curriculum .section-container.tabs > section:has(#curriculum-list),
+  body.sj-page-curriculum .section-container.tabs > section:has(h3.course-long-description-header) {
+    flex: 1 1 100% !important;
+    max-width: none !important;
+  }
+  /* On mobile, show About first then Curriculum */
+  body.sj-page-curriculum .section-container.tabs > section:has(h3.course-long-description-header) {
+    order: 1 !important;
+  }
+  body.sj-page-curriculum .section-container.tabs > section:has(#curriculum-list) {
+    order: 2 !important;
+  }
+}
+</style>
+
+<script>
+(function () {
+  if (!document.body.classList.contains('sj-page-curriculum')) return;
+
+  function injectCatalogButton() {
+    if (document.querySelector('a.pa-catalog-btn')) return;
+    var startBtn = document.querySelector('a.start-button');
+    if (!startBtn) return;
+    var catalogBtn = document.createElement('a');
+    catalogBtn.className = 'medium button pa-catalog-btn';
+    catalogBtn.href = '/';
+    catalogBtn.textContent = 'Return to Catalog';
+    startBtn.insertAdjacentElement('afterend', catalogBtn);
+  }
+
+  function fixSaveToggle() {
+    var resumeBtn = document.getElementById('resume-button');
+    if (!resumeBtn) return;
+    /* sjwc-context-provider uses a shadow root — extract sjwc-save-content-toggle
+       and place it as a direct flex child of #resume-button so gap:12px handles spacing. */
+    var saveToggle = resumeBtn.querySelector('sjwc-save-content-toggle');
+    if (!saveToggle || saveToggle.dataset.moved) return;
+    saveToggle.dataset.moved = '1';
+    resumeBtn.appendChild(saveToggle);
+  }
+
+  /* Remove SkillJar's ellipsis truncation from curriculum lesson titles.
+     Only touches the title element — avoids disturbing item/row heights
+     that SkillJar's layout JS reads to position items. */
+  function fixCurriculumTruncation() {
+    var titles = document.querySelectorAll('#curriculum-list .lesson-row .title');
+    for (var i = 0; i < titles.length; i++) {
+      titles[i].style.setProperty('white-space',   'normal',  'important');
+      titles[i].style.setProperty('overflow',      'visible', 'important');
+      titles[i].style.setProperty('text-overflow', 'clip',    'important');
+      titles[i].style.setProperty('max-width',     'none',    'important');
+    }
+  }
+
+  /* Force-show all tab section content (SkillJar hides inactive tabs via inline style) */
+  function showAllTabContent() {
+    var sections = document.querySelectorAll(
+      'body.sj-page-curriculum .section-container.tabs > section > .content'
+    );
+    for (var i = 0; i < sections.length; i++) {
+      sections[i].style.setProperty('display', 'block', 'important');
+    }
+  }
+
+  /* Align lower-section padding with the hero image edges —
+     mirrors syncLowerSectionPadding from the unregistered course page. */
+  function syncLowerSectionPadding() {
+    var img      = document.querySelector('.cp-promo-image');
+    var tabsEl   = document.querySelector('#cp-content .section-container.tabs');
+    if (!img || !tabsEl) return;
+
+    var imgRect   = img.getBoundingClientRect();
+    var tabsRect  = tabsEl.getBoundingClientRect();
+
+    /* Right: tabs-container right edge → image panel right edge */
+    var padRight = Math.max(0, Math.round(tabsRect.right - imgRect.right));
+
+    /* Left: subtract the image wrapper's internal inset so the left edge
+       aligns with where h1 text starts (not the outer wrapper edge). */
+    var imgWrapper = document.querySelector('.cp-promo-image-wrapper');
+    var padLeft;
+    if (imgWrapper) {
+      var imageInset = Math.max(0, Math.round(imgWrapper.getBoundingClientRect().right - imgRect.right));
+      padLeft = Math.max(0, padRight - imageInset);
+    } else {
+      padLeft = padRight;
+    }
+
+    tabsEl.style.setProperty('padding-left',  padLeft  + 'px', 'important');
+    tabsEl.style.setProperty('padding-right', padRight + 'px', 'important');
+  }
+
+  var resizeTimer;
+  window.addEventListener('resize', function () {
+    clearTimeout(resizeTimer);
+    resizeTimer = setTimeout(syncLowerSectionPadding, 60);
+  });
+  window.addEventListener('load', syncLowerSectionPadding);
+  setTimeout(syncLowerSectionPadding, 300);
+
+  /* Rename SkillJar's "Course Overview" h2 to "Curriculum" to match the
+     unregistered page. The h2 text is set by SkillJar — we overwrite it here. */
+  function renameCurriculumHeading() {
+    var section = document.querySelector(
+      'body.sj-page-curriculum .section-container.tabs > section:has(#curriculum-list)'
+    );
+    if (!section) return;
+    var h2 = section.querySelector('.content > h2');
+    if (h2) h2.textContent = 'Curriculum';
+  }
+
+  /* SkillJar renders a.start-button asynchronously — poll until present */
+  var attempts = 0;
+  var poll = setInterval(function () {
+    attempts++;
+    if (document.querySelector('a.start-button')) {
+      clearInterval(poll);
+      injectCatalogButton();
+      fixSaveToggle();
+      showAllTabContent();
+      renameCurriculumHeading();
+      fixCurriculumTruncation();
+    }
+    if (attempts >= 50) clearInterval(poll); /* bail after ~10 s */
+  }, 200);
+}());
+</script>
+<!-- END Enrolled Course Page Styles -->
+
+
 <!-- START Live Training Course Page Styles -->
 <!--
   WHAT THIS DOES:
