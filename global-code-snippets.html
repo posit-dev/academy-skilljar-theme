@@ -2162,17 +2162,11 @@ a.coursebox-container[data-tags~="path-desc"]:after,
     });
   }
 
-  /* ── Inject the vertical timeline line between separator and course cards ──
-     Runs after path-desc fetch so layout is stable. Measures card positions
-     via getBoundingClientRect and injects one absolutely-positioned div.
-     Circles come from the CSS ::before rule on each card. */
-  /* ── Inject per-card timeline status divs ──
-     One .pa-timeline-status div per course card, inserted as an absolute-
-     positioned child of the card (position:relative; overflow:visible).
-     CSS draws the line segment; left:-30px is relative to the card so it
-     always lands at the gap midpoint regardless of viewport width — no
-     getBoundingClientRect or resize handler needed (unlike a single
-     absolutely-positioned line injected at pixel coords). */
+  /* ── Inject timeline status divs (Asana-style siblings, not card children) ──
+     Each .pa-timeline-status sits in col 2 of the 3-column grid, in the same
+     row as its course card. Explicit grid-row on both ensures alignment.
+     CSS ::before draws the line (extending ±row-gap to bridge gaps);
+     CSS ::after draws the circle. No pixel measurements, no resize handler. */
   function runPathTimelineSetup() {
     if (timelineRan) return;
     if (!document.body.classList.contains('sj-page-detail-path') &&
@@ -2182,9 +2176,7 @@ a.coursebox-container[data-tags~="path-desc"]:after,
     var courses = document.getElementById('catalog-courses');
     if (!courses) return;
 
-    /* Remove any old single-line div from a previous approach */
-    var oldLine = courses.querySelector('.pa-timeline-line');
-    if (oldLine) oldLine.remove();
+    courses.querySelectorAll('.pa-timeline-line, .pa-timeline-status').forEach(function (el) { el.remove(); });
 
     var cards = Array.from(courses.querySelectorAll(
       'a.coursebox-container:not([data-tags~="separator"]):not([data-tags~="path-desc"])'
@@ -2192,14 +2184,16 @@ a.coursebox-container[data-tags~="path-desc"]:after,
     if (!cards.length) return;
 
     cards.forEach(function (card, i) {
-      var old = card.querySelector('.pa-timeline-status');
-      if (old) old.remove();
+      /* row 1 = path-desc (or empty); course cards start at row 2 */
+      var row = String(i + 2);
+      card.style.setProperty('grid-row', row, 'important');
 
       var status = document.createElement('div');
       status.className = 'pa-timeline-status' +
         (i === 0                ? ' pa-timeline-status--first' : '') +
         (i === cards.length - 1 ? ' pa-timeline-status--last'  : '');
-      card.insertBefore(status, card.firstChild);
+      status.style.gridRow = row;
+      courses.appendChild(status);
     });
   }
 
@@ -2241,11 +2235,14 @@ a.coursebox-container[data-tags~="path-desc"]:after,
      ══════════════════════════════════════════════ -->
 <style>
 
-/* ── 2-column grid (overrides the 3-column catalog grid on path pages) ── */
+/* ── 3-column grid: [separator 240px] [timeline 40px] [cards 1fr] ──
+   The 40px timeline column sits where the old 60px column-gap was.
+   No column-gap needed — the columns provide the spacing.
+   row-gap stays at 20px; status div lines bridge it via top/bottom extension. */
 body.sj-page-detail-path #catalog-courses {
   display: grid !important;
-  grid-template-columns: 240px 1fr !important;
-  column-gap: 60px !important;
+  grid-template-columns: 240px 40px 1fr !important;
+  column-gap: 0 !important;
   row-gap: 20px !important;
   padding-top: 40px !important;
   padding-bottom: 60px !important;
@@ -2279,9 +2276,9 @@ body.sj-page-detail-path a.coursebox-container[data-tags="separator"] {
 }
 
 
-/* ── Course cards: right column, grid layout (image left | title/desc/tags right) ── */
+/* ── Course cards: col 3 (right), grid layout (image left | title/desc/tags right) ── */
 body.sj-page-detail-path a.coursebox-container:not([data-tags="separator"]):not([data-tags~="path-desc"]) {
-  grid-column: 2 !important;
+  grid-column: 3 !important;
   display: grid !important;
   grid-template-columns: 220px 1fr !important;
   align-items: unset !important;
@@ -2290,49 +2287,53 @@ body.sj-page-detail-path a.coursebox-container:not([data-tags="separator"]):not(
   flex: unset !important;
   min-height: 140px !important;
   border-radius: 12px !important;
-  overflow: visible !important; /* allows ::before circle to bleed into gap; image panel clips itself */
-  position: relative !important;
+  overflow: hidden !important;
 }
 
-/* Timeline circle node — sits in the column gap, vertically centred on the card */
-body.sj-page-detail-path a.coursebox-container:not([data-tags="separator"]):not([data-tags~="path-desc"])::before {
+/* ── Timeline status div: col 2 (the 40px gutter column) ──
+   JS injects one per course card with a matching grid-row. align-self: stretch
+   makes it exactly as tall as its card row. The ::before line extends top/bottom
+   by the row-gap (20px) to bridge gaps — safe because we own these divs so
+   nothing applies overflow:hidden to them. */
+body.sj-page-detail-path .pa-timeline-status {
+  grid-column: 2 !important;
+  align-self: stretch !important;
+  position: relative !important;
+}
+/* Line: default (middle cards) bridges both the gap above and below */
+body.sj-page-detail-path .pa-timeline-status::before {
   content: '' !important;
-  display: block !important;
   position: absolute !important;
-  left: -37px !important; /* centres circle in the 60px gap: -30px centre, -7px for radius */
+  left: 50% !important;
+  width: 1px !important;
+  background: #A2B8CB !important;
+  top: -20px !important;   /* extends up through the row-gap above */
+  bottom: -20px !important; /* extends down through the row-gap below */
+  z-index: 0 !important;
+}
+/* First card: line starts at circle centre — nothing above */
+body.sj-page-detail-path .pa-timeline-status--first::before {
   top: 50% !important;
-  transform: translateY(-50%) !important;
+}
+/* Last card: line ends at circle centre — nothing below */
+body.sj-page-detail-path .pa-timeline-status--last::before {
+  bottom: 50% !important;
+}
+/* Circle: centred in the status div, sits above the line */
+body.sj-page-detail-path .pa-timeline-status::after {
+  content: '' !important;
+  position: absolute !important;
+  left: 50% !important;
+  top: 50% !important;
+  transform: translate(-50%, -50%) !important;
   width: 14px !important;
   height: 14px !important;
   border-radius: 50% !important;
   border: 2px solid #A2B8CB !important;
   background-color: #ffffff !important;
-  box-shadow: 0 0 0 4px #ffffff !important; /* white halo clips the timeline line cleanly */
+  box-shadow: 0 0 0 4px #ffffff !important;
   z-index: 2 !important;
   pointer-events: none !important;
-}
-
-/* ── Timeline line segment (JS-injected .pa-timeline-status) ──
-   One div per card, absolutely positioned inside the card so left:-30px
-   is always relative to the card's left edge = always at gap midpoint.
-   No pixel measurements or resize handler required. */
-body.sj-page-detail-path .pa-timeline-status {
-  position: absolute !important;
-  left: -30px !important;   /* gap midpoint: card left − 37px + 7px radius = −30px */
-  top: 0 !important;
-  bottom: -20px !important; /* 20px = row-gap; bridges to the next card's top edge */
-  width: 1px !important;
-  background: #A2B8CB !important;
-  pointer-events: none !important;
-  z-index: 0 !important;
-}
-/* First card: start line at circle centre, not card top */
-body.sj-page-detail-path .pa-timeline-status--first {
-  top: 50% !important;
-}
-/* Last card: end at card bottom, no extension into padding below */
-body.sj-page-detail-path .pa-timeline-status--last {
-  bottom: 0 !important;
 }
 
 /* ── Course image: left column, spans all rows ── */
@@ -2346,7 +2347,7 @@ body.sj-page-detail-path a.coursebox-container:not([data-tags="separator"]) .cou
   padding: 0 !important;
   margin: 0 !important;
   line-height: 0 !important;
-  border-radius: 12px 0 0 12px !important; /* rounds top-left/bottom-left since card uses overflow:visible */
+  border-radius: 0 !important; /* card overflow:hidden + border-radius:12px handles corners */
   overflow: hidden !important;
   background-color: #D1DBE5 !important;
 }
@@ -2412,10 +2413,6 @@ body.sj-page-detail-path a.coursebox-container:not([data-tags="separator"]) .cle
   body.sj-page-detail-path a.coursebox-container:not([data-tags="separator"]):not([data-tags~="path-desc"]) {
     grid-column: 1 !important;
   }
-  body.sj-page-detail-path a.coursebox-container:not([data-tags="separator"]):not([data-tags~="path-desc"])::before {
-    display: none !important;
-  }
-  body.sj-page-detail-path .pa-timeline-line,
   body.sj-page-detail-path .pa-timeline-status {
     display: none !important;
   }
