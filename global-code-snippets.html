@@ -2183,6 +2183,13 @@ a.coursebox-container[data-tags~="path-desc"]:after,
     ));
     if (!cards.length) return;
 
+    /* Clamp the separator's span to the actual card count so no empty rows
+       are created (row-gap on 50 empty rows = ~900px of whitespace) */
+    var separator = courses.querySelector('a.coursebox-container[data-tags="separator"]');
+    if (separator) {
+      separator.style.setProperty('grid-row', '2 / span ' + cards.length, 'important');
+    }
+
     cards.forEach(function (card, i) {
       /* row 1 = path-desc (or empty); course cards start at row 2 */
       var row = String(i + 2);
@@ -2266,10 +2273,8 @@ body.sj-page-detail-path #catalog-courses a.coursebox-container[data-tags~="path
 /* ── Separator: left column, starts at row 2 so path-desc occupies row 1 ── */
 body.sj-page-detail-path a.coursebox-container[data-tags="separator"] {
   grid-column: 1 !important;
-  grid-row: 2 / span 50 !important; /* starts at row 2; row 1 = path-desc card */
+  grid-row: 2 / span 50 !important; /* span updated to card count by JS */
   align-self: start !important;
-  position: sticky !important;
-  top: 40px !important;
   padding: 0 !important;
   max-width: unset !important;
   width: auto !important;
