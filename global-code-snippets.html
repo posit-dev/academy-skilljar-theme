@@ -2074,6 +2074,8 @@ a.coursebox-container[data-tags~="path-desc"]:after,
 
 <script>
 (function () {
+  var timelineRan = false;
+
   /* ── Inject "Return to Catalog" button on path pages ──
      Mirrors the course page pattern in the course landing page block above. */
   function injectPathCatalogButton() {
@@ -2119,9 +2121,20 @@ a.coursebox-container[data-tags~="path-desc"]:after,
      The card stays visibility:hidden until data-pa-ready is set so the short
      description never flashes before the long description loads.
      SkillJar renders the "Long description html" field in .dp-long-description
-     on the course detail page. */
+     on the course detail page. Calls runPathTimelineSetup() once all fetches
+     complete, since path-desc card height affects course card y-positions. */
   function runPathDescSetup() {
-    document.querySelectorAll('a.coursebox-container[data-tags~="path-desc"]').forEach(function (card) {
+    var cards = Array.from(document.querySelectorAll('a.coursebox-container[data-tags~="path-desc"]'));
+    var remaining = cards.length;
+
+    function onCardDone() {
+      remaining--;
+      if (remaining === 0) setTimeout(runPathTimelineSetup, 50);
+    }
+
+    if (!remaining) { setTimeout(runPathTimelineSetup, 50); return; }
+
+    cards.forEach(function (card) {
       var titleEl = card.querySelector('.coursebox-text');
       if (titleEl) {
         titleEl.textContent = titleEl.textContent.replace(/\[path-desc\]/gi, '').trim();
@@ -2136,12 +2149,60 @@ a.coursebox-container[data-tags~="path-desc"]:after,
             var longDesc = doc.querySelector('.dp-long-description');
             if (longDesc) { descEl.innerHTML = longDesc.innerHTML; }
             card.setAttribute('data-pa-ready', '');
+            onCardDone();
           })
-          .catch(function () { card.setAttribute('data-pa-ready', ''); });
+          .catch(function () {
+            card.setAttribute('data-pa-ready', '');
+            onCardDone();
+          });
       } else {
         card.setAttribute('data-pa-ready', '');
+        onCardDone();
       }
     });
+  }
+
+  /* ── Inject the vertical timeline line between separator and course cards ──
+     Runs after path-desc fetch so layout is stable. Measures card positions
+     via getBoundingClientRect and injects one absolutely-positioned div.
+     Circles come from the CSS ::before rule on each card. */
+  function runPathTimelineSetup() {
+    if (timelineRan) return;
+    if (!document.body.classList.contains('sj-page-detail-path') &&
+        !document.body.classList.contains('sj-page-detail-bundle')) return;
+    timelineRan = true;
+
+    var courses = document.getElementById('catalog-courses');
+    if (!courses) return;
+
+    var cards = Array.from(courses.querySelectorAll(
+      'a.coursebox-container:not([data-tags~="separator"]):not([data-tags~="path-desc"])'
+    ));
+    if (!cards.length) return;
+
+    var coursesRect = courses.getBoundingClientRect();
+    var firstRect   = cards[0].getBoundingClientRect();
+    var lastRect    = cards[cards.length - 1].getBoundingClientRect();
+
+    /* x-centre of line = same as CSS circle centre: card left − 30px
+       (circle ::before is at left:−37px + radius 7px = −30px from card edge) */
+    var lineX   = Math.round(firstRect.left - coursesRect.left - 30);
+    var lineTop = Math.round(firstRect.top  - coursesRect.top  + firstRect.height  / 2);
+    var lineEnd = Math.round(lastRect.top   - coursesRect.top  + lastRect.height   / 2);
+    if (lineEnd <= lineTop) return; /* fewer than 2 cards, line not needed */
+
+    var line = document.createElement('div');
+    line.className = 'pa-timeline-line';
+    line.style.cssText =
+      'position:absolute;' +
+      'left:'   + lineX               + 'px;' +
+      'top:'    + lineTop             + 'px;' +
+      'height:' + (lineEnd - lineTop) + 'px;' +
+      'width:1px;' +
+      'background:#A2B8CB;' +
+      'pointer-events:none;' +
+      'z-index:1;';
+    courses.appendChild(line);
   }
 
   /* Poll until path-desc cards are in the DOM */
@@ -2152,6 +2213,20 @@ a.coursebox-container[data-tags~="path-desc"]:after,
     }
   }, 200);
   setTimeout(function () { clearInterval(pathDescPoll); }, 15000);
+
+  /* Fallback: paths without a path-desc card still need the timeline.
+     Fires once the separator and at least one course card are in the DOM. */
+  var timelineFallbackPoll = setInterval(function () {
+    if (timelineRan) { clearInterval(timelineFallbackPoll); return; }
+    var hasSep     = document.querySelector('#catalog-courses a.coursebox-container[data-tags="separator"]');
+    var hasCourses = document.querySelector('#catalog-courses a.coursebox-container:not([data-tags="separator"]):not([data-tags~="path-desc"])');
+    var hasPathDesc = document.querySelector('a.coursebox-container[data-tags~="path-desc"]');
+    if (hasSep && hasCourses && !hasPathDesc) {
+      clearInterval(timelineFallbackPoll);
+      setTimeout(runPathTimelineSetup, 200);
+    }
+  }, 200);
+  setTimeout(function () { clearInterval(timelineFallbackPoll); }, 15000);
 }());
 </script>
 
@@ -2205,20 +2280,6 @@ body.sj-page-detail-path a.coursebox-container[data-tags="separator"] {
   width: auto !important;
 }
 
-/* Timeline vertical line through the column gap.
-   The base separator rule hides ::after; the body-scoped selector wins
-   due to higher specificity. */
-body.sj-page-detail-path a.coursebox-container[data-tags="separator"]::after {
-  content: '' !important;
-  display: block !important;
-  position: absolute !important;
-  left: calc(100% + 30px) !important; /* 30px into the 60px gap = midpoint */
-  top: 8px !important;
-  bottom: -20px !important; /* extend slightly past the card bottom */
-  width: 1px !important;
-  background-color: #D1DBE5 !important;
-  pointer-events: none !important;
-}
 
 /* ── Course cards: right column, grid layout (image left | title/desc/tags right) ── */
 body.sj-page-detail-path a.coursebox-container:not([data-tags="separator"]):not([data-tags~="path-desc"]) {
@@ -2231,7 +2292,7 @@ body.sj-page-detail-path a.coursebox-container:not([data-tags="separator"]):not(
   flex: unset !important;
   min-height: 140px !important;
   border-radius: 12px !important;
-  overflow: hidden !important;
+  overflow: visible !important; /* allows ::before circle to bleed into gap; image panel clips itself */
   position: relative !important;
 }
 
@@ -2264,7 +2325,7 @@ body.sj-page-detail-path a.coursebox-container:not([data-tags="separator"]) .cou
   padding: 0 !important;
   margin: 0 !important;
   line-height: 0 !important;
-  border-radius: 0 !important;
+  border-radius: 12px 0 0 12px !important; /* rounds top-left/bottom-left since card uses overflow:visible */
   overflow: hidden !important;
   background-color: #D1DBE5 !important;
 }
@@ -2331,6 +2392,9 @@ body.sj-page-detail-path a.coursebox-container:not([data-tags="separator"]) .cle
     grid-column: 1 !important;
   }
   body.sj-page-detail-path a.coursebox-container:not([data-tags="separator"]):not([data-tags~="path-desc"])::before {
+    display: none !important;
+  }
+  body.sj-page-detail-path .pa-timeline-line {
     display: none !important;
   }
   body.sj-page-detail-path a.coursebox-container:not([data-tags="separator"]) {
