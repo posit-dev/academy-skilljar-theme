@@ -477,6 +477,11 @@ a.coursebox-container[data-tags~="role-card"] {
 a.coursebox-container[data-tags~="role-card"]::before { display: none !important; }
 a.coursebox-container[data-tags~="role-card"]::after  { display: none !important; }
 
+/* Per-role background overrides (set via data-pa-role by JS) */
+a.coursebox-container[data-pa-role="it-admin"] {
+  background: #94BDBF !important;
+}
+
 /* Hover */
 a.coursebox-container[data-tags~="role-card"]:hover {
   box-shadow: 0 6px 24px rgba(61,111,116,0.40) !important;
@@ -583,6 +588,8 @@ a.coursebox-container[data-tags~="role-card"] .sj-ribbon-wrapper {
       var titleEl = card.querySelector('.coursebox-text');
       if (!titleEl) return;
       var key = titleEl.textContent.trim().toLowerCase();
+      /* Stamp a slug attribute so per-role CSS overrides can target individual cards */
+      card.setAttribute('data-pa-role', key.replace(/\s+/g, '-'));
       if (rolePathMap[key]) {
         card.href = rolePathMap[key];
       }
