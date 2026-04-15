@@ -2166,6 +2166,13 @@ a.coursebox-container[data-tags~="path-desc"]:after,
      Runs after path-desc fetch so layout is stable. Measures card positions
      via getBoundingClientRect and injects one absolutely-positioned div.
      Circles come from the CSS ::before rule on each card. */
+  /* ── Inject per-card timeline status divs ──
+     One .pa-timeline-status div per course card, inserted as an absolute-
+     positioned child of the card (position:relative; overflow:visible).
+     CSS draws the line segment; left:-30px is relative to the card so it
+     always lands at the gap midpoint regardless of viewport width — no
+     getBoundingClientRect or resize handler needed (unlike a single
+     absolutely-positioned line injected at pixel coords). */
   function runPathTimelineSetup() {
     if (timelineRan) return;
     if (!document.body.classList.contains('sj-page-detail-path') &&
@@ -2175,53 +2182,25 @@ a.coursebox-container[data-tags~="path-desc"]:after,
     var courses = document.getElementById('catalog-courses');
     if (!courses) return;
 
-    /* Remove any previously injected line (e.g. after a resize re-run) */
-    var old = courses.querySelector('.pa-timeline-line');
-    if (old) old.remove();
+    /* Remove any old single-line div from a previous approach */
+    var oldLine = courses.querySelector('.pa-timeline-line');
+    if (oldLine) oldLine.remove();
 
     var cards = Array.from(courses.querySelectorAll(
       'a.coursebox-container:not([data-tags~="separator"]):not([data-tags~="path-desc"])'
     ));
     if (!cards.length) return;
 
-    var coursesRect = courses.getBoundingClientRect();
-    var firstRect   = cards[0].getBoundingClientRect();
-    var lastRect    = cards[cards.length - 1].getBoundingClientRect();
+    cards.forEach(function (card, i) {
+      var old = card.querySelector('.pa-timeline-status');
+      if (old) old.remove();
 
-    /* x-centre = card left − 30px (circle ::before: left:−37px + radius 7px)
-       Extend line 7px (one radius) past each end circle centre so the line
-       visually passes through the full circle rather than stopping at its centre. */
-    var lineX   = Math.round(firstRect.left - coursesRect.left - 30);
-    var lineTop = Math.round(firstRect.top  - coursesRect.top  + firstRect.height / 2) - 7;
-    var lineEnd = Math.round(lastRect.top   - coursesRect.top  + lastRect.height  / 2) + 7;
-    if (lineEnd <= lineTop) return;
-
-    var line = document.createElement('div');
-    line.className = 'pa-timeline-line';
-    line.style.cssText =
-      'position:absolute;' +
-      'left:'   + lineX               + 'px;' +
-      'top:'    + lineTop             + 'px;' +
-      'height:' + (lineEnd - lineTop) + 'px;' +
-      'width:1px;' +
-      'background:#A2B8CB;' +
-      'pointer-events:none;' +
-      'z-index:1;';
-    courses.appendChild(line);
-
-    /* Re-measure and redraw on viewport resize — padding-left uses 5vw so the
-       x position drifts if we keep stale pixel values after a resize. */
-    if (!courses._paTimelineResizeSet) {
-      courses._paTimelineResizeSet = true;
-      var resizeTimer;
-      window.addEventListener('resize', function () {
-        clearTimeout(resizeTimer);
-        resizeTimer = setTimeout(function () {
-          timelineRan = false;
-          runPathTimelineSetup();
-        }, 150);
-      });
-    }
+      var status = document.createElement('div');
+      status.className = 'pa-timeline-status' +
+        (i === 0                ? ' pa-timeline-status--first' : '') +
+        (i === cards.length - 1 ? ' pa-timeline-status--last'  : '');
+      card.insertBefore(status, card.firstChild);
+    });
   }
 
   /* Poll until path-desc cards are in the DOM */
@@ -2333,6 +2312,29 @@ body.sj-page-detail-path a.coursebox-container:not([data-tags="separator"]):not(
   pointer-events: none !important;
 }
 
+/* ── Timeline line segment (JS-injected .pa-timeline-status) ──
+   One div per card, absolutely positioned inside the card so left:-30px
+   is always relative to the card's left edge = always at gap midpoint.
+   No pixel measurements or resize handler required. */
+body.sj-page-detail-path .pa-timeline-status {
+  position: absolute !important;
+  left: -30px !important;   /* gap midpoint: card left − 37px + 7px radius = −30px */
+  top: 0 !important;
+  bottom: -20px !important; /* 20px = row-gap; bridges to the next card's top edge */
+  width: 1px !important;
+  background: #A2B8CB !important;
+  pointer-events: none !important;
+  z-index: 0 !important;
+}
+/* First card: start line at circle centre, not card top */
+body.sj-page-detail-path .pa-timeline-status--first {
+  top: 50% !important;
+}
+/* Last card: end at card bottom, no extension into padding below */
+body.sj-page-detail-path .pa-timeline-status--last {
+  bottom: 0 !important;
+}
+
 /* ── Course image: left column, spans all rows ── */
 body.sj-page-detail-path a.coursebox-container:not([data-tags="separator"]) .coursebox-image {
   grid-column: 1 !important;
@@ -2413,7 +2415,8 @@ body.sj-page-detail-path a.coursebox-container:not([data-tags="separator"]) .cle
   body.sj-page-detail-path a.coursebox-container:not([data-tags="separator"]):not([data-tags~="path-desc"])::before {
     display: none !important;
   }
-  body.sj-page-detail-path .pa-timeline-line {
+  body.sj-page-detail-path .pa-timeline-line,
+  body.sj-page-detail-path .pa-timeline-status {
     display: none !important;
   }
   body.sj-page-detail-path a.coursebox-container:not([data-tags="separator"]) {
