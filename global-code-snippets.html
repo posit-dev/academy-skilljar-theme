@@ -2753,9 +2753,10 @@ body:is(.sj-page-detail-path, .sj-page-path):has(#main-container[data-tags~="ROL
     });
   }
 
-  /* Poll until real course cards are in the grid, then inject the separator
-     and path-desc UI elements and run the timeline. Waits for actual courses
-     (not the injected .pa-path-ui-card elements) so injection order is safe. */
+  /* Poll until #catalog-courses is in the DOM, then inject the separator
+     and path-desc UI elements and run the timeline. Fires even when the path
+     has no courses yet (e.g. a newly created path) — runPathTimelineSetup
+     returns early when there are no real cards, so that case is safe. */
   var pathSetupPoll = setInterval(function () {
     if (!document.body.classList.contains('sj-page-detail-path') &&
         !document.body.classList.contains('sj-page-path') &&
@@ -2763,11 +2764,7 @@ body:is(.sj-page-detail-path, .sj-page-path):has(#main-container[data-tags~="ROL
       clearInterval(pathSetupPoll);
       return;
     }
-    var courses = document.getElementById('catalog-courses');
-    var hasRealCard = courses && courses.querySelector(
-      'a.coursebox-container:not([data-tags="separator"]):not([data-tags~="path-desc"])'
-    );
-    if (hasRealCard) {
+    if (document.getElementById('catalog-courses')) {
       clearInterval(pathSetupPoll);
       runPathInjection();
     }
