@@ -1733,7 +1733,7 @@ body.sj-page-detail-course:has(#main-container[data-tags~="live-training"]) .sj-
 <!--
   WHAT THIS DOES:
   Modernises learning path landing pages (e.g. Data Scientist, Data Engineer)
-  to match the Posit brand. Scoped to body.sj-page-detail-path.
+  to match the Posit brand. Scoped to body:is(.sj-page-detail-path, .sj-page-path).
 
   ⚠️  VERIFY BODY CLASS: Open a live path page, inspect <body>, and confirm
   the class is "sj-page-detail-path". Update all selectors below if different.
@@ -1765,8 +1765,8 @@ body.sj-page-detail-course:has(#main-container[data-tags~="live-training"]) .sj-
    Individual path images are layered on top via
    the per-path blocks further below.
    ═══════════════════════════════════════════════ */
-body.sj-page-detail-path .top-row-grey,
-body.sj-page-detail-path .top-row-white-v2 {
+body:is(.sj-page-detail-path, .sj-page-path) .top-row-grey,
+body:is(.sj-page-detail-path, .sj-page-path) .top-row-white-v2 {
   background-color: #17212B !important;
   background-size: cover !important;
   background-position: center !important;
@@ -1774,13 +1774,13 @@ body.sj-page-detail-path .top-row-white-v2 {
   box-shadow: none !important;
 }
 /* Remove the grey divider line (added by course-page block) */
-body.sj-page-detail-path .top-row-grey::after,
-body.sj-page-detail-path .top-row-white-v2::after {
+body:is(.sj-page-detail-path, .sj-page-path) .top-row-grey::after,
+body:is(.sj-page-detail-path, .sj-page-path) .top-row-white-v2::after {
   display: none !important;
 }
 
 /* Hero flex row */
-body.sj-page-detail-path .dp-row-flex-v2 {
+body:is(.sj-page-detail-path, .sj-page-path) .dp-row-flex-v2 {
   display: flex !important;
   align-items: center !important;
   flex-wrap: nowrap !important;
@@ -1791,7 +1791,7 @@ body.sj-page-detail-path .dp-row-flex-v2 {
 }
 
 /* ── Text column — left 52 % (mirrors home-page hero overlay width) ── */
-body.sj-page-detail-path .dp-summary-wrapper {
+body:is(.sj-page-detail-path, .sj-page-path) .dp-summary-wrapper {
   order: 1 !important;
   flex: 0 0 52% !important;
   min-width: 0 !important;
@@ -1810,12 +1810,12 @@ body.sj-page-detail-path .dp-summary-wrapper {
 }
 
 /* ── Image column — hidden; person is baked into background PNG ── */
-body.sj-page-detail-path .dp-promo-image-wrapper {
+body:is(.sj-page-detail-path, .sj-page-path) .dp-promo-image-wrapper {
   display: none !important;
 }
 
 /* ── Path title ── */
-body.sj-page-detail-path h1.break-word {
+body:is(.sj-page-detail-path, .sj-page-path) h1.break-word {
   font-family: 'Open Sans', sans-serif !important;
   font-size: clamp(32px, 5vw, 64px) !important;
   font-weight: 700 !important;
@@ -1825,7 +1825,7 @@ body.sj-page-detail-path h1.break-word {
 }
 
 /* ── Path description ── */
-body.sj-page-detail-path .sj-course-info-wrapper > h2 {
+body:is(.sj-page-detail-path, .sj-page-path) .sj-course-info-wrapper > h2 {
   font-family: 'Open Sans', sans-serif !important;
   font-size: clamp(13px, 1.2vw, 16px) !important;
   font-weight: 400 !important;
@@ -1835,23 +1835,23 @@ body.sj-page-detail-path .sj-course-info-wrapper > h2 {
 }
 
 /* ── Button row ── */
-body.sj-page-detail-path .sj-save-toggle-row-alignment {
+body:is(.sj-page-detail-path, .sj-page-path) .sj-save-toggle-row-alignment {
   display: flex !important;
   align-items: center !important;
   justify-content: flex-start !important;
   gap: 12px !important;
   flex-wrap: wrap !important;
 }
-body.sj-page-detail-path {
+body:is(.sj-page-detail-path, .sj-page-path) {
   --button-color: #ffffff;
 }
-body.sj-page-detail-path .sj-save-toggle-row-alignment > sjwc-context-provider {
+body:is(.sj-page-detail-path, .sj-page-path) .sj-save-toggle-row-alignment > sjwc-context-provider {
   display: none !important;
 }
 
 /* Primary CTA (Get Started / Register) — white filled */
-body.sj-page-detail-path a#purchase-button,
-body.sj-page-detail-path a.purchase-button {
+body:is(.sj-page-detail-path, .sj-page-path) a#purchase-button,
+body:is(.sj-page-detail-path, .sj-page-path) a.purchase-button {
   font-family: 'Open Sans', sans-serif !important;
   font-size: 13px !important;
   font-weight: 700 !important;
@@ -1873,8 +1873,8 @@ body.sj-page-detail-path a.purchase-button {
   cursor: pointer !important;
   box-shadow: none !important;
 }
-body.sj-page-detail-path a#purchase-button:hover,
-body.sj-page-detail-path a.purchase-button:hover {
+body:is(.sj-page-detail-path, .sj-page-path) a#purchase-button:hover,
+body:is(.sj-page-detail-path, .sj-page-path) a.purchase-button:hover {
   background-color: #D1DBE5 !important;
   border-color: #D1DBE5 !important;
   color: #17212B !important;
@@ -1882,7 +1882,7 @@ body.sj-page-detail-path a.purchase-button:hover {
 }
 
 /* "Return to Catalog" — injected by JS, white outline */
-body.sj-page-detail-path a.pa-catalog-btn {
+body:is(.sj-page-detail-path, .sj-page-path) a.pa-catalog-btn {
   font-family: 'Open Sans', sans-serif !important;
   font-size: 13px !important;
   font-weight: 700 !important;
@@ -1902,27 +1902,27 @@ body.sj-page-detail-path a.pa-catalog-btn {
   transition: background-color 0.15s ease, border-color 0.15s ease !important;
   cursor: pointer !important;
 }
-body.sj-page-detail-path a.pa-catalog-btn:hover {
+body:is(.sj-page-detail-path, .sj-page-path) a.pa-catalog-btn:hover {
   background-color: rgba(255,255,255,0.15) !important;
   border-color: rgba(255,255,255,1) !important;
 }
 
 /* Save/bookmark toggle — light on dark */
-body.sj-page-detail-path .sj-save-toggle-block__button {
+body:is(.sj-page-detail-path, .sj-page-path) .sj-save-toggle-block__button {
   color: rgba(255,255,255,0.85) !important;
   border-color: rgba(255,255,255,0.5) !important;
 }
-body.sj-page-detail-path .sj-save-toggle-block__icon i {
+body:is(.sj-page-detail-path, .sj-page-path) .sj-save-toggle-block__icon i {
   color: rgba(255,255,255,0.85) !important;
 }
 
 /* Hide social share — off-brand */
-body.sj-page-detail-path .social-media-wrapper {
+body:is(.sj-page-detail-path, .sj-page-path) .social-media-wrapper {
   display: none !important;
 }
 
 /* ── Hide the lower about/curriculum section (paths show course list instead) ── */
-body.sj-page-detail-path #dp-details {
+body:is(.sj-page-detail-path, .sj-page-path) #dp-details {
   display: none !important;
 }
 
@@ -1930,22 +1930,22 @@ body.sj-page-detail-path #dp-details {
    MOBILE — stack text below image, dark overlay
    ═══════════════════════════════════════════════ */
 @media only screen and (max-width: 800px) {
-  body.sj-page-detail-path .top-row-grey,
-  body.sj-page-detail-path .top-row-white-v2 {
+  body:is(.sj-page-detail-path, .sj-page-path) .top-row-grey,
+  body:is(.sj-page-detail-path, .sj-page-path) .top-row-white-v2 {
     background-position: center top !important;
   }
-  body.sj-page-detail-path .dp-row-flex-v2 {
+  body:is(.sj-page-detail-path, .sj-page-path) .dp-row-flex-v2 {
     min-height: 320px !important;
     object-fit: cover !important;
     object-position: center top !important;
   }
-  body.sj-page-detail-path .dp-summary-wrapper {
+  body:is(.sj-page-detail-path, .sj-page-path) .dp-summary-wrapper {
     flex: 0 0 100% !important;
     width: 100% !important;
     padding: 48px 24px 52px !important;
     background: rgba(23,33,43,0.78) !important;
   }
-  body.sj-page-detail-path h1.break-word {
+  body:is(.sj-page-detail-path, .sj-page-path) h1.break-word {
     font-size: clamp(28px, 7vw, 42px) !important;
   }
 }
@@ -1963,14 +1963,14 @@ body.sj-page-detail-path #dp-details {
    renders a custom hero and hides SkillJar's native hero via display:none.
    The background-image below is a fallback and serves as a template only.
    For paths WITHOUT a dedicated HTML file, this block is the primary approach. */
-body.sj-page-detail-path:has(#main-container[data-tags~="data-scientist"]) .top-row-grey,
-body.sj-page-detail-path:has(#main-container[data-tags~="data-scientist"]) .top-row-white-v2 {
+body:is(.sj-page-detail-path, .sj-page-path):has(#main-container[data-tags~="data-scientist"]) .top-row-grey,
+body:is(.sj-page-detail-path, .sj-page-path):has(#main-container[data-tags~="data-scientist"]) .top-row-white-v2 {
   background-image: url('https://everpath-course-content.s3-accelerate.amazonaws.com/instructor%2Feww6wlnql2k9y5hqbfc2ycpct%2Fpublic%2F1776218490%2Facad2.0-role-datasci-hero-x2.1776218489705.png') !important;
 }
 
 /* ── Template for additional paths ──────────────
-body.sj-page-detail-path:has(#main-container[data-tags~="ROLE-TAG"]) .top-row-grey,
-body.sj-page-detail-path:has(#main-container[data-tags~="ROLE-TAG"]) .top-row-white-v2 {
+body:is(.sj-page-detail-path, .sj-page-path):has(#main-container[data-tags~="ROLE-TAG"]) .top-row-grey,
+body:is(.sj-page-detail-path, .sj-page-path):has(#main-container[data-tags~="ROLE-TAG"]) .top-row-white-v2 {
   background-image: url('HERO_IMAGE_URL') !important;
 }
 ─────────────────────────────────────────────── */
@@ -1983,12 +1983,12 @@ body.sj-page-detail-path:has(#main-container[data-tags~="ROLE-TAG"]) .top-row-wh
      ══════════════════════════════════════════════ -->
 <style>
 /* Hide until JS strips [path-desc] and sets data-pa-ready */
-a.coursebox-container[data-tags~="path-desc"]:not([data-pa-ready]) {
+.pa-path-ui-card[data-tags~="path-desc"]:not([data-pa-ready]) {
   visibility: hidden !important;
 }
 
 /* ── Card container — full-width, two-column grid, no card chrome ── */
-a.coursebox-container[data-tags~="path-desc"] {
+.pa-path-ui-card[data-tags~="path-desc"] {
   grid-column: 1 / -1 !important;
   display: grid !important;
   grid-template-columns: 35% 1fr !important;
@@ -2005,13 +2005,13 @@ a.coursebox-container[data-tags~="path-desc"] {
   pointer-events: none !important;
   text-decoration: none !important;
 }
-a.coursebox-container[data-tags~="path-desc"]:hover {
+.pa-path-ui-card[data-tags~="path-desc"]:hover {
   box-shadow: none !important;
   transform: none !important;
 }
 
 /* ── Left column: title with blue accent rule ── */
-a.coursebox-container[data-tags~="path-desc"] .coursebox-text {
+.pa-path-ui-card[data-tags~="path-desc"] .coursebox-text {
   font-family: 'Open Sans', sans-serif !important;
   font-size: clamp(22px, 2.5vw, 34px) !important;
   font-weight: 700 !important;
@@ -2023,7 +2023,7 @@ a.coursebox-container[data-tags~="path-desc"] .coursebox-text {
   grid-column: 1 !important;
   grid-row: 1 !important;
 }
-a.coursebox-container[data-tags~="path-desc"] .coursebox-text::after {
+.pa-path-ui-card[data-tags~="path-desc"] .coursebox-text::after {
   content: '' !important;
   display: block !important;
   width: 80px !important;
@@ -2033,7 +2033,7 @@ a.coursebox-container[data-tags~="path-desc"] .coursebox-text::after {
 }
 
 /* ── Right column: description / objectives ── */
-a.coursebox-container[data-tags~="path-desc"] .coursebox-text-description {
+.pa-path-ui-card[data-tags~="path-desc"] .coursebox-text-description {
   font-family: 'Open Sans', sans-serif !important;
   font-size: 15px !important;
   font-weight: 400 !important;
@@ -2047,25 +2047,25 @@ a.coursebox-container[data-tags~="path-desc"] .coursebox-text-description {
 }
 
 /* Hide image, price, CTA, tags, ribbon, and search results */
-a.coursebox-container[data-tags~="path-desc"] .storefront-price,
-a.coursebox-container[data-tags~="path-desc"] .coursebox-image,
-a.coursebox-container[data-tags~="path-desc"] .no-coursebox-image-v2,
-a.coursebox-container[data-tags~="path-desc"] .coursebox-callout,
-a.coursebox-container[data-tags~="path-desc"] .coursebox-tags,
-a.coursebox-container[data-tags~="path-desc"] .sj-ribbon-wrapper,
-a.coursebox-container[data-tags~="path-desc"]:after,
-.search a.coursebox-container[data-tags~="path-desc"] {
+.pa-path-ui-card[data-tags~="path-desc"] .storefront-price,
+.pa-path-ui-card[data-tags~="path-desc"] .coursebox-image,
+.pa-path-ui-card[data-tags~="path-desc"] .no-coursebox-image-v2,
+.pa-path-ui-card[data-tags~="path-desc"] .coursebox-callout,
+.pa-path-ui-card[data-tags~="path-desc"] .coursebox-tags,
+.pa-path-ui-card[data-tags~="path-desc"] .sj-ribbon-wrapper,
+.pa-path-ui-card[data-tags~="path-desc"]:after,
+.search .pa-path-ui-card[data-tags~="path-desc"] {
   display: none !important;
 }
 
 /* ── Mobile: single column stack ── */
 @media only screen and (max-width: 640px) {
-  a.coursebox-container[data-tags~="path-desc"] {
+  .pa-path-ui-card[data-tags~="path-desc"] {
     grid-template-columns: 1fr !important;
     padding: 32px 0 !important;
     gap: 24px 0 !important;
   }
-  a.coursebox-container[data-tags~="path-desc"] .coursebox-text-description {
+  .pa-path-ui-card[data-tags~="path-desc"] .coursebox-text-description {
     grid-column: 1 !important;
     grid-row: 2 !important;
   }
@@ -2079,7 +2079,8 @@ a.coursebox-container[data-tags~="path-desc"]:after,
   /* ── Inject "Return to Catalog" button on path pages ──
      Mirrors the course page pattern in the course landing page block above. */
   function injectPathCatalogButton() {
-    if (!document.body.classList.contains('sj-page-detail-path')) return;
+    if (!document.body.classList.contains('sj-page-detail-path') &&
+        !document.body.classList.contains('sj-page-path')) return;
     if (document.querySelector('a.pa-catalog-btn')) return;
 
     var purchaseBtn = document.querySelector('a#purchase-button, a.purchase-button');
@@ -2094,7 +2095,8 @@ a.coursebox-container[data-tags~="path-desc"]:after,
 
   /* ── Move save toggle out of shadow DOM on path pages ── */
   function fixPathSaveToggle() {
-    if (!document.body.classList.contains('sj-page-detail-path')) return;
+    if (!document.body.classList.contains('sj-page-detail-path') &&
+        !document.body.classList.contains('sj-page-path')) return;
 
     var row = document.querySelector('.sj-save-toggle-row-alignment');
     if (!row) return;
@@ -2117,49 +2119,54 @@ a.coursebox-container[data-tags~="path-desc"]:after,
     if (pathAttempts >= 50) clearInterval(pathPoll); /* bail after ~10 s */
   }, 200);
 
-  /* ── Strip [path-desc] marker, fetch long description, then reveal card ──
-     The card stays visibility:hidden until data-pa-ready is set so the short
-     description never flashes before the long description loads.
-     SkillJar renders the "Long description html" field in .dp-long-description
-     on the course detail page. Calls runPathTimelineSetup() once all fetches
-     complete, since path-desc card height affects course card y-positions. */
-  function runPathDescSetup() {
-    var cards = Array.from(document.querySelectorAll('a.coursebox-container[data-tags~="path-desc"]'));
-    var remaining = cards.length;
+  /* ── Inject path-desc and separator UI cards from per-path config ──
+     Called once real course cards are in the DOM. Reads window.paPathConfig
+     (set by the per-path HTML block, e.g. data-scientist-path.html) for the
+     description title and HTML content. After injection, runs timeline setup.
+     These are plain <div> elements — not SkillJar courses — so they never
+     appear in SkillJar's path curriculum or affect completion tracking. */
+  function runPathInjection() {
+    if (!document.body.classList.contains('sj-page-detail-path') &&
+        !document.body.classList.contains('sj-page-path') &&
+        !document.body.classList.contains('sj-page-detail-bundle')) return;
 
-    function onCardDone() {
-      remaining--;
-      if (remaining === 0) setTimeout(runPathTimelineSetup, 50);
+    var courses = document.getElementById('catalog-courses');
+    if (!courses) return;
+
+    /* Avoid double-injection on re-runs */
+    if (courses.querySelector('.pa-path-ui-card')) return;
+
+    /* 1. path-desc card — content from window.paPathConfig set in per-path HTML */
+    var cfg = window.paPathConfig;
+    if (cfg && cfg.pathDesc) {
+      var descCard = document.createElement('div');
+      descCard.className = 'pa-path-ui-card';
+      descCard.setAttribute('data-tags', 'path-desc');
+      descCard.setAttribute('data-pa-ready', '');
+      var titleDiv = document.createElement('div');
+      titleDiv.className = 'coursebox-text';
+      titleDiv.textContent = cfg.pathDesc.title || 'Build real skills for your role';
+      var descDiv = document.createElement('div');
+      descDiv.className = 'coursebox-text-description';
+      descDiv.innerHTML = cfg.pathDesc.html || '';
+      descCard.appendChild(titleDiv);
+      descCard.appendChild(descDiv);
+      courses.appendChild(descCard);
     }
 
-    if (!remaining) { setTimeout(runPathTimelineSetup, 50); return; }
+    /* 2. Separator card — renders "Learning Path" heading in the left column */
+    var sepCard = document.createElement('div');
+    sepCard.className = 'pa-path-ui-card';
+    sepCard.setAttribute('data-tags', 'separator');
+    sepCard.setAttribute('data-pa-ready', '');
+    var sepTitle = document.createElement('div');
+    sepTitle.className = 'coursebox-text';
+    sepTitle.textContent = 'Learning Path';
+    sepCard.appendChild(sepTitle);
+    courses.appendChild(sepCard);
 
-    cards.forEach(function (card) {
-      var titleEl = card.querySelector('.coursebox-text');
-      if (titleEl) {
-        titleEl.textContent = titleEl.textContent.replace(/\[path-desc\]/gi, '').trim();
-      }
-      var descEl = card.querySelector('.coursebox-text-description');
-      var href = card.getAttribute('href');
-      if (descEl && href) {
-        fetch(href)
-          .then(function (r) { return r.text(); })
-          .then(function (html) {
-            var doc = new DOMParser().parseFromString(html, 'text/html');
-            var longDesc = doc.querySelector('.dp-long-description');
-            if (longDesc) { descEl.innerHTML = longDesc.innerHTML; }
-            card.setAttribute('data-pa-ready', '');
-            onCardDone();
-          })
-          .catch(function () {
-            card.setAttribute('data-pa-ready', '');
-            onCardDone();
-          });
-      } else {
-        card.setAttribute('data-pa-ready', '');
-        onCardDone();
-      }
-    });
+    /* 3. Grid-row assignments for course cards + separator */
+    setTimeout(runPathTimelineSetup, 50);
   }
 
   /* ── Inject timeline status divs (Asana-style siblings, not card children) ──
@@ -2170,6 +2177,7 @@ a.coursebox-container[data-tags~="path-desc"]:after,
   function runPathTimelineSetup() {
     if (timelineRan) return;
     if (!document.body.classList.contains('sj-page-detail-path') &&
+        !document.body.classList.contains('sj-page-path') &&
         !document.body.classList.contains('sj-page-detail-bundle')) return;
     timelineRan = true;
 
@@ -2185,7 +2193,7 @@ a.coursebox-container[data-tags~="path-desc"]:after,
 
     /* Clamp the separator's span to the actual card count so no empty rows
        are created (row-gap on 50 empty rows = ~900px of whitespace) */
-    var separator = courses.querySelector('a.coursebox-container[data-tags="separator"]');
+    var separator = courses.querySelector('.pa-path-ui-card[data-tags="separator"]');
     if (separator) {
       separator.style.setProperty('grid-row', '2 / span ' + cards.length); /* no !important */
     }
@@ -2204,28 +2212,26 @@ a.coursebox-container[data-tags~="path-desc"]:after,
     });
   }
 
-  /* Poll until path-desc cards are in the DOM */
-  var pathDescPoll = setInterval(function () {
-    if (document.querySelector('a.coursebox-container[data-tags~="path-desc"]')) {
-      clearInterval(pathDescPoll);
-      runPathDescSetup();
+  /* Poll until real course cards are in the grid, then inject the separator
+     and path-desc UI elements and run the timeline. Waits for actual courses
+     (not the injected .pa-path-ui-card elements) so injection order is safe. */
+  var pathSetupPoll = setInterval(function () {
+    if (!document.body.classList.contains('sj-page-detail-path') &&
+        !document.body.classList.contains('sj-page-path') &&
+        !document.body.classList.contains('sj-page-detail-bundle')) {
+      clearInterval(pathSetupPoll);
+      return;
+    }
+    var courses = document.getElementById('catalog-courses');
+    var hasRealCard = courses && courses.querySelector(
+      'a.coursebox-container:not([data-tags="separator"]):not([data-tags~="path-desc"])'
+    );
+    if (hasRealCard) {
+      clearInterval(pathSetupPoll);
+      runPathInjection();
     }
   }, 200);
-  setTimeout(function () { clearInterval(pathDescPoll); }, 15000);
-
-  /* Fallback: paths without a path-desc card still need the timeline.
-     Fires once the separator and at least one course card are in the DOM. */
-  var timelineFallbackPoll = setInterval(function () {
-    if (timelineRan) { clearInterval(timelineFallbackPoll); return; }
-    var hasSep     = document.querySelector('#catalog-courses a.coursebox-container[data-tags="separator"]');
-    var hasCourses = document.querySelector('#catalog-courses a.coursebox-container:not([data-tags="separator"]):not([data-tags~="path-desc"])');
-    var hasPathDesc = document.querySelector('a.coursebox-container[data-tags~="path-desc"]');
-    if (hasSep && hasCourses && !hasPathDesc) {
-      clearInterval(timelineFallbackPoll);
-      setTimeout(runPathTimelineSetup, 200);
-    }
-  }, 200);
-  setTimeout(function () { clearInterval(timelineFallbackPoll); }, 15000);
+  setTimeout(function () { clearInterval(pathSetupPoll); }, 15000);
 }());
 </script>
 
@@ -2236,9 +2242,11 @@ a.coursebox-container[data-tags~="path-desc"]:after,
      right column as full-width horizontal items (image left, text right).
 
      HOW TO USE:
-     Add a dummy course (tag: "separator", title: "[separator] Learning Path")
-     as the FIRST item in the path's course list in SkillJar. All
-     non-separator courses automatically go to the right column.
+     The separator and path-desc cards are injected as plain <div> elements
+     by runPathInjection() — do NOT add dummy SkillJar courses for them.
+     Add path-specific content via window.paPathConfig in the per-path HTML
+     block (e.g. data-scientist-path.html). Real courses go straight into
+     the SkillJar path; all non-.pa-path-ui-card cards go to the right column.
      ══════════════════════════════════════════════ -->
 <style>
 
@@ -2246,13 +2254,15 @@ a.coursebox-container[data-tags~="path-desc"]:after,
    The 40px timeline column sits where the old 60px column-gap was.
    No column-gap needed — the columns provide the spacing.
    row-gap stays at 20px; status div lines bridge it via top/bottom extension. */
-body.sj-page-detail-path #catalog-courses {
+body:is(.sj-page-detail-path, .sj-page-path) #catalog-courses {
   display: grid !important;
   grid-template-columns: 240px 40px 1fr !important;
   column-gap: 0 !important;
   row-gap: 20px !important;
   padding-top: 40px !important;
   padding-bottom: 60px !important;
+  padding-left: max(20px, 5vw) !important;
+  padding-right: max(20px, 5vw) !important;
   align-items: start !important;
   justify-content: unset !important;
   position: relative !important;
@@ -2260,29 +2270,52 @@ body.sj-page-detail-path #catalog-courses {
 
 /* ── path-desc card: row 1, full width — sits above the separator/course grid ──
    High-specificity selector beats SkillJar's #catalog-courses flex/max-width rules */
-body.sj-page-detail-path #catalog-courses a.coursebox-container[data-tags~="path-desc"] {
+body:is(.sj-page-detail-path, .sj-page-path) #catalog-courses .pa-path-ui-card[data-tags~="path-desc"] {
+  display: grid !important;
+  grid-template-columns: 35% 1fr !important;
+  column-gap: 60px !important;
+  align-items: start !important;
   grid-row: 1 !important;
   grid-column: 1 / -1 !important;
   width: 100% !important;
   max-width: 100% !important;
-  flex: unset !important;
   box-sizing: border-box !important;
+  padding: 40px 0 48px !important;
   border-bottom: 1px solid #E8ECEF !important;
 }
 
 /* ── Separator: left column, starts at row 2 so path-desc occupies row 1 ── */
-body.sj-page-detail-path a.coursebox-container[data-tags="separator"] {
+body:is(.sj-page-detail-path, .sj-page-path) .pa-path-ui-card[data-tags="separator"] {
   grid-column: 1 !important;
   grid-row: 2 / span 50; /* fallback; JS overrides via inline style to exact card count */
   align-self: start !important;
-  padding: 0 !important;
+  padding: 20px 0 0 !important;
   max-width: unset !important;
   width: auto !important;
+}
+/* Title text — scoped here because global separator CSS only targets a.coursebox-container */
+body:is(.sj-page-detail-path, .sj-page-path) .pa-path-ui-card[data-tags="separator"] .coursebox-text {
+  font-family: 'Open Sans', sans-serif !important;
+  font-size: clamp(22px, 2.5vw, 34px) !important;
+  font-weight: 700 !important;
+  color: #17212B !important;
+  line-height: 1.2 !important;
+  padding: 0 !important;
+  margin: 0 0 12px !important;
+  display: block !important;
+}
+body:is(.sj-page-detail-path, .sj-page-path) .pa-path-ui-card[data-tags="separator"] .coursebox-text::after {
+  content: '' !important;
+  display: block !important;
+  width: 80px !important;
+  height: 3px !important;
+  background-color: #447099 !important;
+  margin-top: 10px !important;
 }
 
 
 /* ── Course cards: col 3 (right), grid layout (image left | title/desc/tags right) ── */
-body.sj-page-detail-path a.coursebox-container:not([data-tags="separator"]):not([data-tags~="path-desc"]) {
+body:is(.sj-page-detail-path, .sj-page-path) a.coursebox-container:not([data-tags="separator"]):not([data-tags~="path-desc"]) {
   grid-column: 3 !important;
   display: grid !important;
   grid-template-columns: 220px 1fr !important;
@@ -2300,13 +2333,13 @@ body.sj-page-detail-path a.coursebox-container:not([data-tags="separator"]):not(
    makes it exactly as tall as its card row. The ::before line extends top/bottom
    by the row-gap (20px) to bridge gaps — safe because we own these divs so
    nothing applies overflow:hidden to them. */
-body.sj-page-detail-path .pa-timeline-status {
+body:is(.sj-page-detail-path, .sj-page-path) .pa-timeline-status {
   grid-column: 2 !important;
   align-self: stretch !important;
   position: relative !important;
 }
 /* Line: default (middle cards) bridges both the gap above and below */
-body.sj-page-detail-path .pa-timeline-status::before {
+body:is(.sj-page-detail-path, .sj-page-path) .pa-timeline-status::before {
   content: '' !important;
   position: absolute !important;
   left: 50% !important;
@@ -2317,15 +2350,15 @@ body.sj-page-detail-path .pa-timeline-status::before {
   z-index: 0 !important;
 }
 /* First card: line starts at circle centre — nothing above */
-body.sj-page-detail-path .pa-timeline-status--first::before {
+body:is(.sj-page-detail-path, .sj-page-path) .pa-timeline-status--first::before {
   top: 50% !important;
 }
 /* Last card: line ends at circle centre — nothing below */
-body.sj-page-detail-path .pa-timeline-status--last::before {
+body:is(.sj-page-detail-path, .sj-page-path) .pa-timeline-status--last::before {
   bottom: 50% !important;
 }
 /* Circle: centred in the status div, sits above the line */
-body.sj-page-detail-path .pa-timeline-status::after {
+body:is(.sj-page-detail-path, .sj-page-path) .pa-timeline-status::after {
   content: '' !important;
   position: absolute !important;
   left: 50% !important;
@@ -2342,7 +2375,7 @@ body.sj-page-detail-path .pa-timeline-status::after {
 }
 
 /* ── Course image: left column, spans all rows ── */
-body.sj-page-detail-path a.coursebox-container:not([data-tags="separator"]) .coursebox-image {
+body:is(.sj-page-detail-path, .sj-page-path) a.coursebox-container:not([data-tags="separator"]) .coursebox-image {
   grid-column: 1 !important;
   grid-row: 1 / span 10 !important;
   width: auto !important;
@@ -2356,7 +2389,7 @@ body.sj-page-detail-path a.coursebox-container:not([data-tags="separator"]) .cou
   overflow: hidden !important;
   background-color: #D1DBE5 !important;
 }
-body.sj-page-detail-path a.coursebox-container:not([data-tags="separator"]) .coursebox-image img {
+body:is(.sj-page-detail-path, .sj-page-path) a.coursebox-container:not([data-tags="separator"]) .coursebox-image img {
   width: 100% !important;
   height: 100% !important;
   max-width: unset !important;
@@ -2365,12 +2398,12 @@ body.sj-page-detail-path a.coursebox-container:not([data-tags="separator"]) .cou
   display: block !important;
 }
 /* Live training image panel: yellow tint (overrides the light-blue default above) */
-body.sj-page-detail-path a.coursebox-container[data-tags~="live-training"] .coursebox-image {
+body:is(.sj-page-detail-path, .sj-page-path) a.coursebox-container[data-tags~="live-training"] .coursebox-image {
   background-color: #F4C540 !important;
 }
 
 /* ── Course text: title, description, tags — stacked in right column ── */
-body.sj-page-detail-path a.coursebox-container:not([data-tags="separator"]) .coursebox-text {
+body:is(.sj-page-detail-path, .sj-page-path) a.coursebox-container:not([data-tags="separator"]) .coursebox-text {
   grid-column: 2 !important;
   grid-row: 1 !important;
   font-size: 20px !important;
@@ -2380,7 +2413,7 @@ body.sj-page-detail-path a.coursebox-container:not([data-tags="separator"]) .cou
   width: auto !important;
   flex: none !important;
 }
-body.sj-page-detail-path a.coursebox-container:not([data-tags="separator"]) .coursebox-text-description {
+body:is(.sj-page-detail-path, .sj-page-path) a.coursebox-container:not([data-tags="separator"]) .coursebox-text-description {
   grid-column: 2 !important;
   grid-row: 2 !important;
   font-size: 14px !important;
@@ -2388,7 +2421,7 @@ body.sj-page-detail-path a.coursebox-container:not([data-tags="separator"]) .cou
   line-height: 1.65 !important;
   flex: unset !important;
 }
-body.sj-page-detail-path a.coursebox-container:not([data-tags="separator"]) .coursebox-tags {
+body:is(.sj-page-detail-path, .sj-page-path) a.coursebox-container:not([data-tags="separator"]) .coursebox-tags {
   grid-column: 2 !important;
   grid-row: 3 !important;
   padding: 0 24px 20px !important;
@@ -2396,65 +2429,65 @@ body.sj-page-detail-path a.coursebox-container:not([data-tags="separator"]) .cou
   align-items: center !important;
   gap: 6px !important;
 }
-body.sj-page-detail-path a.coursebox-container:not([data-tags="separator"]) .clearfix {
+body:is(.sj-page-detail-path, .sj-page-path) a.coursebox-container:not([data-tags="separator"]) .clearfix {
   display: none !important;
 }
 
 /* ── Mobile: single-column stacked cards ── */
 @media only screen and (max-width: 768px) {
-  body.sj-page-detail-path #catalog-courses {
+  body:is(.sj-page-detail-path, .sj-page-path) #catalog-courses {
     grid-template-columns: 1fr !important;
     column-gap: 0 !important;
     row-gap: 16px !important;
   }
-  body.sj-page-detail-path a.coursebox-container[data-tags="separator"] {
+  body:is(.sj-page-detail-path, .sj-page-path) .pa-path-ui-card[data-tags="separator"] {
     grid-column: 1 !important;
     grid-row: auto !important;
     position: static !important;
   }
-  body.sj-page-detail-path a.coursebox-container[data-tags="separator"]::after {
+  body:is(.sj-page-detail-path, .sj-page-path) .pa-path-ui-card[data-tags="separator"]::after {
     display: none !important;
   }
-  body.sj-page-detail-path a.coursebox-container:not([data-tags="separator"]):not([data-tags~="path-desc"]) {
+  body:is(.sj-page-detail-path, .sj-page-path) a.coursebox-container:not([data-tags="separator"]):not([data-tags~="path-desc"]) {
     grid-column: 1 !important;
     grid-row: auto !important; /* overrides the non-important inline style set by JS */
   }
-  body.sj-page-detail-path .pa-timeline-status {
+  body:is(.sj-page-detail-path, .sj-page-path) .pa-timeline-status {
     display: none !important;
   }
   /* path-desc: stack title above description on mobile */
-  body.sj-page-detail-path #catalog-courses a.coursebox-container[data-tags~="path-desc"] {
+  body:is(.sj-page-detail-path, .sj-page-path) #catalog-courses .pa-path-ui-card[data-tags~="path-desc"] {
     display: flex !important;
     flex-direction: column !important;
     padding: 20px 0 28px !important;
   }
-  body.sj-page-detail-path #catalog-courses a.coursebox-container[data-tags~="path-desc"] .coursebox-text {
+  body:is(.sj-page-detail-path, .sj-page-path) #catalog-courses .pa-path-ui-card[data-tags~="path-desc"] .coursebox-text {
     font-size: clamp(20px, 5vw, 26px) !important;
     padding-bottom: 14px !important;
   }
-  body.sj-page-detail-path #catalog-courses a.coursebox-container[data-tags~="path-desc"] .coursebox-text-description {
+  body:is(.sj-page-detail-path, .sj-page-path) #catalog-courses .pa-path-ui-card[data-tags~="path-desc"] .coursebox-text-description {
     font-size: 14px !important;
   }
-  body.sj-page-detail-path a.coursebox-container:not([data-tags="separator"]):not([data-tags~="path-desc"]) {
+  body:is(.sj-page-detail-path, .sj-page-path) a.coursebox-container:not([data-tags="separator"]):not([data-tags~="path-desc"]) {
     grid-template-columns: 1fr !important; /* matches desktop selector specificity so source order wins */
   }
-  body.sj-page-detail-path a.coursebox-container:not([data-tags="separator"]) .coursebox-image {
+  body:is(.sj-page-detail-path, .sj-page-path) a.coursebox-container:not([data-tags="separator"]) .coursebox-image {
     display: none !important;
   }
-  body.sj-page-detail-path a.coursebox-container:not([data-tags="separator"]) .coursebox-text {
+  body:is(.sj-page-detail-path, .sj-page-path) a.coursebox-container:not([data-tags="separator"]) .coursebox-text {
     grid-column: 1 !important;
     width: 100% !important;
     max-width: 100% !important;
     font-size: 16px !important;
     padding: 16px 16px 4px !important;
   }
-  body.sj-page-detail-path a.coursebox-container:not([data-tags="separator"]) .coursebox-text-description {
+  body:is(.sj-page-detail-path, .sj-page-path) a.coursebox-container:not([data-tags="separator"]) .coursebox-text-description {
     grid-column: 1 !important;
     width: 100% !important;
     max-width: 100% !important;
     padding: 0 16px 8px !important;
   }
-  body.sj-page-detail-path a.coursebox-container:not([data-tags="separator"]) .coursebox-tags {
+  body:is(.sj-page-detail-path, .sj-page-path) a.coursebox-container:not([data-tags="separator"]) .coursebox-tags {
     grid-column: 1 !important;
     width: 100% !important;
     padding: 0 16px 14px !important;
@@ -2464,25 +2497,53 @@ body.sj-page-detail-path a.coursebox-container:not([data-tags="separator"]) .cle
 /* ── path-desc card: undo bleed-in from the course card child-element rules above ──
    Those rules use :not([data-tags="separator"]) which inadvertently matches path-desc.
    Adding #catalog-courses (ID) gives us higher specificity to override them. */
-body.sj-page-detail-path #catalog-courses a.coursebox-container[data-tags~="path-desc"] .coursebox-image {
+body:is(.sj-page-detail-path, .sj-page-path) #catalog-courses .pa-path-ui-card[data-tags~="path-desc"] .coursebox-image {
   display: none !important;
 }
-body.sj-page-detail-path #catalog-courses a.coursebox-container[data-tags~="path-desc"] .coursebox-text {
+body:is(.sj-page-detail-path, .sj-page-path) #catalog-courses .pa-path-ui-card[data-tags~="path-desc"] .coursebox-text {
   grid-column: 1 !important;
   grid-row: 1 !important;
   font-size: clamp(22px, 2.5vw, 34px) !important;
   font-weight: 700 !important;
   padding: 0 !important;
 }
-body.sj-page-detail-path #catalog-courses a.coursebox-container[data-tags~="path-desc"] .coursebox-text-description {
+body:is(.sj-page-detail-path, .sj-page-path) #catalog-courses .pa-path-ui-card[data-tags~="path-desc"] .coursebox-text-description {
   grid-column: 2 !important;
   grid-row: 1 !important;
   font-size: 15px !important;
   padding: 0 !important;
 }
-body.sj-page-detail-path #catalog-courses a.coursebox-container[data-tags~="path-desc"] .coursebox-tags,
-body.sj-page-detail-path #catalog-courses a.coursebox-container[data-tags~="path-desc"] .clearfix {
+body:is(.sj-page-detail-path, .sj-page-path) #catalog-courses .pa-path-ui-card[data-tags~="path-desc"] .coursebox-tags,
+body:is(.sj-page-detail-path, .sj-page-path) #catalog-courses .pa-path-ui-card[data-tags~="path-desc"] .clearfix {
   display: none !important;
+}
+
+/* ── Hide SkillJar's enrollment resume bar (injected after "Get Started" is clicked) ──
+   After enrollment the body class changes to .sj-page-path. The custom hero already
+   provides the CTA, so the native yellow resume bar is redundant and off-brand. */
+body:is(.sj-page-detail-path, .sj-page-path) .path-curriculum-resume-wrapper {
+  display: none !important;
+}
+
+/* ── Hide legacy SkillJar separator/path-desc courses if still in the path ──
+   Since v2 of the path page injects these as .pa-path-ui-card divs, any
+   a.coursebox-container with these tags is a leftover SkillJar course.
+   Remove them from the path in SkillJar admin to fully clean up. */
+body:is(.sj-page-detail-path, .sj-page-path) a.coursebox-container[data-tags="separator"],
+body:is(.sj-page-detail-path, .sj-page-path) a.coursebox-container[data-tags~="path-desc"] {
+  display: none !important;
+}
+
+/* ── Consistent centering on enrolled vs. unenrolled pages ──
+   On unenrolled (sj-page-detail-path), Foundation's .columns container wraps
+   #catalog-courses and provides max-width + margin:auto centering.
+   On enrolled (sj-page-path), .columns is absent — #catalog-courses sits
+   directly inside #catalog-content. Constraining #catalog-content here
+   replicates that centering so both states have the same side margins. */
+body:is(.sj-page-detail-path, .sj-page-path) #catalog-content {
+  max-width: 1280px !important;
+  margin-left: auto !important;
+  margin-right: auto !important;
 }
 </style>
 <!-- END Path Landing Page Styles -->

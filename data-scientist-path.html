@@ -5,7 +5,7 @@
   paste this entire file, and save.
 
   ⚠️  BODY CLASS: This file hides SkillJar's native hero using
-  body.sj-page-detail-path — verify that class on a live path page
+  body:is(.sj-page-detail-path, .sj-page-path) — verify that class on a live path page
   and update the two selectors in the <style> block if different.
 
   BUILD REAL SKILLS CARD:
@@ -47,8 +47,8 @@
   margin-top: 0 !important;
 }
 /* Path pages add top padding to #main-container that catalog pages don't have */
-body.sj-page-detail-path #main-container,
-body.sj-page-detail-path .storefront {
+body:is(.sj-page-detail-path, .sj-page-path) #main-container,
+body:is(.sj-page-detail-path, .sj-page-path) .storefront {
   padding-top: 0 !important;
   margin-top: 0 !important;
 }
@@ -71,14 +71,14 @@ body.sj-page-detail-path .storefront {
    HIDE SKILLJAR'S NATIVE PATH HERO
    Our custom #pa-path-hero above replaces it.
    ══════════════════════════════════════════════ */
-body.sj-page-detail-path .top-row-grey,
-body.sj-page-detail-path .top-row-white-v2 {
+body:is(.sj-page-detail-path, .sj-page-path) .top-row-grey,
+body:is(.sj-page-detail-path, .sj-page-path) .top-row-white-v2 {
   display: none !important;
 }
-body.sj-page-detail-path #dp-details {
+body:is(.sj-page-detail-path, .sj-page-path) #dp-details {
   display: none !important;
 }
-body.sj-page-detail-path .social-media-wrapper {
+body:is(.sj-page-detail-path, .sj-page-path) .social-media-wrapper {
   display: none !important;
 }
 
@@ -230,13 +230,22 @@ body.sj-page-detail-path .social-media-wrapper {
        ancestor's own margin/padding/max-width. Stopping early at .top-row or
        .catalog-center-width left those elements' own padding uncleaned. */
     while (el && el !== document.body && el !== document.documentElement) {
-      el.style.setProperty('margin-top',    '0', 'important');
-      el.style.setProperty('padding-top',   '0', 'important');
-      el.style.setProperty('margin-left',   '0', 'important');
-      el.style.setProperty('padding-left',  '0', 'important');
-      el.style.setProperty('margin-right',  '0', 'important');
-      el.style.setProperty('padding-right', '0', 'important');
-      el.style.setProperty('max-width', 'none', 'important');
+      el.style.setProperty('margin-top',  '0',       'important');
+      el.style.setProperty('padding-top', '0',       'important');
+      el.style.setProperty('overflow',    'visible', 'important');
+      /* Leave #catalog-content's max-width and side margins alone — the global
+         CSS sets max-width: 1280px + margin: auto there for consistent centering
+         on both the enrolled and unenrolled pages. Zeroing it here would override
+         that rule via inline style and break the enrolled-page layout. */
+      if (el.id !== 'catalog-content') {
+        el.style.setProperty('max-width', 'none', 'important');
+      }
+      if (el.id !== 'catalog-courses' && el.id !== 'catalog-content') {
+        el.style.setProperty('margin-left',   '0', 'important');
+        el.style.setProperty('padding-left',  '0', 'important');
+        el.style.setProperty('margin-right',  '0', 'important');
+        el.style.setProperty('padding-right', '0', 'important');
+      }
       el = el.parentElement;
     }
   }
@@ -248,15 +257,25 @@ body.sj-page-detail-path .social-media-wrapper {
   window.addEventListener('load', fixPathGap);
 }());
 
-/* Sync "Get Started" href to SkillJar's native path CTA.
-   SkillJar renders its button asynchronously, so poll until it appears. */
+/* Sync hero CTA href + update text based on enrollment state.
+   - Not enrolled (sj-page-detail-path): href from SkillJar's purchase button, text "Get Started"
+   - Enrolled (sj-page-path): href from SkillJar's resume button, text "Resume" */
 (function () {
+  var enrolled = document.body.classList.contains('sj-page-path');
+  var cta = document.getElementById('pa-path-hero-cta');
+
+  /* Update button text immediately on enrolled page — no polling needed */
+  if (enrolled && cta) cta.textContent = 'Resume';
+
   var attempts = 0;
   var poll = setInterval(function () {
     attempts++;
-    var sjBtn = document.querySelector('a#purchase-button, a.purchase-button');
+    /* On enrolled page, SkillJar injects #path-curriculum-resume-button (inside the
+       hidden .path-curriculum-resume-wrapper). On un-enrolled, use the purchase button. */
+    var sjBtn = enrolled
+      ? document.querySelector('a#path-curriculum-resume-button')
+      : document.querySelector('a#purchase-button, a.purchase-button');
     if (sjBtn && sjBtn.href && sjBtn.href !== window.location.href + '#') {
-      var cta = document.getElementById('pa-path-hero-cta');
       if (cta) cta.href = sjBtn.href;
       clearInterval(poll);
     }
@@ -265,4 +284,21 @@ body.sj-page-detail-path .social-media-wrapper {
 }());
 </script>
 </p>
+<script>
+/* Path-specific content for the injected UI cards.
+   pathDesc.title  — heading shown in the left column of the "Build real skills" card
+   pathDesc.html   — description HTML shown in the right column (supports <p>, <ul>, etc.)
+   Update this when the path description changes; no SkillJar course needed. */
+window.paPathConfig = {
+  pathDesc: {
+    title: 'Build real skills for your role',
+    html: '<p>By the end of this path, you will be able to:</p>' +
+          '<ul>' +
+          '<li>Placeholder objective 1 — update this content</li>' +
+          '<li>Placeholder objective 2 — update this content</li>' +
+          '<li>Placeholder objective 3 — update this content</li>' +
+          '</ul>'
+  }
+};
+</script>
 <!-- END Posit Academy — Data Scientist Path Page -->
