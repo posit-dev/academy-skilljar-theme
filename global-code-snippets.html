@@ -2175,6 +2175,10 @@ a.coursebox-container[data-tags~="path-desc"]:after,
     var courses = document.getElementById('catalog-courses');
     if (!courses) return;
 
+    /* Remove any previously injected line (e.g. after a resize re-run) */
+    var old = courses.querySelector('.pa-timeline-line');
+    if (old) old.remove();
+
     var cards = Array.from(courses.querySelectorAll(
       'a.coursebox-container:not([data-tags~="separator"]):not([data-tags~="path-desc"])'
     ));
@@ -2184,12 +2188,13 @@ a.coursebox-container[data-tags~="path-desc"]:after,
     var firstRect   = cards[0].getBoundingClientRect();
     var lastRect    = cards[cards.length - 1].getBoundingClientRect();
 
-    /* x-centre of line = same as CSS circle centre: card left − 30px
-       (circle ::before is at left:−37px + radius 7px = −30px from card edge) */
+    /* x-centre = card left − 30px (circle ::before: left:−37px + radius 7px)
+       Extend line 7px (one radius) past each end circle centre so the line
+       visually passes through the full circle rather than stopping at its centre. */
     var lineX   = Math.round(firstRect.left - coursesRect.left - 30);
-    var lineTop = Math.round(firstRect.top  - coursesRect.top  + firstRect.height  / 2);
-    var lineEnd = Math.round(lastRect.top   - coursesRect.top  + lastRect.height   / 2);
-    if (lineEnd <= lineTop) return; /* fewer than 2 cards, line not needed */
+    var lineTop = Math.round(firstRect.top  - coursesRect.top  + firstRect.height / 2) - 7;
+    var lineEnd = Math.round(lastRect.top   - coursesRect.top  + lastRect.height  / 2) + 7;
+    if (lineEnd <= lineTop) return;
 
     var line = document.createElement('div');
     line.className = 'pa-timeline-line';
@@ -2203,6 +2208,20 @@ a.coursebox-container[data-tags~="path-desc"]:after,
       'pointer-events:none;' +
       'z-index:1;';
     courses.appendChild(line);
+
+    /* Re-measure and redraw on viewport resize — padding-left uses 5vw so the
+       x position drifts if we keep stale pixel values after a resize. */
+    if (!courses._paTimelineResizeSet) {
+      courses._paTimelineResizeSet = true;
+      var resizeTimer;
+      window.addEventListener('resize', function () {
+        clearTimeout(resizeTimer);
+        resizeTimer = setTimeout(function () {
+          timelineRan = false;
+          runPathTimelineSetup();
+        }, 150);
+      });
+    }
   }
 
   /* Poll until path-desc cards are in the DOM */
