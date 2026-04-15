@@ -2187,13 +2187,13 @@ a.coursebox-container[data-tags~="path-desc"]:after,
        are created (row-gap on 50 empty rows = ~900px of whitespace) */
     var separator = courses.querySelector('a.coursebox-container[data-tags="separator"]');
     if (separator) {
-      separator.style.setProperty('grid-row', '2 / span ' + cards.length, 'important');
+      separator.style.setProperty('grid-row', '2 / span ' + cards.length); /* no !important */
     }
 
     cards.forEach(function (card, i) {
       /* row 1 = path-desc (or empty); course cards start at row 2 */
       var row = String(i + 2);
-      card.style.setProperty('grid-row', row, 'important');
+      card.style.setProperty('grid-row', row); /* no !important — lets mobile CSS reset to auto */
 
       var status = document.createElement('div');
       status.className = 'pa-timeline-status' +
@@ -2273,7 +2273,7 @@ body.sj-page-detail-path #catalog-courses a.coursebox-container[data-tags~="path
 /* ── Separator: left column, starts at row 2 so path-desc occupies row 1 ── */
 body.sj-page-detail-path a.coursebox-container[data-tags="separator"] {
   grid-column: 1 !important;
-  grid-row: 2 / span 50 !important; /* span updated to card count by JS */
+  grid-row: 2 / span 50; /* fallback; JS overrides via inline style to exact card count */
   align-self: start !important;
   padding: 0 !important;
   max-width: unset !important;
@@ -2417,24 +2417,46 @@ body.sj-page-detail-path a.coursebox-container:not([data-tags="separator"]) .cle
   }
   body.sj-page-detail-path a.coursebox-container:not([data-tags="separator"]):not([data-tags~="path-desc"]) {
     grid-column: 1 !important;
+    grid-row: auto !important; /* overrides the non-important inline style set by JS */
   }
   body.sj-page-detail-path .pa-timeline-status {
     display: none !important;
   }
-  body.sj-page-detail-path a.coursebox-container:not([data-tags="separator"]) {
-    grid-template-columns: 140px 1fr !important;
+  /* path-desc: stack title above description on mobile */
+  body.sj-page-detail-path #catalog-courses a.coursebox-container[data-tags~="path-desc"] {
+    display: flex !important;
+    flex-direction: column !important;
+    padding: 20px 0 28px !important;
+  }
+  body.sj-page-detail-path #catalog-courses a.coursebox-container[data-tags~="path-desc"] .coursebox-text {
+    font-size: clamp(20px, 5vw, 26px) !important;
+    padding-bottom: 14px !important;
+  }
+  body.sj-page-detail-path #catalog-courses a.coursebox-container[data-tags~="path-desc"] .coursebox-text-description {
+    font-size: 14px !important;
+  }
+  body.sj-page-detail-path a.coursebox-container:not([data-tags="separator"]):not([data-tags~="path-desc"]) {
+    grid-template-columns: 1fr !important; /* matches desktop selector specificity so source order wins */
   }
   body.sj-page-detail-path a.coursebox-container:not([data-tags="separator"]) .coursebox-image {
-    min-height: 100px !important;
+    display: none !important;
   }
   body.sj-page-detail-path a.coursebox-container:not([data-tags="separator"]) .coursebox-text {
+    grid-column: 1 !important;
+    width: 100% !important;
+    max-width: 100% !important;
     font-size: 16px !important;
-    padding: 14px 16px 4px !important;
+    padding: 16px 16px 4px !important;
   }
   body.sj-page-detail-path a.coursebox-container:not([data-tags="separator"]) .coursebox-text-description {
+    grid-column: 1 !important;
+    width: 100% !important;
+    max-width: 100% !important;
     padding: 0 16px 8px !important;
   }
   body.sj-page-detail-path a.coursebox-container:not([data-tags="separator"]) .coursebox-tags {
+    grid-column: 1 !important;
+    width: 100% !important;
     padding: 0 16px 14px !important;
   }
 }

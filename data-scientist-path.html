@@ -23,7 +23,7 @@
 <p id="pa-path-eyebrow">Learning Path</p>
 <h1 id="pa-path-hero-title">Data<br />Scientist</h1>
 <p id="pa-path-hero-desc">Short description of role courses. Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
-<div id="pa-path-hero-btns"><!-- href synced to SkillJar's native CTA by the script below --> <a id="pa-path-hero-cta" href="#">Get Started</a> <a id="pa-path-catalog-btn" href="/">Return to Catalog</a></div>
+<div id="pa-path-hero-btns"><!-- href synced to SkillJar's native CTA by the script below --> <a id="pa-path-hero-cta" href="#">Get Started</a> <a id="pa-path-catalog-btn" href="https://academy.posit.co/page/all-courses">Return to Catalog</a></div>
 </div>
 </div>
 <div>
@@ -189,15 +189,25 @@ body.sj-page-detail-path .social-media-wrapper {
 
 /* ── Mobile ── */
 @media only screen and (max-width: 800px) {
+  /* On mobile the overlay has variable height (more content than the home page),
+     so flip the stacking: image becomes absolute background, overlay is in-flow
+     and determines the hero height — content can never overflow. */
   #pa-path-hero-img {
-    min-height: 320px;
+    position: absolute;
+    top: 0; left: 0;
+    width: 100%;
+    height: 100%;
     object-fit: cover;
     object-position: center top;
   }
   #pa-path-hero-overlay {
+    position: relative;
     width: 100%;
+    min-height: 320px;
     padding: 48px 24px 52px;
     background: rgba(23, 33, 43, 0.78);
+    box-sizing: border-box;
+    justify-content: flex-start;
   }
   #pa-path-hero-title {
     white-space: normal;
