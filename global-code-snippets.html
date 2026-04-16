@@ -1613,6 +1613,35 @@ body.sj-page-curriculum a.start-button:hover {
   color: #ffffff !important;
 }
 
+/* ── Resume button — Posit Blue ── */
+body.sj-page-curriculum a.resume-button {
+  font-family: 'Open Sans', sans-serif !important;
+  font-size: 13px !important;
+  font-weight: 700 !important;
+  line-height: 1 !important;
+  letter-spacing: 0.08em !important;
+  text-transform: uppercase !important;
+  background-color: #447099 !important;
+  color: #ffffff !important;
+  border: 2px solid #447099 !important;
+  border-radius: 6px !important;
+  padding: 0 28px !important;
+  height: 44px !important;
+  text-decoration: none !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  box-sizing: border-box !important;
+  transition: background-color 0.15s ease, border-color 0.15s ease !important;
+  cursor: pointer !important;
+  box-shadow: none !important;
+}
+body.sj-page-curriculum a.resume-button:hover {
+  background-color: #3A5672 !important;
+  border-color: #3A5672 !important;
+  color: #ffffff !important;
+}
+
 /* ── "Return to Catalog" — injected by JS, outlined ── */
 body.sj-page-curriculum a.pa-catalog-btn {
   font-family: 'Open Sans', sans-serif !important;
@@ -1639,35 +1668,9 @@ body.sj-page-curriculum a.pa-catalog-btn:hover {
   color: #ffffff !important;
 }
 
-/* Override SkillJar's yellow --button-color for the save toggle */
-body.sj-page-curriculum {
-  --button-color: #447099;
-}
-body.sj-page-curriculum .sj-save-toggle-block__button {
-  color: #447099 !important;
-  border-color: #447099 !important;
-  /* Constrain to 44px so it aligns with the other buttons */
-  height: 44px !important;
-  width: 44px !important;
-  min-width: 44px !important;
-  border-radius: 6px !important;
-  padding: 0 !important;
-  box-sizing: border-box !important;
-  display: inline-flex !important;
-  align-items: center !important;
-  justify-content: center !important;
-}
-body.sj-page-curriculum .sj-save-toggle-block__icon i {
-  color: #447099 !important;
-}
-/* Constrain the outer web component element too */
-body.sj-page-curriculum sjwc-save-content-toggle {
-  height: 44px !important;
-  width: 44px !important;
-  flex-shrink: 0 !important;
-}
-/* Hide the empty context-provider wrapper after JS moves the toggle out */
-body.sj-page-curriculum #resume-button > sjwc-context-provider {
+/* Hide save toggle on registered course page */
+body.sj-page-curriculum #resume-button sjwc-save-content-toggle,
+body.sj-page-curriculum #resume-button > div[style*="inline-block"] {
   display: none !important;
 }
 
@@ -1878,14 +1881,7 @@ body.sj-page-curriculum .section-container.tabs > section:has(h3.course-long-des
   }
 
   function fixSaveToggle() {
-    var resumeBtn = document.getElementById('resume-button');
-    if (!resumeBtn) return;
-    /* sjwc-context-provider uses a shadow root — extract sjwc-save-content-toggle
-       and place it as a direct flex child of #resume-button so gap:12px handles spacing. */
-    var saveToggle = resumeBtn.querySelector('sjwc-save-content-toggle');
-    if (!saveToggle || saveToggle.dataset.moved) return;
-    saveToggle.dataset.moved = '1';
-    resumeBtn.appendChild(saveToggle);
+    /* Save toggle is hidden on the registered page via CSS — nothing to do. */
   }
 
   /* Remove SkillJar's ellipsis truncation from curriculum lesson titles.
@@ -1971,7 +1967,7 @@ body.sj-page-curriculum .section-container.tabs > section:has(h3.course-long-des
   var attempts = 0;
   var poll = setInterval(function () {
     attempts++;
-    if (document.querySelector('a.start-button')) {
+    if (document.querySelector('a.start-button, a.resume-button')) {
       clearInterval(poll);
       injectCatalogButton();
       fixSaveToggle();
@@ -2990,7 +2986,14 @@ body:is(.sj-page-detail-path, .sj-page-path) a.coursebox-container:not([data-tag
     column-gap: 0 !important;
     row-gap: 16px !important;
   }
+  /* path-desc and separator are appended last in the DOM by JS, so on mobile
+     (where grid-row:auto uses DOM order) they'd fall after course cards.
+     Use order to pull them back to the top. */
+  body:is(.sj-page-detail-path, .sj-page-path) #catalog-courses .pa-path-ui-card[data-tags~="path-desc"] {
+    order: -2 !important;
+  }
   body:is(.sj-page-detail-path, .sj-page-path) .pa-path-ui-card[data-tags="separator"] {
+    order: -1 !important;
     grid-column: 1 !important;
     grid-row: auto !important;
     position: static !important;
