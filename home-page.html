@@ -162,8 +162,9 @@
 <div id="pa-announce-wrap">
   <div id="pa-announce-card">
     <div id="pa-announce-text">
-      <h2 id="pa-announce-heading">Featured news</h2>
+      <h2 id="pa-announce-heading">posit::conf(2026) is coming to Houston, TX! Join us Sept 14–16.</h2>
       <p id="pa-announce-body">Featured and new courses, Posit education news, Conf announcements, upcoming meetings, Posit webinars, and more. Stay up to date with everything happening in the Posit Academy community.</p>
+      <a href="https://conf.posit.co/2026/" id="pa-announce-cta" target="_blank" rel="noopener">Register now</a>
     </div>
     <div id="pa-announce-image">
       <!-- Replace src with your announcement image -->
@@ -206,7 +207,25 @@
   font-weight: 400;
   color: #404041;
   line-height: 1.65;
-  margin: 0;
+  margin: 0 0 16px 0;
+}
+#pa-announce-cta {
+  display: inline-block;
+  font-family: 'Open Sans', sans-serif;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: #17212B;
+  background: #F6B000;
+  border-radius: 4px;
+  padding: 10px 20px;
+  text-decoration: none;
+  transition: background-color 0.15s;
+}
+#pa-announce-cta:hover {
+  background: #C48F0A;
+  color: #17212B;
 }
 #pa-announce-image {
   flex: 0 0 220px;
