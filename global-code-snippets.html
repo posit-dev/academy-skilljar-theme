@@ -1732,12 +1732,15 @@ body.sj-page-curriculum .section-container.tabs {
   border: none !important;
   box-shadow: none !important;
 }
-/* Remove Foundation's per-section and per-content borders that create the line */
+/* Remove Foundation's per-section and per-content borders that create the line.
+   Also zero out the inline padding-top SkillJar's tab JS injects (equals the
+   hidden tab-bar height — leaves a white gap if not overridden). */
 body.sj-page-curriculum .section-container.tabs > section,
 body.sj-page-curriculum .section-container.tabs > section > .content {
   border: none !important;
   box-shadow: none !important;
   background: transparent !important;
+  padding-top: 0 !important;
 }
 
 /* Hide Foundation tab title elements (.title, [data-section-title], or <p> wrappers) */
