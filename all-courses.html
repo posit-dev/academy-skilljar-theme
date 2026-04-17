@@ -58,33 +58,7 @@
 }
 
 
-/* ── Mobile: filter drawer ──────────────────────────────────────────────
-   The filter button is injected by JS directly into document.body so it
-   is never inside SkillJar's content wrappers. position:fixed anchors it
-   to the left edge of the viewport regardless of page layout. */
-
-/* Filter button — JS-created, appended to <body> */
-#pa-filter-btn {
-  display: none;                  /* hidden by default; JS shows on narrow screens */
-  position: fixed;
-  left: 0;
-  top: 50%;
-  transform: translateY(-50%);
-  z-index: 200;
-  align-items: center;
-  background: rgba(23, 33, 43, 0.75);
-  color: #ffffff;
-  border: none;
-  border-radius: 0 4px 4px 0;    /* tab that "sticks out" from left edge */
-  padding: 10px 10px;
-  font-family: 'Open Sans', sans-serif;
-  font-size: 11px;
-  font-weight: 700;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-  cursor: pointer;
-  box-shadow: 2px 2px 8px rgba(0,0,0,0.2);
-}
+/* ── Mobile: filter drawer ── */
 
 /* Dim backdrop */
 #pa-filter-overlay {
@@ -129,70 +103,4 @@
 }
 </style>
 
-<!-- Backdrop overlay only — button is injected by JS into document.body -->
 <div id="pa-filter-overlay"></div>
-
-<script>
-(function () {
-  var mq = window.matchMedia('(max-width: 875px)');
-
-  function getOrCreateBtn() {
-    var btn = document.getElementById('pa-filter-btn');
-    if (btn) return btn;
-
-    btn = document.createElement('button');
-    btn.id = 'pa-filter-btn';
-    btn.setAttribute('aria-label', 'Open filters');
-    btn.innerHTML =
-      '<svg width="16" height="16" viewBox="0 0 16 16" fill="none" ' +
-      'xmlns="http://www.w3.org/2000/svg" aria-hidden="true">' +
-      '<line x1="1" y1="4" x2="15" y2="4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>' +
-      '<line x1="3" y1="8" x2="13" y2="8" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>' +
-      '<line x1="6" y1="12" x2="10" y2="12" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>' +
-      '</svg>';
-
-    document.body.appendChild(btn);
-    return btn;
-  }
-
-  function updateVisibility() {
-    var btn = getOrCreateBtn();
-    btn.style.display = mq.matches ? 'inline-flex' : 'none';
-  }
-
-  function initMobileFilters() {
-    var overlay = document.getElementById('pa-filter-overlay');
-    if (!overlay) return;
-
-    var btn = getOrCreateBtn();
-    if (btn.dataset.wired) return;
-    btn.dataset.wired = '1';
-
-    function openFilters() {
-      var nav = document.getElementById('catalog-left-nav');
-      if (nav) nav.classList.add('cbp-spmenu-open');
-      overlay.classList.add('pa-open');
-      document.body.style.overflow = 'hidden';
-    }
-    function closeFilters() {
-      var nav = document.getElementById('catalog-left-nav');
-      if (nav) nav.classList.remove('cbp-spmenu-open');
-      overlay.classList.remove('pa-open');
-      document.body.style.overflow = '';
-    }
-
-    btn.addEventListener('click', openFilters);
-    overlay.addEventListener('click', closeFilters);
-
-    updateVisibility();
-    mq.addEventListener('change', updateVisibility);
-  }
-
-  if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', initMobileFilters);
-  } else {
-    initMobileFilters();
-  }
-  window.addEventListener('load', initMobileFilters);
-}());
-</script>

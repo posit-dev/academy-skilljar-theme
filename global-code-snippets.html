@@ -1146,7 +1146,7 @@ body.sj-page-detail-course #dp-details .row {
   flex-wrap: nowrap !important;
   align-items: flex-start !important;
   gap: 56px !important;
-  padding: 48px 40px !important;   /* 40px horizontal is a CSS fallback; JS overrides left/right */
+  padding: 24px 40px 48px !important;   /* 40px horizontal is a CSS fallback; JS overrides left/right */
   max-width: 1500px !important;    /* match hero's outer container so edges can align */
   margin: 0 auto !important;       /* centre within viewport at wide widths */
   width: auto !important;
@@ -1723,8 +1723,8 @@ body.sj-page-curriculum .section-container.tabs {
   display: flex !important;
   align-items: flex-start !important;
   flex-wrap: nowrap !important;
-  gap: 56px !important;
-  padding: 48px 40px !important;  /* 40px is a CSS fallback; JS overrides left/right */
+  gap: 40px !important;
+  padding: 24px 40px 48px !important;  /* 40px is a CSS fallback; JS overrides left/right */
   max-width: 1500px !important;
   margin: 0 auto !important;
   width: auto !important;
@@ -1752,9 +1752,9 @@ body.sj-page-curriculum .section-container.tabs > section > .content {
   display: block !important;
 }
 
-/* Curriculum column — wide enough for longest titles to sit on one line */
+/* Curriculum column — equal flex share with the About column so titles have more room */
 body.sj-page-curriculum .section-container.tabs > section:has(#curriculum-list) {
-  flex: 0 0 400px !important;
+  flex: 1 1 0 !important;
   min-width: 0 !important;
 }
 
@@ -3161,12 +3161,53 @@ body.sj-page-lesson:has(.scorm-lesson-content) #scaled_embedded_content {
   border: 1px solid #D1DBE5 !important;
   border-top: 4px solid #447099 !important;   /* Posit Blue accent */
   border-radius: 10px !important;
-  padding: 28px 32px 24px !important;
+  padding: 36px 32px 28px !important;
   box-shadow: 0 2px 10px rgba(68,112,153,0.08) !important;
   max-width: 560px !important;
   box-sizing: border-box !important;
   margin: 0 auto !important;
   text-align: center !important;
+}
+
+/* ── Icon badge — blue circle with </> symbol ── */
+.lti-launch-area::before {
+  content: "</>" !important;
+  display: block !important;
+  width: 48px !important;
+  height: 48px !important;
+  line-height: 48px !important;
+  border-radius: 50% !important;
+  background: #447099 !important;   /* Posit Blue */
+  color: #ffffff !important;
+  font-family: 'Courier New', monospace !important;
+  font-size: 13px !important;
+  font-weight: 700 !important;
+  text-align: center !important;
+  margin: 0 auto 12px !important;
+}
+
+/* ── Eyebrow label — injected above lesson details ── */
+.lti-lesson-details::before {
+  content: "HANDS-ON LAB" !important;
+  display: block !important;
+  font-family: 'Open Sans', sans-serif !important;
+  font-size: 11px !important;
+  font-weight: 700 !important;
+  color: #447099 !important;   /* Posit Blue */
+  letter-spacing: 0.1em !important;
+  text-transform: uppercase !important;
+  margin-bottom: 10px !important;
+}
+
+/* ── Title heading ── */
+.lti-lesson-details h2,
+.lti-lesson-details h3 {
+  font-family: 'Open Sans', sans-serif !important;
+  font-size: 22px !important;
+  font-weight: 600 !important;
+  color: #17212B !important;
+  line-height: 1.35 !important;
+  margin: 0 0 16px !important;
 }
 
 /* ── Description text ── */
@@ -3731,3 +3772,33 @@ button.sj-text-quiz-submit:hover {
 </style>
 <!-- END Quiz Button Styles -->
 <!-- END Live Training (VILT) Lesson Page Styles -->
+
+<!-- START Remove clickable course tiles in Paths. Add to Global Code Snippet -->
+<style>
+#skilljar-content .expandable-view .coursebox-container:hover {
+  border: none;
+}
+</style>
+<script>
+  /* change the below 'tagBased' variable value  to 'true' if you want to
+  trigger this customization by adding the tag 'not-clickable'
+  to a Path object */
+  var tagBased = false;
+
+$(document).ready(function() {
+  if($('[data-tags*="not-clickable"]').length || tagBased == false){
+    if($('.sj-page-detail-path').length) {
+        $('.coursebox-container').css("pointer-events", "none");
+        $('.storefront-price').html($('.course-time').html());
+        $('.course-time').css('display', 'none');
+
+        //check for expanded details path view and add pointer event back in
+        if($('.course-overview__toggle').length) {
+          $('.course-overview__toggle').css("pointer-events", "initial");
+          $('a.course-overview__content__lesson').css("pointer-events", "none");
+        }
+    }
+  }
+});
+</script>
+<!-- END Remove clickable course tiles in Paths. Add to Global Code Snippet -->

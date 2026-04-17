@@ -207,11 +207,63 @@
     gap: 32px 24px;
   }
 }
+
+/* ── Accordion panel transition (applied at all sizes, JS controls height) ── */
+.pa-fcol-panel {
+  transition: height 0.28s ease;
+}
+.pa-fcol-panel-inner {
+  padding-bottom: 20px;
+}
+
 @media only screen and (max-width: 600px) {
+  /* Single-column accordion layout */
   #pa-footer-columns {
-    grid-template-columns: repeat(2, 1fr);
-    gap: 32px 20px;
+    grid-template-columns: 1fr;
+    gap: 0;
+    padding-top: 8px;
+    padding-bottom: 24px;
   }
+
+  /* Divider between sections */
+  .pa-fcol {
+    border-bottom: 1px solid #E8ECEF;
+  }
+
+  /* Heading becomes a tap target with chevron */
+  .pa-fcol-heading {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    color: #447099;
+    padding: 16px 0;
+    margin: 0;
+    cursor: pointer;
+    user-select: none;
+  }
+
+  /* Chevron indicator — border trick */
+  .pa-fcol-heading::after {
+    content: '';
+    display: block;
+    width: 7px;
+    height: 7px;
+    border-right: 2px solid currentColor;
+    border-bottom: 2px solid currentColor;
+    transform: rotate(45deg) translateY(-2px);
+    flex-shrink: 0;
+    transition: transform 0.25s ease;
+  }
+
+  .pa-fcol.pa-accordion-open .pa-fcol-heading::after {
+    transform: rotate(225deg) translateY(-2px);
+  }
+
+  /* Contact sub-section: flush up since ul is now in a collapsed panel */
+  .pa-fcol-subheading {
+    margin-top: 16px;
+  }
+
   #pa-footer-top {
     flex-direction: column;
     align-items: flex-start;
@@ -384,4 +436,67 @@
   </div>
 
 </footer>
+
+<script>
+(function () {
+  var mq = window.matchMedia('(max-width: 600px)');
+
+  function initFooterAccordion() {
+    document.querySelectorAll('#pa-footer-columns .pa-fcol').forEach(function (col) {
+      var heading = col.querySelector('.pa-fcol-heading');
+      var ul = col.querySelector('ul');
+      if (!heading || !ul || heading.dataset.accordionReady) return;
+      heading.dataset.accordionReady = '1';
+
+      // Wrap the <ul> in a panel + inner div so we can animate height
+      var inner = document.createElement('div');
+      inner.className = 'pa-fcol-panel-inner';
+      var panel = document.createElement('div');
+      panel.className = 'pa-fcol-panel';
+      ul.parentNode.insertBefore(panel, ul);
+      panel.appendChild(inner);
+      inner.appendChild(ul);
+
+      function applyState() {
+        if (mq.matches && !col.classList.contains('pa-accordion-open')) {
+          panel.style.height = '0';
+          panel.style.overflow = 'hidden';
+        } else if (!mq.matches) {
+          panel.style.height = '';
+          panel.style.overflow = '';
+        }
+      }
+      applyState();
+      mq.addEventListener('change', applyState);
+
+      heading.addEventListener('click', function () {
+        if (!mq.matches) return;
+        var open = col.classList.toggle('pa-accordion-open');
+        if (open) {
+          panel.style.overflow = 'hidden';
+          panel.style.height = panel.scrollHeight + 'px';
+          panel.addEventListener('transitionend', function done() {
+            panel.style.height = 'auto';
+            panel.style.overflow = '';
+            panel.removeEventListener('transitionend', done);
+          });
+        } else {
+          panel.style.height = panel.scrollHeight + 'px';
+          panel.style.overflow = 'hidden';
+          requestAnimationFrame(function () {
+            requestAnimationFrame(function () { panel.style.height = '0'; });
+          });
+        }
+      });
+    });
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initFooterAccordion);
+  } else {
+    initFooterAccordion();
+  }
+  window.addEventListener('load', initFooterAccordion);
+}());
+</script>
 <!-- END Custom Footer -->
