@@ -1304,6 +1304,25 @@ body.sj-page-detail-course ul.dp-curriculum li.lesson-rating {
   color: #707073 !important;
   font-size: 13px !important;
 }
+/* Section headers — bold, dark, extra top spacing to group lessons beneath */
+body.sj-page-detail-course ul.dp-curriculum li.section {
+  font-weight: 700 !important;
+  color: #17212B !important;
+  font-size: 14px !important;
+  margin-top: 16px !important;
+  padding-bottom: 2px !important;
+}
+body.sj-page-detail-course ul.dp-curriculum li.section:first-child {
+  margin-top: 0 !important;
+}
+/* Solid filled circle for section headers */
+body.sj-page-detail-course ul.dp-curriculum li.section::before {
+  background-color: #447099 !important;
+  border-color: #447099 !important;
+  width: 10px !important;
+  height: 10px !important;
+  margin-top: 5px !important;
+}
 
 /* ═══════════════════════════════════════════════
    HIDE DUPLICATE TAB SECTION
@@ -1885,19 +1904,6 @@ body.sj-page-curriculum .section-container.tabs > section:has(h3.course-long-des
     /* Save toggle is hidden on the registered page via CSS — nothing to do. */
   }
 
-  /* Remove SkillJar's ellipsis truncation from curriculum lesson titles.
-     Only touches the title element — avoids disturbing item/row heights
-     that SkillJar's layout JS reads to position items. */
-  function fixCurriculumTruncation() {
-    var titles = document.querySelectorAll('#curriculum-list .lesson-row .title');
-    for (var i = 0; i < titles.length; i++) {
-      titles[i].style.setProperty('white-space',   'normal',  'important');
-      titles[i].style.setProperty('overflow',      'visible', 'important');
-      titles[i].style.setProperty('text-overflow', 'clip',    'important');
-      titles[i].style.setProperty('max-width',     'none',    'important');
-    }
-  }
-
   /* Force-show all tab section content (SkillJar hides inactive tabs via inline style) */
   function showAllTabContent() {
     var sections = document.querySelectorAll(
@@ -1974,7 +1980,6 @@ body.sj-page-curriculum .section-container.tabs > section:has(h3.course-long-des
       fixSaveToggle();
       showAllTabContent();
       renameCurriculumHeading();
-      fixCurriculumTruncation();
     }
     if (attempts >= 50) clearInterval(poll); /* bail after ~10 s */
   }, 200);
