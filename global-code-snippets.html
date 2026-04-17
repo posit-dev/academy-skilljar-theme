@@ -1821,6 +1821,45 @@ body.sj-page-curriculum .section-container.tabs > section:has(h3.course-long-des
   margin: 0 0 16px 0 !important;
 }
 
+/* ── Course objectives list — mirrors unregistered page styling ── */
+body.sj-page-curriculum .section-container.tabs > section:has(h3.course-long-description-header) .content ol {
+  padding-left: 0 !important;
+  margin: 0 !important;
+  list-style: none !important;
+  counter-reset: objectives !important;
+}
+body.sj-page-curriculum .section-container.tabs > section:has(h3.course-long-description-header) .content ol li {
+  counter-increment: objectives !important;
+  display: flex !important;
+  align-items: flex-start !important;
+  gap: 14px !important;
+  padding: 10px 0 !important;
+  border-bottom: 1px solid #F0F3F6 !important;
+  font-family: 'Open Sans', sans-serif !important;
+  font-size: 15px !important;
+  font-weight: 400 !important;
+  color: #404041 !important;
+  line-height: 1.6 !important;
+}
+body.sj-page-curriculum .section-container.tabs > section:has(h3.course-long-description-header) .content ol li:last-child {
+  border-bottom: none !important;
+}
+body.sj-page-curriculum .section-container.tabs > section:has(h3.course-long-description-header) .content ol li::before {
+  content: counter(objectives) !important;
+  flex-shrink: 0 !important;
+  width: 26px !important;
+  height: 26px !important;
+  border-radius: 50% !important;
+  background-color: #447099 !important;
+  color: #ffffff !important;
+  font-size: 12px !important;
+  font-weight: 700 !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  margin-top: 2px !important;
+}
+
 
 /* ═══════════════════════════════════════════════
    MOBILE — hero + buttons stack at 640px
