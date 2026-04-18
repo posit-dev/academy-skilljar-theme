@@ -124,4 +124,34 @@
 
 <div id="pa-congrats-divider"></div>
 
+<script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.3/dist/confetti.browser.min.js"></script>
+<script>
+(function () {
+  function fireConfetti() {
+    var colors = ['#F6B000', '#F4C540', '#447099', '#D1DBE5', '#ffffff'];
+    var count  = 180;
+
+    function fire(ratio, opts) {
+      confetti(Object.assign({
+        particleCount: Math.floor(count * ratio),
+        colors: colors,
+        origin: { y: 0.55 }
+      }, opts));
+    }
+
+    fire(0.25, { spread: 26,  startVelocity: 55 });
+    fire(0.20, { spread: 60 });
+    fire(0.35, { spread: 100, decay: 0.91, scalar: 0.8 });
+    fire(0.10, { spread: 120, startVelocity: 25, decay: 0.92, scalar: 1.2 });
+    fire(0.10, { spread: 120, startVelocity: 45 });
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', fireConfetti);
+  } else {
+    fireConfetti();
+  }
+}());
+</script>
+
 <!-- END Posit Academy Post-Course Congratulations -->
