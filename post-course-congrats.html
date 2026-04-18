@@ -84,11 +84,20 @@
   color: #17212B;
 }
 
+/* Confetti trigger wrapper — centered row above nav buttons */
+#pa-confetti-btn-wrap {
+  display: flex;
+  justify-content: center;
+  padding: 32px 24px 0;
+  background: #ffffff;
+}
+
 /* Confetti trigger — outlined yellow */
 .pa-congrats-btn-confetti {
   background: transparent;
   color: #17212B;
   border: 2px solid #F6B000;
+  cursor: pointer;
 }
 .pa-congrats-btn-confetti:hover {
   background: #F6B000;
@@ -124,8 +133,11 @@
   <p id="pa-congrats-sub">You've completed this course. Use the links below to continue your learning journey.</p>
 </div>
 
+<div id="pa-confetti-btn-wrap">
+  <button id="pa-confetti-btn" class="pa-congrats-btn pa-congrats-btn-confetti">Fire Confetti</button>
+</div>
+
 <div id="pa-congrats-buttons">
-  <button class="pa-congrats-btn pa-congrats-btn-confetti" onclick="window.fireConfetti()">Fire Confetti</button>
   <a class="pa-congrats-btn pa-congrats-btn-primary"
      href="https://academy.posit.co"
      target="_self">Home</a>
@@ -138,7 +150,7 @@
 
 <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.3/dist/confetti.browser.min.js"></script>
 <script>
-window.fireConfetti = function () {
+function fireConfetti() {
   var colors = ['#F6B000', '#F4C540', '#447099', '#D1DBE5', '#ffffff'];
   var count  = 180;
 
@@ -155,12 +167,18 @@ window.fireConfetti = function () {
   fire(0.35, { spread: 100, decay: 0.91, scalar: 0.8 });
   fire(0.10, { spread: 120, startVelocity: 25, decay: 0.92, scalar: 1.2 });
   fire(0.10, { spread: 120, startVelocity: 45 });
-};
+}
+
+function initConfetti() {
+  fireConfetti();
+  var btn = document.getElementById('pa-confetti-btn');
+  if (btn) btn.addEventListener('click', fireConfetti);
+}
 
 if (document.readyState === 'loading') {
-  document.addEventListener('DOMContentLoaded', window.fireConfetti);
+  document.addEventListener('DOMContentLoaded', initConfetti);
 } else {
-  window.fireConfetti();
+  initConfetti();
 }
 </script>
 
