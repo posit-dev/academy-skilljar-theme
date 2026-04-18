@@ -1,0 +1,140 @@
+<!-- Posit Academy — Post-Course Congratulations Lesson -->
+<!-- Paste this into a SkillJar HTML lesson as the lesson body. -->
+
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Open+Sans:wght@300;400;600;700&display=swap');
+
+/* ── Banner ── */
+#pa-congrats-banner {
+  background: linear-gradient(135deg, #17212B 0%, #3A5672 100%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 56px 24px 48px;
+  text-align: center;
+}
+
+#pa-congrats-icon {
+  width: 72px;
+  height: 72px;
+  background: rgba(246, 176, 0, 0.15);
+  border: 2px solid #F6B000;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 24px;
+}
+
+#pa-congrats-icon svg {
+  width: 36px;
+  height: 36px;
+}
+
+#pa-congrats-heading {
+  font-family: 'Open Sans', sans-serif;
+  font-size: clamp(28px, 5vw, 48px);
+  font-weight: 700;
+  color: #ffffff;
+  margin: 0 0 12px 0;
+  line-height: 1.15;
+}
+
+#pa-congrats-sub {
+  font-family: 'Open Sans', sans-serif;
+  font-size: clamp(14px, 2vw, 17px);
+  font-weight: 400;
+  color: rgba(255, 255, 255, 0.78);
+  margin: 0;
+  line-height: 1.6;
+  max-width: 500px;
+}
+
+/* ── Button row ── */
+#pa-congrats-buttons {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 14px;
+  padding: 40px 24px 32px;
+  background: #ffffff;
+}
+
+.pa-congrats-btn {
+  font-family: 'Open Sans', sans-serif;
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  text-decoration: none;
+  border-radius: 4px;
+  padding: 14px 28px;
+  transition: background-color 0.15s, color 0.15s;
+  display: inline-block;
+}
+
+/* Primary — dark filled */
+.pa-congrats-btn-primary {
+  background: #17212B;
+  color: #ffffff;
+}
+.pa-congrats-btn-primary:hover {
+  background: #213D4F;
+  color: #ffffff;
+}
+
+/* Secondary — Academy Yellow */
+.pa-congrats-btn-secondary {
+  background: #F6B000;
+  color: #17212B;
+}
+.pa-congrats-btn-secondary:hover {
+  background: #C48F0A;
+  color: #17212B;
+}
+
+/* ── Divider ── */
+#pa-congrats-divider {
+  height: 1px;
+  background: #E8ECEF;
+  margin: 0 24px;
+}
+
+/* ── Responsive ── */
+@media only screen and (max-width: 480px) {
+  .pa-congrats-btn {
+    width: 100%;
+    text-align: center;
+  }
+  #pa-congrats-buttons {
+    flex-direction: column;
+    align-items: center;
+    padding: 32px 20px;
+  }
+}
+</style>
+
+<div id="pa-congrats-banner">
+  <!-- Checkmark icon -->
+  <div id="pa-congrats-icon">
+    <svg viewBox="0 0 36 36" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+      <path d="M7 18.5L14.5 26L29 11" stroke="#F6B000" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round"/>
+    </svg>
+  </div>
+  <h1 id="pa-congrats-heading">Congratulations!</h1>
+  <p id="pa-congrats-sub">You've completed this course. Use the links below to continue your learning journey.</p>
+</div>
+
+<div id="pa-congrats-buttons">
+  <a class="pa-congrats-btn pa-congrats-btn-primary"
+     href="https://academy.posit.co"
+     target="_self">Home</a>
+  <a class="pa-congrats-btn pa-congrats-btn-secondary"
+     href="https://academy.posit.co/page/all-courses"
+     target="_self">Browse All Courses</a>
+</div>
+
+<div id="pa-congrats-divider"></div>
+
+<!-- END Posit Academy Post-Course Congratulations -->
