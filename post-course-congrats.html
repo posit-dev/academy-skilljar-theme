@@ -153,12 +153,16 @@
 function fireConfetti() {
   var colors = ['#F6B000', '#F4C540', '#447099', '#D1DBE5', '#ffffff'];
   var count  = 180;
+  var origin = {
+    x: Math.random(),
+    y: Math.random() * 0.4 + 0.3   /* between 30% and 70% down */
+  };
 
   function fire(ratio, opts) {
     confetti(Object.assign({
       particleCount: Math.floor(count * ratio),
       colors: colors,
-      origin: { y: 0.55 }
+      origin: origin
     }, opts));
   }
 
