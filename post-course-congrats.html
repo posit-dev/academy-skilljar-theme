@@ -1,5 +1,7 @@
-<!-- Posit Academy — Post-Course Congratulations Lesson -->
-<!-- Paste this into a SkillJar HTML lesson as the lesson body. -->
+<!-- Posit Academy — Post-Course Congratulations -->
+<!-- Paste this into the SkillJar rating lesson's Summary field.
+     The script injects the banner into the main lesson content area,
+     so it appears above the rating widget regardless of pane state. -->
 
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Open+Sans:wght@300;400;600;700&display=swap');
@@ -84,31 +86,24 @@
   color: #17212B;
 }
 
-/* Confetti trigger wrapper — centered row above nav buttons */
-#pa-confetti-btn-wrap {
-  display: flex;
-  justify-content: center;
-  padding: 32px 24px 0;
-  background: #ffffff;
-}
-
-/* Confetti trigger — outlined yellow */
+/* Confetti trigger — outlined yellow, sits inside the dark banner */
 .pa-congrats-btn-confetti {
   background: transparent;
-  color: #17212B;
+  color: #ffffff;
   border: 2px solid #F6B000;
   cursor: pointer;
+  margin-top: 28px;
 }
 .pa-congrats-btn-confetti:hover {
   background: #F6B000;
   color: #17212B;
 }
 
-/* ── Divider ── */
+/* ── Divider between congrats and rating widget ── */
 #pa-congrats-divider {
   height: 1px;
   background: #E8ECEF;
-  margin: 0 24px;
+  margin: 0 24px 32px;
 }
 
 /* ── Responsive ── */
@@ -125,65 +120,70 @@
 }
 </style>
 
-<div id="pa-congrats-banner">
-  <img id="pa-congrats-logo"
-       src="https://everpath-course-content.s3-accelerate.amazonaws.com/instructor%2Feww6wlnql2k9y5hqbfc2ycpct%2Fpublic%2F1776479064%2Flogo_academytag-reverse.1776479063876.svg"
-       alt="Academy by Posit">
-  <h1 id="pa-congrats-heading">Congratulations!</h1>
-  <p id="pa-congrats-sub">You've completed this course. Use the links below to continue your learning journey.</p>
-</div>
-
-<div id="pa-confetti-btn-wrap">
-  <button id="pa-confetti-btn" class="pa-congrats-btn pa-congrats-btn-confetti">Fire Confetti</button>
-</div>
-
-<div id="pa-congrats-buttons">
-  <a class="pa-congrats-btn pa-congrats-btn-primary"
-     href="https://academy.posit.co"
-     target="_self">Home</a>
-  <a class="pa-congrats-btn pa-congrats-btn-secondary"
-     href="https://academy.posit.co/page/all-courses"
-     target="_self">Browse All Courses</a>
-</div>
-
-<div id="pa-congrats-divider"></div>
-
 <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.3/dist/confetti.browser.min.js"></script>
 <script>
-function fireConfetti() {
-  var colors = ['#F6B000', '#F4C540', '#447099', '#D1DBE5', '#ffffff'];
-  var count  = 180;
-  var origin = {
-    x: Math.random(),
-    y: Math.random() * 0.4 + 0.3   /* between 30% and 70% down */
-  };
-
-  function fire(ratio, opts) {
-    confetti(Object.assign({
-      particleCount: Math.floor(count * ratio),
-      colors: colors,
-      origin: origin
-    }, opts));
+(function () {
+  function fireConfetti() {
+    var colors = ['#F6B000', '#F4C540', '#447099', '#D1DBE5', '#ffffff'];
+    var count  = 180;
+    var origin = {
+      x: Math.random(),
+      y: Math.random() * 0.4 + 0.3
+    };
+    function fire(ratio, opts) {
+      confetti(Object.assign({
+        particleCount: Math.floor(count * ratio),
+        colors: colors,
+        origin: origin
+      }, opts));
+    }
+    fire(0.25, { spread: 26,  startVelocity: 55 });
+    fire(0.20, { spread: 60 });
+    fire(0.35, { spread: 100, decay: 0.91, scalar: 0.8 });
+    fire(0.10, { spread: 120, startVelocity: 25, decay: 0.92, scalar: 1.2 });
+    fire(0.10, { spread: 120, startVelocity: 45 });
   }
 
-  fire(0.25, { spread: 26,  startVelocity: 55 });
-  fire(0.20, { spread: 60 });
-  fire(0.35, { spread: 100, decay: 0.91, scalar: 0.8 });
-  fire(0.10, { spread: 120, startVelocity: 25, decay: 0.92, scalar: 1.2 });
-  fire(0.10, { spread: 120, startVelocity: 45 });
-}
+  function injectCongrats() {
+    if (document.getElementById('pa-congrats-banner')) return; /* already injected */
 
-function initConfetti() {
-  fireConfetti();
-  var btn = document.getElementById('pa-confetti-btn');
-  if (btn) btn.addEventListener('click', fireConfetti);
-}
+    var target = document.getElementById('lesson-main-content');
+    if (!target) return;
 
-if (document.readyState === 'loading') {
-  document.addEventListener('DOMContentLoaded', initConfetti);
-} else {
-  initConfetti();
-}
+    var wrapper = document.createElement('div');
+    wrapper.innerHTML = [
+      '<div id="pa-congrats-banner">',
+        '<img id="pa-congrats-logo"',
+             'src="https://everpath-course-content.s3-accelerate.amazonaws.com/instructor%2Feww6wlnql2k9y5hqbfc2ycpct%2Fpublic%2F1776479064%2Flogo_academytag-reverse.1776479063876.svg"',
+             'alt="Academy by Posit">',
+        '<h1 id="pa-congrats-heading">Congratulations!</h1>',
+        '<p id="pa-congrats-sub">You\'ve completed this course. Use the links below to continue your learning journey.</p>',
+        '<button id="pa-confetti-btn" class="pa-congrats-btn pa-congrats-btn-confetti">Fire Confetti</button>',
+      '</div>',
+      '<div id="pa-congrats-buttons">',
+        '<a class="pa-congrats-btn pa-congrats-btn-primary" href="https://academy.posit.co" target="_self">Home</a>',
+        '<a class="pa-congrats-btn pa-congrats-btn-secondary" href="https://academy.posit.co/page/all-courses" target="_self">Browse All Courses</a>',
+      '</div>',
+      '<div id="pa-congrats-divider"></div>'
+    ].join('');
+
+    target.insertBefore(wrapper, target.firstChild);
+
+    var btn = document.getElementById('pa-confetti-btn');
+    if (btn) btn.addEventListener('click', fireConfetti);
+
+    fireConfetti();
+  }
+
+  /* Run after DOMContentLoaded, then retry after load to catch SkillJar's async render */
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', injectCongrats);
+  } else {
+    injectCongrats();
+  }
+  window.addEventListener('load', function () {
+    setTimeout(injectCongrats, 300);
+  });
+}());
 </script>
-
 <!-- END Posit Academy Post-Course Congratulations -->
