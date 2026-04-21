@@ -311,19 +311,6 @@ a.coursebox-container[data-tags="live-training"] {
   padding: 0 !important;
   box-sizing: border-box !important;
 }
-/* Foundation .row/.columns inside the catalog add ~15px side padding/gutter by default,
-   shifting #catalog-courses right of the HTML-block sections above it (hero, announce, etc.)
-   that don't sit inside .columns. Reset them so all sections share the same left edge. */
-#catalog-content .row {
-  max-width: none !important;
-  width: 100% !important;
-  margin-left: 0 !important;
-  margin-right: 0 !important;
-}
-#catalog-content .columns {
-  padding-left: 0 !important;
-  padding-right: 0 !important;
-}
 
 /* Course listing — fixed-column grid keeps card sizes consistent at any zoom level */
 #catalog-courses {
@@ -356,6 +343,7 @@ a.coursebox-container[data-tags="separator"]:not([data-pa-ready]) {
 /* ── Container: single-column stacked layout ── */
 a.coursebox-container[data-tags="separator"] {
   grid-column: 1 / -1 !important;
+  margin: 0 !important;
   padding: 20px 0 32px 0 !important;
   width: 100% !important;
   min-height: unset !important;
