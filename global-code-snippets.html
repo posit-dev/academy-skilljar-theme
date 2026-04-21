@@ -230,19 +230,10 @@ a.coursebox-container {
   text-decoration: none !important;
   padding: 0 !important;
 }
-/* Stretch cards to fill their row, but cap width so a lone card
-   on a short row doesn't expand to fill the entire container.
-   Subtract half the inter-card gap (8px = 16px / 2) so the lone
-   card matches the width of cards in a full two-card row above it. */
+/* Cards fill their grid column; grid template controls column count and width */
 a.coursebox-container:not([data-tags="separator"]) {
-  flex-grow: 1 !important;
-  max-width: calc(50% - 8px) !important;
-}
-@media (min-width: 900px) {
-  a.coursebox-container:not([data-tags="separator"]) {
-    /* 2 gaps of 16px shared across 3 cards → subtract 32px/3 ≈ 11px */
-    max-width: calc(100% / 3 - 11px) !important;
-  }
+  width: 100% !important;
+  max-width: 100% !important;
 }
 a.coursebox-container:hover {
   box-shadow: 0 8px 28px rgba(0,0,0,0.1) !important;
@@ -267,6 +258,7 @@ a.coursebox-container .coursebox-image {
 /* Regular course/training cards: fix container aspect ratio so object-fit:cover works at any zoom level */
 a.coursebox-container:not([data-tags~="role-card"]):not([data-tags~="separator"]):not([data-tags~="path-desc"]) .coursebox-image {
   aspect-ratio: 16 / 9 !important;
+  max-height: 280px !important;
 }
 a.coursebox-container .coursebox-image img {
   width: 100% !important;
@@ -319,11 +311,14 @@ a.coursebox-container[data-tags="live-training"] {
   box-sizing: border-box !important;
 }
 
-/* Course listing */
+/* Course listing — fixed-column grid keeps card sizes consistent at any zoom level */
 #catalog-courses {
+  display: grid !important;
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)) !important;
+  gap: 16px !important;
+  align-items: start !important;
   padding-top: 0 !important;
   box-sizing: border-box !important;
-  justify-content: center !important;
 }
 
 /* Hide price and CTA button */
@@ -346,6 +341,7 @@ a.coursebox-container[data-tags="separator"]:not([data-pa-ready]) {
 
 /* ── Container: single-column stacked layout ── */
 a.coursebox-container[data-tags="separator"] {
+  grid-column: 1 / -1 !important;
   padding: max(20px, calc((70vw - 1280px) / 4)) 0 32px 0 !important;
   width: 100% !important;
   min-height: unset !important;
@@ -455,6 +451,7 @@ a.coursebox-container[data-tags~="role-card"] {
   grid-template-rows: 52px 1fr !important;
   grid-template-columns: 1fr !important;
   grid-template-areas: "header" "photo" !important;  /* named areas — beats order/DOM order */
+  grid-column: span 2 !important;    /* spans 2 catalog columns → 2 per row at normal widths */
   position: relative !important;
   overflow: hidden !important;
   border: none !important;
@@ -462,8 +459,8 @@ a.coursebox-container[data-tags~="role-card"] {
   background: #3D6F74 !important;
   aspect-ratio: 4 / 3 !important;
   min-height: 0 !important;
-  flex: 1 1 0 !important;            /* grow to fill row; flex-basis:0 lets growth be even */
-  max-width: min(calc(50% - 8px), 460px) !important;  /* cap at 2-per-row AND at 460px on wide screens */
+  width: 100% !important;
+  max-width: 100% !important;
   align-self: flex-start !important;
   box-shadow: 0 2px 12px rgba(0,0,0,0.15) !important;
 }
@@ -471,7 +468,7 @@ a.coursebox-container[data-tags~="role-card"] {
 @media (max-width: 640px) {
   #catalog-courses a.coursebox-container[data-tags~="role-card"],
   a.coursebox-container[data-tags~="role-card"] {
-    flex: 0 0 100% !important;  /* flex-basis:100% forces one per row; overrides flex-grow */
+    grid-column: span 1 !important;
     max-width: 100% !important;
   }
 }
