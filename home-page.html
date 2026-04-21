@@ -268,4 +268,162 @@
 }
 </style>
 
+<!-- ══════════════════════════════════════════════
+     YOUR LEARNING OPTIONS
+     Two-column section: Courses & Training (left)
+     vs. Academy Apprenticeships (right).
+     ══════════════════════════════════════════════ -->
+<div id="pa-learn-wrap">
+  <h2 id="pa-learn-heading">Your Learning Options</h2>
+  <div id="pa-learn-grid">
+
+    <div class="pa-learn-col" id="pa-learn-col-courses">
+      <h3 class="pa-learn-col-title">Courses &amp; Training</h3>
+      <p class="pa-learn-col-desc">Browse on-demand video courses and live technical workshops on data science with R and Python. Learn at your own pace or join an instructor-led session.</p>
+      <ul class="pa-learn-features">
+        <li>Self-paced, on-demand access</li>
+        <li>Live instructor-led workshops</li>
+        <li>Topics for every skill level</li>
+      </ul>
+      <a href="/page/all-courses" class="pa-learn-btn pa-learn-btn--primary">Browse All Courses</a>
+    </div>
+
+    <div class="pa-learn-col" id="pa-learn-col-apprentice">
+      <h3 class="pa-learn-col-title">Academy Apprenticeships</h3>
+      <p class="pa-learn-col-desc">A structured, mentor-led program for teams. Combine self-paced lessons, real-world projects, and weekly live sessions to build lasting data science skills.</p>
+      <ul class="pa-learn-features">
+        <li>~45 min/day of interactive coding lessons</li>
+        <li>Industry-relevant weekly projects</li>
+        <li>Weekly live sessions with expert mentors</li>
+      </ul>
+      <a href="https://posit.co/products/enterprise/academy" target="_blank" rel="noopener" class="pa-learn-btn pa-learn-btn--secondary">Learn More</a>
+    </div>
+
+  </div>
+</div>
+
+<style>
+#pa-learn-wrap {
+  padding: 48px max(20px, 5vw) 0;
+  box-sizing: border-box;
+  background: #ffffff;
+}
+#pa-learn-heading {
+  font-family: 'Open Sans', sans-serif;
+  font-size: clamp(24px, 2.5vw, 36px);
+  font-weight: 700;
+  color: #17212B;
+  margin: 0 0 6px 0;
+  line-height: 1.2;
+}
+#pa-learn-heading::after {
+  content: '';
+  display: block;
+  width: 120px;
+  height: 3px;
+  background: #447099;
+  margin-top: 12px;
+}
+#pa-learn-grid {
+  display: flex;
+  align-items: flex-start;
+  padding-top: 32px;
+}
+.pa-learn-col {
+  flex: 1;
+  min-width: 0;
+}
+#pa-learn-col-courses {
+  padding-right: 48px;
+}
+#pa-learn-col-apprentice {
+  padding-left: 48px;
+  border-left: 1px solid #D1DBE5;
+}
+.pa-learn-col-title {
+  font-family: 'Open Sans', sans-serif;
+  font-size: clamp(17px, 1.6vw, 22px);
+  font-weight: 700;
+  color: #17212B;
+  margin: 0 0 12px 0;
+  line-height: 1.3;
+}
+.pa-learn-col-desc {
+  font-family: 'Open Sans', sans-serif;
+  font-size: 15px;
+  font-weight: 400;
+  color: #404041;
+  line-height: 1.7;
+  margin: 0 0 20px 0;
+}
+.pa-learn-features {
+  list-style: none;
+  padding: 0;
+  margin: 0 0 28px 0;
+}
+.pa-learn-features li {
+  font-family: 'Open Sans', sans-serif;
+  font-size: 14px;
+  font-weight: 400;
+  color: #404041;
+  line-height: 1.6;
+  padding-left: 1.4em;
+  margin-bottom: 8px;
+  position: relative;
+}
+.pa-learn-features li::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 0.55em;
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: #447099;
+}
+.pa-learn-btn {
+  display: inline-block;
+  font-family: 'Open Sans', sans-serif;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  text-decoration: none;
+  border-radius: 4px;
+  padding: 12px 24px;
+  transition: background-color 0.15s, color 0.15s;
+}
+.pa-learn-btn--primary {
+  background: #17212B;
+  color: #ffffff;
+}
+.pa-learn-btn--primary:hover {
+  background: #3A5672;
+  color: #ffffff;
+}
+.pa-learn-btn--secondary {
+  background: #F6B000;
+  color: #17212B;
+}
+.pa-learn-btn--secondary:hover {
+  background: #C48F0A;
+  color: #17212B;
+}
+@media only screen and (max-width: 700px) {
+  #pa-learn-grid {
+    flex-direction: column;
+  }
+  #pa-learn-col-courses {
+    padding-right: 0;
+    padding-bottom: 36px;
+  }
+  #pa-learn-col-apprentice {
+    padding-left: 0;
+    padding-top: 36px;
+    border-left: none;
+    border-top: 1px solid #D1DBE5;
+  }
+}
+</style>
+
 <!-- END Posit Academy Home Page -->
