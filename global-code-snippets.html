@@ -255,8 +255,9 @@ a.coursebox-container .coursebox-image {
   font-size: 0 !important;
   overflow: hidden !important;
 }
-/* Regular course/training cards: fix container aspect ratio so object-fit:cover works at any zoom level */
-a.coursebox-container:not([data-tags~="role-card"]):not([data-tags~="separator"]):not([data-tags~="path-desc"]) .coursebox-image {
+/* Regular course/training cards: fix container aspect ratio so object-fit:cover works at any zoom level.
+   Scoped to non-path pages — path pages use a fixed 220px image column and don't need this. */
+body:not(.sj-page-detail-path):not(.sj-page-path) a.coursebox-container:not([data-tags~="role-card"]):not([data-tags~="separator"]):not([data-tags~="path-desc"]) .coursebox-image {
   aspect-ratio: 16 / 9 !important;
   max-height: 280px !important;
 }
@@ -2999,8 +3000,6 @@ body:is(.sj-page-detail-path, .sj-page-path) a.coursebox-container:not([data-tag
   width: auto !important;
   min-height: 140px !important;
   height: auto !important;
-  aspect-ratio: unset !important;
-  max-height: unset !important;
   align-self: stretch !important;
   padding: 0 !important;
   margin: 0 !important;
