@@ -445,13 +445,23 @@ a.coursebox-container[data-tags="separator"]:after,
    opts out of flex-grow so it stays at its stated width).
    Use #catalog-courses prefix for specificity over
    SkillJar's own flex-grow/max-width rules. */
+/* Wrapper injected by JS: spans all grid columns, centers role cards inside */
+.pa-role-cards-wrapper {
+  grid-column: 1 / -1 !important;
+  display: flex !important;
+  justify-content: center !important;
+  gap: 16px !important;
+  flex-wrap: wrap !important;
+}
+
 #catalog-courses a.coursebox-container[data-tags~="role-card"],
 a.coursebox-container[data-tags~="role-card"] {
   display: grid !important;
   grid-template-rows: 52px 1fr !important;
   grid-template-columns: 1fr !important;
   grid-template-areas: "header" "photo" !important;  /* named areas — beats order/DOM order */
-  grid-column: span 2 !important;    /* spans 2 catalog columns → 2 per row at normal widths */
+  flex: 0 0 min(calc(50% - 8px), 460px) !important;
+  max-width: 460px !important;
   position: relative !important;
   overflow: hidden !important;
   border: none !important;
@@ -459,8 +469,6 @@ a.coursebox-container[data-tags~="role-card"] {
   background: #3D6F74 !important;
   aspect-ratio: 4 / 3 !important;
   min-height: 0 !important;
-  width: 100% !important;
-  max-width: 100% !important;
   align-self: flex-start !important;
   box-shadow: 0 2px 12px rgba(0,0,0,0.15) !important;
 }
@@ -468,7 +476,7 @@ a.coursebox-container[data-tags~="role-card"] {
 @media (max-width: 640px) {
   #catalog-courses a.coursebox-container[data-tags~="role-card"],
   a.coursebox-container[data-tags~="role-card"] {
-    grid-column: span 1 !important;
+    flex: 0 0 100% !important;
     max-width: 100% !important;
   }
 }
@@ -603,11 +611,25 @@ a.coursebox-container[data-tags~="role-card"] .sj-ribbon-wrapper {
     });
   }
 
+  /* Wrap all role cards in a centered flex row that spans the full catalog grid */
+  function wrapRoleCards() {
+    var cards = Array.from(document.querySelectorAll(
+      '#catalog-courses a.coursebox-container[data-tags~="role-card"]'
+    ));
+    if (!cards.length) return;
+    if (cards[0].parentElement.classList.contains('pa-role-cards-wrapper')) return;
+    var wrapper = document.createElement('div');
+    wrapper.className = 'pa-role-cards-wrapper';
+    cards[0].parentElement.insertBefore(wrapper, cards[0]);
+    cards.forEach(function (card) { wrapper.appendChild(card); });
+  }
+
   /* Poll until SkillJar has rendered the course cards */
   var poll = setInterval(function () {
     if (document.querySelector('a.coursebox-container[data-tags~="role-card"]')) {
       clearInterval(poll);
       updateRoleCardLinks();
+      wrapRoleCards();
     }
   }, 200);
   setTimeout(function () { clearInterval(poll); }, 15000);
