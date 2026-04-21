@@ -18,6 +18,19 @@
   to the path's course list in SkillJar. The existing global separator
   CSS/JS in global-code-snippets.html handles the rest.
 -->
+<script>
+/* Inject the native-hero hide rule into <head> synchronously so it applies
+   before the browser paints, preventing the white-gap FOUC on the
+   unregistered path page. The <style> block later in this file is a
+   fallback for any edge-case where this script is deferred. */
+(function(){
+  var b = document.body;
+  if (!b || (!b.classList.contains('sj-page-detail-path') && !b.classList.contains('sj-page-detail-bundle'))) return;
+  var s = document.createElement('style');
+  s.textContent = '.top-row-grey,.top-row-white-v2{display:none!important}';
+  document.head.appendChild(s);
+}());
+</script>
 <div id="pa-path-hero"><img id="pa-path-hero-img" src="https://everpath-course-content.s3-accelerate.amazonaws.com/instructor%2Feww6wlnql2k9y5hqbfc2ycpct%2Fpublic%2F1776218490%2Facad2.0-role-datasci-hero-x2.1776218489705.png" alt="Posit Academy &mdash; Data Scientist learning path" />
 <div id="pa-path-hero-overlay">
 <p id="pa-path-eyebrow">Learning Path</p>

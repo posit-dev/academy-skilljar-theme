@@ -262,12 +262,17 @@ a.coursebox-container .coursebox-image {
   margin: 0 !important;
   line-height: 0 !important;
   font-size: 0 !important;
+  overflow: hidden !important;
+}
+/* Regular course/training cards: fix container aspect ratio so object-fit:cover works at any zoom level */
+a.coursebox-container:not([data-tags~="role-card"]):not([data-tags~="separator"]):not([data-tags~="path-desc"]) .coursebox-image {
+  aspect-ratio: 16 / 9 !important;
 }
 a.coursebox-container .coursebox-image img {
   width: 100% !important;
-  max-width: 100% !important;
-  height: auto !important;
+  height: 100% !important;
   display: block !important;
+  object-fit: cover !important;
 }
 
 /* Title */
