@@ -311,12 +311,10 @@ a.coursebox-container[data-tags="live-training"] {
   box-sizing: border-box !important;
 }
 
-/* Course listing — fixed-column grid keeps card sizes consistent at any zoom level.
-   auto-fit collapses empty columns so partial rows center rather than left-align. */
+/* Course listing — fixed-column grid keeps card sizes consistent at any zoom level */
 #catalog-courses {
   display: grid !important;
-  grid-template-columns: repeat(auto-fit, minmax(260px, 300px)) !important;
-  justify-content: center !important;
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)) !important;
   gap: 16px !important;
   align-items: start !important;
   padding-top: 0 !important;
