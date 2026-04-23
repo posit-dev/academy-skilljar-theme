@@ -14,6 +14,11 @@
     <p id="pa-hero-desc">Your learning hub for data science with R and Python — courses, live trainings, and a thriving community.</p>
     <a href="/page/all-courses" id="pa-hero-btn">Full Course Catalog</a>
   </div>
+  </div>
+</div>
+<div id="pa-conf-bar">
+  <span id="pa-conf-bar-text">posit::conf(2026) is coming to Houston, TX! Join us Sept 14–16.</span>
+  <a href="https://conf.posit.co/2026/" id="pa-conf-bar-cta" target="_blank" rel="noopener">RSVP Now</a>
 </div>
 
 <style>
@@ -93,6 +98,43 @@
     font-size: clamp(28px, 7vw, 42px);
   }
 }
+#pa-conf-bar {
+  width: 100%;
+  background: #F6B000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 20px;
+  padding: 12px max(20px, 5vw);
+  box-sizing: border-box;
+  flex-wrap: wrap;
+}
+#pa-conf-bar-text {
+  font-family: 'Open Sans', sans-serif;
+  font-size: clamp(12px, 1.4vw, 16px);
+  font-weight: 700;
+  color: #17212B;
+  line-height: 1.4;
+}
+#pa-conf-bar-cta {
+  display: inline-block;
+  font-family: 'Open Sans', sans-serif;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: #F6B000;
+  background: #17212B;
+  border-radius: 4px;
+  padding: 8px 18px;
+  text-decoration: none;
+  white-space: nowrap;
+  transition: opacity 0.15s;
+}
+#pa-conf-bar-cta:hover {
+  opacity: 0.85;
+  color: #F6B000;
+}
 </style>
 <!--
   HOW TO INSTALL:
@@ -157,116 +199,6 @@
   window.addEventListener('load', fixCatalogGap);
 }());
 </script>
-<!-- ══════════════════════════════════════════════
-     ANNOUNCEMENT BLOCK
-     Two-column card: text left, image right.
-     To update: edit the h2, p, and swap the img src.
-     ══════════════════════════════════════════════ -->
-<div id="pa-announce-wrap">
-  <div id="pa-announce-card">
-    <div id="pa-announce-text">
-      <h2 id="pa-announce-heading">posit::conf(2026), Houston, TX · Sept 14–16</h2>
-      <p id="pa-announce-body">Join thousands of R and Python practitioners for full-day hands-on workshops, 100+ live talks across multiple tracks, and community events. Workshops run Sept 14; main conference Sept 15–16. Super Early Bird passes from $1,099. Virtual Pass just $99.</p>
-      <a href="https://conf.posit.co/2026/" id="pa-announce-cta" target="_blank" rel="noopener">Register now</a>
-    </div>
-    <div id="pa-announce-image">
-      <!-- Replace src with your announcement image -->
-      <img src="https://lirp.cdn-website.com/d4d6e48c/dms3rep/multi/opt/img-placeholder-rectangle+%286%29-600h.png" alt="Announcement" id="pa-announce-img">
-    </div>
-  </div>
-</div>
-
-<style>
-#pa-announce-wrap {
-  width: 100%;
-  padding: 28px max(20px, 5vw) 0;
-  box-sizing: border-box;
-  background: #ffffff;
-}
-#pa-announce-card {
-  display: flex;
-  align-items: center;
-  gap: 28px;
-  background: #D1DBE5;
-  border-radius: 12px;
-  padding: 32px 40px;
-  box-sizing: border-box;
-}
-#pa-announce-text {
-  flex: 1 1 0;
-  min-width: 0;
-}
-#pa-announce-heading {
-  font-family: 'Open Sans', sans-serif;
-  font-size: clamp(18px, 2vw, 24px);
-  font-weight: 700;
-  color: #17212B;
-  margin: 0 0 10px 0;
-  line-height: 1.2;
-}
-#pa-announce-body {
-  font-family: 'Open Sans', sans-serif;
-  font-size: 14px;
-  font-weight: 400;
-  color: #404041;
-  line-height: 1.65;
-  margin: 0 0 16px 0;
-}
-#pa-announce-cta {
-  display: inline-block;
-  font-family: 'Open Sans', sans-serif !important;
-  font-size: 12px;
-  font-weight: 700;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-  color: #17212B;
-  background: #F6B000;
-  border-radius: 4px;
-  padding: 10px 20px;
-  text-decoration: none;
-  transition: background-color 0.15s;
-}
-#pa-announce-cta:hover {
-  background: #C48F0A;
-  color: #17212B;
-}
-#pa-announce-image {
-  flex: 0 0 220px;
-  width: 220px;
-  aspect-ratio: 4 / 3;
-  background: #A2B8CB;
-  border-radius: 8px;
-  overflow: hidden;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-#pa-announce-img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  display: block;
-}
-/* Hide img element when src is empty (placeholder state) */
-#pa-announce-img[src=""] {
-  display: none;
-}
-@media only screen and (max-width: 700px) {
-  #pa-announce-wrap {
-    padding: 20px max(16px, calc((100vw - 1280px) / 4));
-  }
-  #pa-announce-card {
-    flex-direction: column;
-    padding: 24px 20px;
-    gap: 16px;
-  }
-  #pa-announce-image {
-    flex: 0 0 auto;
-    width: 100%;
-    max-height: 160px;
-  }
-}
-</style>
 
 <!-- ══════════════════════════════════════════════
      YOUR LEARNING OPTIONS
