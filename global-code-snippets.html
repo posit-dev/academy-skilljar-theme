@@ -1131,6 +1131,35 @@ body.sj-page-detail-course a.purchase-button:hover {
   transform: none !important;
 }
 
+/* Rename "Register" → "Get Started" on course pages (not live trainings).
+   CSS fires at first paint — no JS poll needed, no flicker.
+   color: transparent hides the native text without altering button dimensions.
+   ::after is absolutely centered so flex + line-height quirks can't shift it. */
+body.sj-page-detail-course:not(:has(#main-container[data-tags~="live-training"])) a#purchase-button,
+body.sj-page-detail-course:not(:has(#main-container[data-tags~="live-training"])) a.purchase-button {
+  position: relative !important;
+  color: transparent !important;
+}
+body.sj-page-detail-course:not(:has(#main-container[data-tags~="live-training"])) a#purchase-button:hover,
+body.sj-page-detail-course:not(:has(#main-container[data-tags~="live-training"])) a.purchase-button:hover {
+  color: transparent !important;
+}
+body.sj-page-detail-course:not(:has(#main-container[data-tags~="live-training"])) a#purchase-button::after,
+body.sj-page-detail-course:not(:has(#main-container[data-tags~="live-training"])) a.purchase-button::after {
+  content: 'Get Started';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  color: #ffffff;
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: none;
+  white-space: nowrap;
+  pointer-events: none;
+}
+
 /* "Return to Catalog" — injected by JS, outlined */
 body.sj-page-detail-course a.pa-catalog-btn {
   font-family: 'Open Sans', sans-serif !important;
