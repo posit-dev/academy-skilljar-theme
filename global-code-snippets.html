@@ -304,6 +304,58 @@ a.coursebox-container[data-tags="live-training"] {
   border-color: #F4C540 !important;
 }
 
+/* Learning Path card — dark blue body.
+   Target only known child elements — NOT a wildcard — so the ribbon keeps its own styling. */
+a.coursebox-container[data-tags*="learning-path"],
+a.coursebox-container[data-tags*="learning-path"]:hover {
+  background: #213D4F !important;
+  border-color: #213D4F !important;
+}
+a.coursebox-container[data-tags*="learning-path"] .coursebox-text,
+a.coursebox-container[data-tags*="learning-path"] .coursebox-text-description,
+a.coursebox-container[data-tags*="learning-path"] .coursebox-tags,
+a.coursebox-container[data-tags*="learning-path"] .no-coursebox-image-v2,
+a.coursebox-container[data-tags*="learning-path"]:hover .coursebox-text,
+a.coursebox-container[data-tags*="learning-path"]:hover .coursebox-text-description,
+a.coursebox-container[data-tags*="learning-path"]:hover .coursebox-tags,
+a.coursebox-container[data-tags*="learning-path"]:hover .no-coursebox-image-v2 {
+  background-color: #213D4F !important;
+}
+/* Ghost badge */
+a.coursebox-container[data-tags*="learning-path"] .coursebox-tag[data-tag="learning-path"] > span,
+a.coursebox-container[data-tags*="learning-path"]:hover .coursebox-tag[data-tag="learning-path"] > span {
+  background-color: rgba(255,255,255,0.15) !important;
+}
+/* Hide known elements that create the "stacked card" appearance */
+a.coursebox-container[data-tags*="learning-path"] .storefront-price,
+a.coursebox-container[data-tags*="learning-path"] .coursebox-callout,
+a.coursebox-container[data-tags*="learning-path"] .course-series-count,
+a.coursebox-container[data-tags*="learning-path"]:hover .storefront-price,
+a.coursebox-container[data-tags*="learning-path"]:hover .coursebox-callout,
+a.coursebox-container[data-tags*="learning-path"]:hover .course-series-count {
+  display: none !important;
+}
+/* Catch anything SkillJar injects AFTER the badge at hover time */
+a.coursebox-container[data-tags*="learning-path"] .coursebox-tags ~ *,
+a.coursebox-container[data-tags*="learning-path"]:hover .coursebox-tags ~ * {
+  display: none !important;
+  background-color: #213D4F !important;
+}
+/* Hide both pseudo-elements — JS inline styles handle the dark background */
+a.coursebox-container[data-tags*="learning-path"]::before,
+a.coursebox-container[data-tags*="learning-path"]::after,
+a.coursebox-container[data-tags*="learning-path"]:hover::before,
+a.coursebox-container[data-tags*="learning-path"]:hover::after {
+  display: none !important;
+  content: none !important;
+}
+a.coursebox-container[data-tags*="learning-path"] .coursebox-text {
+  color: #ffffff !important;
+}
+a.coursebox-container[data-tags*="learning-path"] .coursebox-text-description {
+  color: rgba(255,255,255,0.75) !important;
+}
+
 /* Catalog container — strip SkillJar's own width/padding constraints */
 #catalog-content {
   width: 100% !important;
@@ -660,16 +712,23 @@ a.coursebox-container:not([data-tags="separator"]) .coursebox-tag {
   display: none !important;
 }
 
-/* Show only course + live-training */
+/* Show only course + live-training + learning-path */
 a.coursebox-container:not([data-tags="separator"]) .coursebox-tag[data-tag="course"],
-a.coursebox-container:not([data-tags="separator"]) .coursebox-tag[data-tag="live-training"] {
+a.coursebox-container:not([data-tags="separator"]) .coursebox-tag[data-tag="live-training"],
+a.coursebox-container:not([data-tags="separator"]) .coursebox-tag[data-tag="learning-path"] {
   display: inline-flex !important;
   align-items: center !important;
 }
 
+/* On learning-path cards, only show the "Learning Path" badge — hide everything else */
+a.coursebox-container[data-tags*="learning-path"] .coursebox-tag:not([data-tag="learning-path"]) {
+  display: none !important;
+}
+
 /* Pill base */
 a.coursebox-container:not([data-tags="separator"]) .coursebox-tag[data-tag="course"] > span,
-a.coursebox-container:not([data-tags="separator"]) .coursebox-tag[data-tag="live-training"] > span {
+a.coursebox-container:not([data-tags="separator"]) .coursebox-tag[data-tag="live-training"] > span,
+a.coursebox-container:not([data-tags="separator"]) .coursebox-tag[data-tag="learning-path"] > span {
   font-family: 'Open Sans', sans-serif !important;
   font-size: 11px !important;
   font-weight: 700 !important;
@@ -692,8 +751,85 @@ a.coursebox-container:not([data-tags="separator"]) .coursebox-tag[data-tag="live
   background-color: #F6B000 !important;
   color: #17212B !important;
 }
+
+/* Learning Path — ghost pill: semi-transparent white on dark background */
+a.coursebox-container:not([data-tags="separator"]) .coursebox-tag[data-tag="learning-path"] > span {
+  background-color: rgba(255,255,255,0.15) !important;
+  color: #ffffff !important;
+  border: 1px solid rgba(255,255,255,0.40) !important;
+  padding: 4px 12px !important; /* 1px less to compensate for added border */
+}
 </style>
 <!-- END Course Type Badge -->
+
+
+<!-- START Learning Path Card Hover Fix -->
+<script>
+/* SkillJar's ::before overlay and JS hover styles both override CSS rules.
+   Inline styles set via JS beat everything, so we apply them on initial
+   setup AND on every hover transition — never removing them. */
+(function () {
+  var BG = '#213D4F';
+  var BADGE_BG = 'rgba(255,255,255,0.15)';
+
+  var KEEP = new Set(['sj-ribbon-wrapper', 'coursebox-image', 'coursebox-text',
+                      'coursebox-text-description', 'coursebox-tags']);
+
+  function applyDark(card) {
+    card.style.setProperty('background-color', BG, 'important');
+    card.querySelectorAll('.coursebox-text, .coursebox-text-description, .coursebox-tags').forEach(function (el) {
+      el.style.setProperty('background-color', BG, 'important');
+    });
+    var badge = card.querySelector('.coursebox-tag[data-tag="learning-path"] > span');
+    if (badge) badge.style.setProperty('background-color', BADGE_BG, 'important');
+  }
+
+  function hideUnwanted(card) {
+    Array.prototype.forEach.call(card.children, function (el) {
+      var classes = Array.prototype.slice.call(el.classList);
+      var keep = classes.some(function (c) { return KEEP.has(c); });
+      if (!keep) {
+        el.style.setProperty('display', 'none', 'important');
+        el.style.setProperty('background-color', BG, 'important');
+      }
+    });
+  }
+
+  function setupCards() {
+    document.querySelectorAll('a.coursebox-container[data-tags*="learning-path"]').forEach(function (card) {
+      /* Apply dark background immediately — not just on hover */
+      applyDark(card);
+      hideUnwanted(card);
+
+      /* Re-apply on both enter and leave so SkillJar can never win */
+      card.addEventListener('mouseenter', function () { applyDark(card); hideUnwanted(card); });
+      card.addEventListener('mouseleave', function () { applyDark(card); });
+
+      /* Catch anything SkillJar injects dynamically */
+      new MutationObserver(function (mutations) {
+        mutations.forEach(function (m) {
+          m.addedNodes.forEach(function (node) {
+            if (node.nodeType !== 1) return;
+            var keep = Array.prototype.slice.call(node.classList).some(function (c) { return KEEP.has(c); });
+            if (!keep) {
+              node.style.setProperty('display', 'none', 'important');
+              node.style.setProperty('background-color', BG, 'important');
+            }
+          });
+        });
+      }).observe(card, { childList: true });
+    });
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', setupCards);
+  } else {
+    setupCards();
+  }
+  window.addEventListener('load', setupCards);
+}());
+</script>
+<!-- END Learning Path Card Hover Fix -->
 
 
 <!-- START Search Results Styles -->
@@ -2620,6 +2756,12 @@ body:is(.sj-page-detail-path, .sj-page-path):has(#main-container[data-tags~="dat
   background-image: url('https://everpath-course-content.s3-accelerate.amazonaws.com/instructor%2Feww6wlnql2k9y5hqbfc2ycpct%2Fpublic%2F1776218490%2Facad2.0-role-datasci-hero-x2.1776218489705.png') !important;
 }
 
+/* Connect path — tag: "connect" */
+body:is(.sj-page-detail-path, .sj-page-path):has(#main-container[data-tags~="connect"]) .top-row-grey,
+body:is(.sj-page-detail-path, .sj-page-path):has(#main-container[data-tags~="connect"]) .top-row-white-v2 {
+  background-image: url('https://everpath-course-content.s3-accelerate.amazonaws.com/instructor%2Feww6wlnql2k9y5hqbfc2ycpct%2Fpublic%2F1777303139%2Facad2.0-prod-connect-hero-x2.1777303138410.png') !important;
+}
+
 /* ── Template for additional paths ──────────────
 body:is(.sj-page-detail-path, .sj-page-path):has(#main-container[data-tags~="ROLE-TAG"]) .top-row-grey,
 body:is(.sj-page-detail-path, .sj-page-path):has(#main-container[data-tags~="ROLE-TAG"]) .top-row-white-v2 {
@@ -3869,6 +4011,39 @@ button.sj-text-quiz-submit:hover {
 </style>
 <!-- END Quiz Button Styles -->
 <!-- END Live Training (VILT) Lesson Page Styles -->
+
+<!-- START Lesson Nav Default-Open Fix -->
+<!--
+  SkillJar's "Display lesson menu by default" setting relies on localStorage
+  being set to 'true', but never initialises it on first visit — so new users
+  always see the nav closed. This block opens it unless the user has explicitly
+  closed it (localStorage value === 'false').
+-->
+<script>
+(function () {
+  if (!document.body.classList.contains('sj-page-lesson')) return;
+  if (localStorage.getItem('lessonNavStateOpen') === 'false') return;
+
+  function openNavDefault() {
+    var nav  = document.querySelector('#lp-left-nav');
+    var body = document.querySelector('body.sj-page-lesson');
+    if (!nav || !body || nav.classList.contains('cbp-spmenu-open')) return;
+    nav.classList.add('cbp-spmenu-open', 'no-nav-transition');
+    body.classList.add('cbp-spmenu-open', 'no-nav-transition');
+    /* Update hamburger aria-label to reflect open state */
+    var burger = document.getElementById('left-nav-button');
+    if (burger) burger.setAttribute('aria-label', 'Close');
+  }
+
+  /* Run after SkillJar's own $(document).ready handlers */
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', function () { setTimeout(openNavDefault, 0); });
+  } else {
+    setTimeout(openNavDefault, 0);
+  }
+}());
+</script>
+<!-- END Lesson Nav Default-Open Fix -->
 
 <!-- START Remove clickable course tiles in Paths. Add to Global Code Snippet -->
 <style>
