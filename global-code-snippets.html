@@ -310,6 +310,18 @@ a.coursebox-container[data-tags*="learning-path"],
 a.coursebox-container[data-tags*="learning-path"]:hover {
   background: #213D4F !important;
   border-color: #213D4F !important;
+  /* Only animate shadow/transform — prevent any background-color transition
+     that would cause a white flash between the image and text area on hover */
+  transition: box-shadow 0.2s ease, transform 0.2s ease !important;
+}
+/* Fill the image div so no gap shows through between image and text.
+   transition:none stops any background-color fade SkillJar applies to children.
+   translateZ(0) forces a compositor layer, preventing subpixel rendering gaps. */
+a.coursebox-container[data-tags*="learning-path"] .coursebox-image {
+  background-color: #213D4F !important;
+  transition: none !important;
+  transform: translateZ(0);
+  line-height: 0 !important;
 }
 a.coursebox-container[data-tags*="learning-path"] .coursebox-text,
 a.coursebox-container[data-tags*="learning-path"] .coursebox-text-description,
@@ -777,7 +789,7 @@ a.coursebox-container:not([data-tags="separator"]) .coursebox-tag[data-tag="lear
 
   function applyDark(card) {
     card.style.setProperty('background-color', BG, 'important');
-    card.querySelectorAll('.coursebox-text, .coursebox-text-description, .coursebox-tags').forEach(function (el) {
+    card.querySelectorAll('.coursebox-image, .coursebox-text, .coursebox-text-description, .coursebox-tags').forEach(function (el) {
       el.style.setProperty('background-color', BG, 'important');
     });
     var badge = card.querySelector('.coursebox-tag[data-tag="learning-path"] > span');
