@@ -4086,3 +4086,82 @@ $(document).ready(function() {
 });
 </script>
 <!-- END Remove clickable course tiles in Paths. Add to Global Code Snippet -->
+
+<!-- ══════════════════════════════════════════════════════════════════
+     Usersnap feedback widget
+     ──────────────────────────────────────────────────────────────────
+     Loads the Usersnap script and attaches custom data (user identity,
+     page URL, and a GitHub source-file URL) to every submission. The
+     source URL is built from <meta name="academy-source-*"> tags that
+     each page declares. Pages in this repo declare
+     posit-dev/academy-skilljar-theme; lessons rendered by academy-assistant
+     declare posit-dev/academy-assistant (via a Lua filter). A workflow in
+     academy-assistant's repo reads `sourceRepo` on each new issue and
+     transfers theme-repo issues to academy-skilljar-theme.
+
+     PROJECT_ID comes from app.usersnap.com > Configure > Publish (the
+     UUID in the script URL).
+     ══════════════════════════════════════════════════════════════════ -->
+<script>
+(function () {
+  var PROJECT_ID = '201822a1-3032-4808-b576-11dfd489fb46';
+
+  function metaContent(name) {
+    var m = document.querySelector('meta[name="' + name + '"]');
+    return m ? m.getAttribute('content') : null;
+  }
+
+  function buildSourceUrl() {
+    var repo   = metaContent('academy-source-repo');
+    var path   = metaContent('academy-source-path');
+    var branch = metaContent('academy-source-branch') || 'main';
+    if (!repo || !path) return null;
+    return 'https://github.com/' + repo + '/blob/' + branch + '/' + path;
+  }
+
+  window.onUsersnapLoad = function (api) {
+    var initOpts = {
+      useSystemFonts: false,
+      useLocalStorage: false,
+      collectGeoLocation: 'none',
+      nativeScreenshot: true
+    };
+    // window.skilljarUser is populated by Skilljar when a learner is
+    // signed in. Missing on anonymous / logged-out views.
+    if (window.skilljarUser && window.skilljarUser.email) {
+      initOpts.user = {
+        email:  window.skilljarUser.email,
+        userId: String(window.skilljarUser.id || '')
+      };
+    }
+    api.init(initOpts);
+
+    api.on('beforeSubmit', function (event) {
+      var custom = {
+        sourceRepo:    metaContent('academy-source-repo'),
+        sourceFileUrl: buildSourceUrl(),
+        pageUrl:       window.location.href,
+        pageTitle:     document.title,
+        courseTitle:   (document.querySelector('.course-title, h1.course')  || {}).textContent || null,
+        lessonTitle:   (document.querySelector('.lesson-title, h1.lesson') || {}).textContent || null,
+        timestamp:     new Date().toUTCString(),
+        userAgent:     navigator.userAgent,
+        user:          window.skilljarUser ? window.skilljarUser.name  : null,
+        userEmail:     window.skilljarUser ? window.skilljarUser.email : null,
+        userId:        window.skilljarUser ? window.skilljarUser.id    : null
+      };
+      event.api.setValue('custom', custom);
+      if (window.skilljarUser && window.skilljarUser.email) {
+        event.api.setValue('visitor', window.skilljarUser.email);
+      }
+    });
+  };
+
+  var tag = document.createElement('script');
+  tag.defer = 1;
+  tag.src = 'https://widget.usersnap.com/global/load/' + PROJECT_ID +
+            '?onload=onUsersnapLoad';
+  document.head.appendChild(tag);
+}());
+</script>
+<!-- END Usersnap feedback widget -->
